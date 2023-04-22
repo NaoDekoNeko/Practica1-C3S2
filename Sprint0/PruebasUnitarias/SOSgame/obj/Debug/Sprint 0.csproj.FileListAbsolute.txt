@@ -1,0 +1,22 @@
+C:\Users\Ademar\OneDrive\Desktop\CC-3S2\Proyecto-3S2\Sprint0\SOSgame\SOSgame\obj\Debug\Sprint 0.csproj.AssemblyReference.cache
+C:\Users\Ademar\OneDrive\Desktop\CC-3S2\Proyecto-3S2\Sprint0\SOSgame\SOSgame\obj\Debug\Sprint 0.csproj.SuggestedBindingRedirects.cache
+C:\Users\Ademar\OneDrive\Desktop\CC-3S2\Proyecto-3S2\Sprint0\SOSgame\SOSgame\obj\Debug\Sprint0.Form1.resources
+C:\Users\Ademar\OneDrive\Desktop\CC-3S2\Proyecto-3S2\Sprint0\SOSgame\SOSgame\obj\Debug\SOSgame.Properties.Resources.resources
+C:\Users\Ademar\OneDrive\Desktop\CC-3S2\Proyecto-3S2\Sprint0\SOSgame\SOSgame\obj\Debug\Sprint 0.csproj.GenerateResource.cache
+C:\Users\Ademar\OneDrive\Desktop\CC-3S2\Proyecto-3S2\Sprint0\SOSgame\SOSgame\obj\Debug\Sprint 0.csproj.CoreCompileInputs.cache
+C:\Users\Ademar\OneDrive\Desktop\CC-3S2\Proyecto-3S2\Sprint0\SOSgame\SOSgame\obj\Debug\SOSgame.exe
+C:\Users\Ademar\OneDrive\Desktop\CC-3S2\Proyecto-3S2\Sprint0\SOSgame\SOSgame\obj\Debug\SOSgame.pdb
+C:\Users\Ademar\OneDrive\Desktop\CC-3S2\Proyecto-3S2\Sprint0\SOSgame\SOSgame\bin\Debug\SOSgame.exe.config
+C:\Users\Ademar\OneDrive\Desktop\CC-3S2\Proyecto-3S2\Sprint0\SOSgame\SOSgame\bin\Debug\SOSgame.exe
+C:\Users\Ademar\OneDrive\Desktop\CC-3S2\Proyecto-3S2\Sprint0\SOSgame\SOSgame\bin\Debug\SOSgame.pdb
+C:\Users\Ademar\OneDrive\Desktop\CC-3S2\Proyecto-3S2\Sprint0\PruebasUnitarias\SOSgame\bin\Debug\SOSgame.exe.config
+C:\Users\Ademar\OneDrive\Desktop\CC-3S2\Proyecto-3S2\Sprint0\PruebasUnitarias\SOSgame\bin\Debug\SOSgame.exe
+C:\Users\Ademar\OneDrive\Desktop\CC-3S2\Proyecto-3S2\Sprint0\PruebasUnitarias\SOSgame\bin\Debug\SOSgame.pdb
+C:\Users\Ademar\OneDrive\Desktop\CC-3S2\Proyecto-3S2\Sprint0\PruebasUnitarias\SOSgame\obj\Debug\Sprint 0.csproj.AssemblyReference.cache
+C:\Users\Ademar\OneDrive\Desktop\CC-3S2\Proyecto-3S2\Sprint0\PruebasUnitarias\SOSgame\obj\Debug\Sprint 0.csproj.SuggestedBindingRedirects.cache
+C:\Users\Ademar\OneDrive\Desktop\CC-3S2\Proyecto-3S2\Sprint0\PruebasUnitarias\SOSgame\obj\Debug\Sprint0.Form1.resources
+C:\Users\Ademar\OneDrive\Desktop\CC-3S2\Proyecto-3S2\Sprint0\PruebasUnitarias\SOSgame\obj\Debug\SOSgame.Properties.Resources.resources
+C:\Users\Ademar\OneDrive\Desktop\CC-3S2\Proyecto-3S2\Sprint0\PruebasUnitarias\SOSgame\obj\Debug\Sprint 0.csproj.GenerateResource.cache
+C:\Users\Ademar\OneDrive\Desktop\CC-3S2\Proyecto-3S2\Sprint0\PruebasUnitarias\SOSgame\obj\Debug\Sprint 0.csproj.CoreCompileInputs.cache
+C:\Users\Ademar\OneDrive\Desktop\CC-3S2\Proyecto-3S2\Sprint0\PruebasUnitarias\SOSgame\obj\Debug\SOSgame.exe
+C:\Users\Ademar\OneDrive\Desktop\CC-3S2\Proyecto-3S2\Sprint0\PruebasUnitarias\SOSgame\obj\Debug\SOSgame.pdb

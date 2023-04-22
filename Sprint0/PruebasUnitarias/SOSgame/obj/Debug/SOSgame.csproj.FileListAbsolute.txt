@@ -1,0 +1,11 @@
+C:\Users\Ademar\OneDrive\Desktop\CC-3S2\Proyecto-3S2\Sprint0\SOSgame\SOSgame\bin\Debug\SOSgame.exe.config
+C:\Users\Ademar\OneDrive\Desktop\CC-3S2\Proyecto-3S2\Sprint0\SOSgame\SOSgame\bin\Debug\SOSgame.exe
+C:\Users\Ademar\OneDrive\Desktop\CC-3S2\Proyecto-3S2\Sprint0\SOSgame\SOSgame\bin\Debug\SOSgame.pdb
+C:\Users\Ademar\OneDrive\Desktop\CC-3S2\Proyecto-3S2\Sprint0\SOSgame\SOSgame\obj\Debug\SOSgame.csproj.AssemblyReference.cache
+C:\Users\Ademar\OneDrive\Desktop\CC-3S2\Proyecto-3S2\Sprint0\SOSgame\SOSgame\obj\Debug\SOSgame.csproj.SuggestedBindingRedirects.cache
+C:\Users\Ademar\OneDrive\Desktop\CC-3S2\Proyecto-3S2\Sprint0\SOSgame\SOSgame\obj\Debug\SOSgame.Properties.Resources.resources
+C:\Users\Ademar\OneDrive\Desktop\CC-3S2\Proyecto-3S2\Sprint0\SOSgame\SOSgame\obj\Debug\SOSgame.csproj.GenerateResource.cache
+C:\Users\Ademar\OneDrive\Desktop\CC-3S2\Proyecto-3S2\Sprint0\SOSgame\SOSgame\obj\Debug\SOSgame.csproj.CoreCompileInputs.cache
+C:\Users\Ademar\OneDrive\Desktop\CC-3S2\Proyecto-3S2\Sprint0\SOSgame\SOSgame\obj\Debug\SOSgame.exe
+C:\Users\Ademar\OneDrive\Desktop\CC-3S2\Proyecto-3S2\Sprint0\SOSgame\SOSgame\obj\Debug\SOSgame.pdb
+C:\Users\Ademar\OneDrive\Desktop\CC-3S2\Proyecto-3S2\Sprint0\SOSgame\SOSgame\obj\Debug\SOSgame.Form1.resources
