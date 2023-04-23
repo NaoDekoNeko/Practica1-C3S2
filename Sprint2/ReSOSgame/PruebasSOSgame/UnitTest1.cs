@@ -33,28 +33,36 @@ namespace PruebasSOSgame
     {
         //Criterio de aceptacion 2.1        
         private Tablero t = new Tablero(6);
-        private Juego juego;
+        
+
         [TestMethod]
         public void selectSimpleGameMode()
         {
-            
+            JuegoSimple juegoSimple;
+            juegoSimple = new JuegoSimple(t);
+            Assert.AreEqual(juegoSimple.tipoDeJuego, "SIMPLE");
         }
         //Criterio de aceptacion 2.2
         [TestMethod]
         public void selectGeneralGameMode() 
         {
-            Assert.AreEqual(0, 0);
+            JuegoGeneral juegoGeneral;
+            juegoGeneral = new JuegoGeneral(t);
+            Assert.AreEqual(juegoGeneral.tipoDeJuego, "GENERAL");
         }
     }
 
     [TestClass] // Clase de Codigo de Prueba HU.3
     public class TestShowGameState
     {
+        private Tablero t = new Tablero(6);
+        JuegoSimple juego;
         //Criterio de aceptacion 3.1
         [TestMethod]
         public void showGameState() 
-        {
-            Assert.AreEqual(0, 0);
+        {            
+            juego = new JuegoSimple(t);
+            Assert.AreEqual(juego.estadoDeJuego, "JUGANDO");
         }
     }
 
