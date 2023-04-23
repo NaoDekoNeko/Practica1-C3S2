@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ReSOSgame;
+using System;
 
 namespace PruebasSOSgame
 // HU :Historia de Usuario
@@ -7,7 +8,7 @@ namespace PruebasSOSgame
     [TestClass] // Clase de Codigo de Prueba HU.1
     public class TestEmptyBoard
     {
-        static int preferredSize = 7;
+        static readonly int preferredSize = 7;
         private Tablero tablero = new Tablero(preferredSize);
         //Criterio de aceptacion 1.1
         [TestMethod]
@@ -32,23 +33,23 @@ namespace PruebasSOSgame
     public class TestSelectorModeGame
     {
         //Criterio de aceptacion 2.1        
-        private Tablero t = new Tablero(6);
+        private Tablero tablero = new Tablero(6);
         
 
         [TestMethod]
-        public void selectSimpleGameMode()
+        public void SelectSimpleGameMode()
         {
             JuegoSimple juegoSimple;
-            juegoSimple = new JuegoSimple(t);
-            Assert.AreEqual(juegoSimple.tipoDeJuego, "SIMPLE");
+            juegoSimple = new JuegoSimple(tablero);
+            Assert.AreEqual("SIMPLE", juegoSimple.tipoDeJuego);
         }
         //Criterio de aceptacion 2.2
         [TestMethod]
-        public void selectGeneralGameMode() 
+        public void SelectGeneralGameMode() 
         {
             JuegoGeneral juegoGeneral;
-            juegoGeneral = new JuegoGeneral(t);
-            Assert.AreEqual(juegoGeneral.tipoDeJuego, "GENERAL");
+            juegoGeneral = new JuegoGeneral(tablero);
+            Assert.AreEqual("GENERAL", juegoGeneral.tipoDeJuego);
         }
     }
 
@@ -59,10 +60,10 @@ namespace PruebasSOSgame
         
         //Criterio de aceptacion 3.1
         [TestMethod]
-        public void showGameState() 
+        public void ShowGameState() 
         {
             t.InitBoard();
-            Assert.AreEqual(t.EstadoDeJuego, "JUGANDO");
+            Assert.AreEqual("JUGANDO", t.EstadoDeJuego);
         }
     }
 
@@ -75,22 +76,26 @@ namespace PruebasSOSgame
         {
             tablero = new Tablero(3);
         }
+        [TestCleanup]
+        public void Teardown()
+        {
+        }
         //Criterio de aceptacion 4.1
         [TestMethod]
-        public void makeBlueMoveS_SimpleGame()
+        public void MakeBlueMoveS_SimpleGame()
         {
             tablero.MakeMove(1, 1, 'S');
-            Assert.AreEqual(tablero.GetCell(1, 1), Tablero.Cell.S);
-            Assert.AreEqual(tablero.Jugador, "Rojo");
+            Assert.AreEqual(Tablero.Cell.S, tablero.GetCell(1, 1));
+            Assert.AreEqual("Rojo", tablero.Jugador);
         }
         //Criterio de aceptacion 4.2
         [TestMethod]
-        public void makeRedMoveO_SimpleGame()
+        public void MakeRedMoveO_SimpleGame()
         {
             tablero.MakeMove(0, 0, 'S');
             tablero.MakeMove(2, 2, 'O');
-            Assert.AreEqual(tablero.GetCell(2, 2), Tablero.Cell.O);
-            Assert.AreEqual(tablero.Jugador, "Azul");
+            Assert.AreEqual(Tablero.Cell.O,tablero.GetCell(2, 2));
+            Assert.AreEqual("Azul", tablero.Jugador);
         }
     }
 
@@ -100,39 +105,43 @@ namespace PruebasSOSgame
         private Tablero tablero;
         private JuegoSimple juego;
         [TestInitialize]
-        private void Init()
+        public void Init()
         {
             tablero = new Tablero(3);
+            juego = new JuegoSimple(tablero);
+        }
+        [TestCleanup]
+        public void Teardown()
+        {
         }
         //Criterio de aceptacion 5.1
         [TestMethod]
         public void VictorybluePlayerWithS()
         {
-            juego = new JuegoSimple(tablero);
+            
             tablero.MakeMove(0, 0, 'S');
             tablero.MakeMove(0, 1, '0');
             tablero.MakeMove(1, 1, '0');
             tablero.MakeMove(0, 2, '0');
             tablero.MakeMove(2, 2, 'S');
-
-            Assert.AreEqual(tablero.Jugador, "Rojo");
-            Assert.AreEqual(tablero.Ficha,'S');
-            Assert.AreEqual(juego.JuegoGanado(), true);
+            new Consola(tablero).DisplayBoard();
+            Assert.AreEqual("Rojo", tablero.Jugador);
+            Assert.AreEqual('S', tablero.Ficha);
+            Assert.AreEqual(true, juego.JuegoGanado());
         }
         //Criterio de aceptacion 5.2
         [TestMethod]
         public void VictoryRedPlayerWithO()
         {
-
-            juego = new JuegoSimple(tablero);
+            Assert.AreEqual("Azul", tablero.Jugador);
             tablero.MakeMove(0, 0, 'S');
             tablero.MakeMove(0, 2, 'S');
             tablero.MakeMove(2, 2, 'S');
-            tablero.MakeMove(0, 2, 'O');
-
-            Assert.AreEqual(tablero.Jugador, "Azul");
-            Assert.AreEqual(tablero.Ficha, 'O');
-            Assert.AreEqual(juego.JuegoGanado(), true);
+            tablero.MakeMove(0, 1, 'O');
+            new Consola(tablero).DisplayBoard();
+            Assert.AreEqual("Azul", tablero.Jugador);
+            Assert.AreEqual('O', tablero.Ficha );
+            Assert.AreEqual(true,juego.JuegoGanado());
 
         }
     }
