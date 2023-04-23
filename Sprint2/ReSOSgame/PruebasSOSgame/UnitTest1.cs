@@ -79,8 +79,8 @@ namespace PruebasSOSgame
         [TestMethod]
         public void makeBlueMoveS_SimpleGame()
         {
-            tablero.MakeMove(0, 0, 'S');
-            Assert.AreEqual(tablero.GetCell(0, 0), Tablero.Cell.S);
+            tablero.MakeMove(1, 1, 'S');
+            Assert.AreEqual(tablero.GetCell(1, 1), Tablero.Cell.S);
             Assert.AreEqual(tablero.Jugador, "Rojo");
         }
         //Criterio de aceptacion 4.2
@@ -88,8 +88,8 @@ namespace PruebasSOSgame
         public void makeRedMoveO_SimpleGame()
         {
             tablero.MakeMove(0, 0, 'S');
-            tablero.MakeMove(1, 1, 'O');
-            Assert.AreEqual(tablero.GetCell(1, 1), Tablero.Cell.O);
+            tablero.MakeMove(2, 2, 'O');
+            Assert.AreEqual(tablero.GetCell(2, 2), Tablero.Cell.O);
             Assert.AreEqual(tablero.Jugador, "Azul");
         }
     }
@@ -97,17 +97,34 @@ namespace PruebasSOSgame
     [TestClass] // Clase de Codigo de Prueba HU.5
     public class TestGameVictory
     {
+        private Tablero tablero = new Tablero(3);
+        private JuegoSimple juego;
         //Criterio de aceptacion 5.1
         [TestMethod]
         public void VictorybluePlayerWithS()
         {
-            Assert.AreEqual(0, 0);
+            juego = new JuegoSimple(tablero);
+            tablero.MakeMove(0, 0, 'S');
+            tablero.MakeMove(0, 1, '0');
+            tablero.MakeMove(1, 1, 'S');
+            tablero.MakeMove(0, 2, '0');
+            tablero.MakeMove(2, 2, 'S');
+
+            Assert.AreEqual(juego.JuegoGanado(), true);
         }
         //Criterio de aceptacion 5.2
         [TestMethod]
         public void VictoryRedPlayerWithO()
         {
-            Assert.AreEqual(0, 0);
+            juego = new JuegoSimple(tablero);
+            tablero.MakeMove(0, 0, 'S');
+            tablero.MakeMove(0, 1, '0');
+            tablero.MakeMove(0, 2, 'S');
+            tablero.MakeMove(1, 1, '0');
+            tablero.MakeMove(2, 2, 'S');
+            tablero.MakeMove(2, 1, '0');
+
+            Assert.AreEqual(juego.JuegoGanado(), true);
 
         }
     }
