@@ -56,7 +56,6 @@ namespace ReSOSgame
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(300, 325);
             this.panel1.TabIndex = 0;
-            this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
             // 
             // groupBox1
             // 
@@ -230,7 +229,6 @@ namespace ReSOSgame
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "Form1";
             this.Text = "SOS";
-            this.Load += new System.EventHandler(this.Form1_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);

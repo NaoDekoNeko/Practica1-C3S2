@@ -49,7 +49,9 @@ namespace ReSOSgame
         {
             private readonly Juego juego;
             private readonly Tablero tablero;
-
+            public int CELL_SIZE;
+            public int CELL_PADDING;
+            public static int SYMBOL_SIZE = 20;
             public GameBoardCanvas(Tablero tablero)
             {
                 this.tablero = tablero;
@@ -58,10 +60,12 @@ namespace ReSOSgame
 
             private void Clickeo(object sender, MouseEventArgs e)
             {
+                CELL_SIZE = CANVAS_HEIGHT / (tablero.Tamanio+1);
+                CELL_PADDING = CELL_SIZE/6;
                 if (tablero.EstadoDeJuego == "JUGANDO")
                 {
-                    int rowSelected = e.Y / (CANVAS_HEIGHT / tablero.Tamanio);
-                    int colSelected = e.X / (CANVAS_WIDTH / tablero.Tamanio);
+                    int rowSelected = e.Y / CELL_SIZE;
+                    int colSelected = e.X / CELL_SIZE;
                     tablero.MakeMove(rowSelected, colSelected, tablero.Ficha);
                 }
                 else
@@ -102,37 +106,50 @@ namespace ReSOSgame
             private void DrawBoard(Graphics g)
             {
                 Pen pen;
-                
-                for(int row =0;row<tablero.Tamanio;row++)
+                for (int row =0;row<tablero.Tamanio;row++)
                 {
                     for(int col=0;col<tablero.Tamanio;col++)
                     {
-                        if (tablero.Jugador == "Azul")
-                        {
-                            pen = new Pen(Color.Blue, 10);
-                        }
-                        else
-                        {
-                            pen = new Pen(Color.Red, 10);
-                        }
-                        int x1= col*(CANVAS_HEIGHT/tablero.Tamanio)+ 
-                            (CANVAS_HEIGHT / tablero.Tamanio)/tablero.Tamanio;
-                        int y1 = row*(CANVAS_WIDTH/tablero.Tamanio)+ 
-                            (CANVAS_HEIGHT / tablero.Tamanio) / tablero.Tamanio;
+
+                        int x1 = col * CELL_SIZE;
+                        int y1 = row * CELL_SIZE;
+                        
                         if(tablero.GetCell(row,col) == Tablero.Cell.S)
                         {
+                            if (tablero.Jugador == "Azul")
+                            {
+                                pen = new Pen(Color.Blue, 5);
+                            }
+                            else
+                            {
+                                pen = new Pen(Color.Red, 5);
+                            }
+                            /*
                             Point[] points = new Point[]
-                                {
-                                    new Point(50,50),
-                                    new Point(75,25),
-                                    new Point(125,75),
-                                    new Point(150,50)
-                                };
+                            {
+                                new Point(2+x1, 12+y1),
+                                new Point(7+x1, 5+y1),
+                                new Point(17 + x1, 20 + y1),
+                                new Point(22 + x1, 12 + y1)
+                            };
+                            int centerX = (points[1].X + points[2].X) / 2;
+                            //int offsetY = CANVAS_HEIGHT / 2;
+                            points[0].X = centerX - ((points[3].X - centerX) / 2);
                             g.DrawCurve(pen, points);
+                            */
+                            g.DrawEllipse(pen, x1, y1, SYMBOL_SIZE / 2, SYMBOL_SIZE / 2);
                         }
                         else if(tablero.GetCell(row, col) == Tablero.Cell.O)
                         {
-                            g.DrawEllipse(pen,x1,y1,10,10);
+                            if (tablero.Jugador == "Azul")
+                            {
+                                pen = new Pen(Color.Blue, 5);
+                            }
+                            else
+                            {
+                                pen = new Pen(Color.Red, 5);
+                            }
+                            g.DrawEllipse(pen,x1,y1,SYMBOL_SIZE/2,SYMBOL_SIZE/2);
                         }
                     }
                 }
@@ -159,16 +176,6 @@ namespace ReSOSgame
             {
                 return new JuegoGeneral(tablero);
             }
-        }
-
-        private void panel1_Paint(object sender, PaintEventArgs e)
-        {
-            
-        }
-
-        private void Form1_Load(object sender, EventArgs e)
-        {
-
         }
     }
 }
