@@ -12,14 +12,18 @@ namespace ReSOSgame
         public string jugador;
         public Tablero tablero;
         public string tipoDeJuego;
-        public Juego(Tablero tablero)
+        public string estadoDeJuego;
+
+        public Juego(Tablero tablero,string tipoDeJuego,string estadoDeJuego)
         {
             this.tablero = tablero;
+            this.tipoDeJuego = tipoDeJuego;
+            this.estadoDeJuego= estadoDeJuego;  
         }
     }
     public class JuegoSimple : Juego,IJuegoTerminado,IJuegoGanado
     {
-        public JuegoSimple(Tablero tablero) : base(tablero)
+        public JuegoSimple(Tablero tablero) : base(tablero,"SIMPLE","JUGANDO")
         {
             
         }
@@ -135,7 +139,7 @@ namespace ReSOSgame
     }
     public class JuegoGeneral : Juego
     {
-        public JuegoGeneral(Tablero tablero) : base(tablero)
+        public JuegoGeneral(Tablero tablero) : base(tablero,"GENERAL", "JUGANDO")
         {
         }
     }
