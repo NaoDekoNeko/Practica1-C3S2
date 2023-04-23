@@ -15,6 +15,7 @@ namespace ReSOSgame
         private Cell[,] grid;
         private char ficha = 'S';
         private string jugador = "Azul";
+        private string estadoDeJuego;
         public Tablero(int tamanio)
         {
             grid = new Cell[tamanio, tamanio];
@@ -30,7 +31,7 @@ namespace ReSOSgame
         public char Ficha { get { return ficha; } }
         public string Jugador { get { return jugador; } }
         public int Tamanio { get { return tamanio; } }
-        
+        public string EstadoDeJuego {  get { return estadoDeJuego; } }
         public void MakeMove(int row, int column, char _ficha)
         {
             if (row >= 0 && row < tamanio && column >= 0 && column < tamanio
@@ -40,6 +41,20 @@ namespace ReSOSgame
                 grid[row,column] = (ficha == 'S')? Cell.S:Cell.O;
                 jugador = (jugador == "Azul")? "Rojo": "Azul";
             }
+        }
+
+        public void InitBoard()
+        {
+            for(int row = 0; row < tamanio; row++)
+            {
+                for(int column = 0; column < tamanio; column++)
+                {
+                    grid[row, column] = Cell.VACIA;
+                }
+            }
+            estadoDeJuego = "JUGANDO";
+            ficha = 'S';
+            jugador = "Azul";
         }
     }
 }
