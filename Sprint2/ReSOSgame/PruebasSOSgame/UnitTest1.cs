@@ -56,13 +56,13 @@ namespace PruebasSOSgame
     public class TestShowGameState
     {
         private Tablero t = new Tablero(6);
-        JuegoSimple juego;
+        
         //Criterio de aceptacion 3.1
         [TestMethod]
         public void showGameState() 
-        {            
-            juego = new JuegoSimple(t);
-            Assert.AreEqual(juego.estadoDeJuego, "JUGANDO");
+        {
+            t.InitBoard();
+            Assert.AreEqual(t.EstadoDeJuego, "JUGANDO");
         }
     }
 
@@ -97,8 +97,13 @@ namespace PruebasSOSgame
     [TestClass] // Clase de Codigo de Prueba HU.5
     public class TestGameVictory
     {
-        private Tablero tablero = new Tablero(3);
+        private Tablero tablero;
         private JuegoSimple juego;
+        [TestInitialize]
+        private void Init()
+        {
+            tablero = new Tablero(3);
+        }
         //Criterio de aceptacion 5.1
         [TestMethod]
         public void VictorybluePlayerWithS()
@@ -106,24 +111,27 @@ namespace PruebasSOSgame
             juego = new JuegoSimple(tablero);
             tablero.MakeMove(0, 0, 'S');
             tablero.MakeMove(0, 1, '0');
-            tablero.MakeMove(1, 1, 'S');
+            tablero.MakeMove(1, 1, '0');
             tablero.MakeMove(0, 2, '0');
             tablero.MakeMove(2, 2, 'S');
 
+            Assert.AreEqual(tablero.Jugador, "Rojo");
+            Assert.AreEqual(tablero.Ficha,'S');
             Assert.AreEqual(juego.JuegoGanado(), true);
         }
         //Criterio de aceptacion 5.2
         [TestMethod]
         public void VictoryRedPlayerWithO()
         {
+
             juego = new JuegoSimple(tablero);
             tablero.MakeMove(0, 0, 'S');
-            tablero.MakeMove(0, 1, '0');
             tablero.MakeMove(0, 2, 'S');
-            tablero.MakeMove(1, 1, '0');
             tablero.MakeMove(2, 2, 'S');
-            tablero.MakeMove(2, 1, '0');
+            tablero.MakeMove(0, 2, 'O');
 
+            Assert.AreEqual(tablero.Jugador, "Azul");
+            Assert.AreEqual(tablero.Ficha, 'O');
             Assert.AreEqual(juego.JuegoGanado(), true);
 
         }
