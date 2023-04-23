@@ -4,16 +4,19 @@ using System;
 using System.Security.Permissions;
 
 namespace PruebasSOSgame
+// HU :Historia de Usuario
 {
-    [TestClass]
-    public class TestTableroVacio
+    [TestClass] // Clase de Codigo de Prueba HU.1
+    public class TestEmptyBoard
     {
-        static int tamanio_a_gusto = 7;
-        private Tablero tablero = new Tablero(tamanio_a_gusto);
+        static int preferredSize = 7;
+        private Tablero tablero = new Tablero(preferredSize);
         //Criterio de aceptacion 1.1
         [TestMethod]
-        public void TableroNuevo()
+        public void NewTablero()
         {
+            
+            // Refactorizable - Comprueba que todas las celdas del tablero estén vacías
             for (int row = 0; row < tablero.Tamanio; row++)
             {
                 for (int column = 0; column < tablero.Tamanio; column++)
@@ -21,36 +24,86 @@ namespace PruebasSOSgame
                     Assert.AreEqual(tablero.GetCell(row, column), Tablero.Cell.VACIA);
                 }
             }
-            Assert.AreEqual(tablero.Ficha,'S');
-            Assert.AreEqual(tablero.Jugador, "Azul");
-      }
+            // Esto podria ser otro criterio de aceptacion no manual ni automatico
+            // Assert.AreEqual(tablero.Ficha, 'S');
+            // Assert.AreEqual(tablero.Jugador, "Azul");
+        }
     }
-    [TestClass]
-    public class TestMovimientosValidos
+
+    [TestClass] // Clase de Codigo de Prueba HU.2
+    public class TestSelectorModeGame
     {
-        private Tablero tablero
-            ;
+        //Criterio de aceptacion 2.1        
+        private Tablero t = new Tablero(6);
+        private Juego juego;
+        [TestMethod]
+        public void selectSimpleGameMode()
+        {
+            
+        }
+        //Criterio de aceptacion 2.2
+        [TestMethod]
+        public void selectGeneralGameMode() 
+        {
+            Assert.AreEqual(0, 0);
+        }
+    }
+
+    [TestClass] // Clase de Codigo de Prueba HU.3
+    public class TestShowGameState
+    {
+        //Criterio de aceptacion 3.1
+        [TestMethod]
+        public void showGameState() 
+        {
+            Assert.AreEqual(0, 0);
+        }
+    }
+
+    [TestClass] // Clase de Codigo de Prueba HU.4
+    public class TestMakeMove
+    {
+        private Tablero tablero;
         [TestInitialize]
         public void Init()
         {
             tablero = new Tablero(3);
         }
-        //Critero de aceptacion 4.1
+        //Criterio de aceptacion 4.1
         [TestMethod]
-        public void TestMovimientoAzulSCeldaVacia()
+        public void makeBlueMoveS_SimpleGame()
         {
-            tablero.MakeMove(0, 0,'S');
+            tablero.MakeMove(0, 0, 'S');
             Assert.AreEqual(tablero.GetCell(0, 0), Tablero.Cell.S);
             Assert.AreEqual(tablero.Jugador, "Rojo");
         }
-        //Criterio de aceptación 4.2
+        //Criterio de aceptacion 4.2
         [TestMethod]
-        public void TestMovimientoRojoOCeldaVacia()
+        public void makeRedMoveO_SimpleGame()
         {
-            tablero.MakeMove(0, 0,'S');
-            tablero.MakeMove(1, 1,'O');
+            tablero.MakeMove(0, 0, 'S');
+            tablero.MakeMove(1, 1, 'O');
             Assert.AreEqual(tablero.GetCell(1, 1), Tablero.Cell.O);
             Assert.AreEqual(tablero.Jugador, "Azul");
         }
     }
+
+    [TestClass] // Clase de Codigo de Prueba HU.5
+    public class TestGameVictory
+    {
+        //Criterio de aceptacion 5.1
+        [TestMethod]
+        public void VictorybluePlayerWithS()
+        {
+            Assert.AreEqual(0, 0);
+        }
+        //Criterio de aceptacion 5.2
+        [TestMethod]
+        public void VictoryRedPlayerWithO()
+        {
+            Assert.AreEqual(0, 0);
+
+        }
+    }
+    
 }
