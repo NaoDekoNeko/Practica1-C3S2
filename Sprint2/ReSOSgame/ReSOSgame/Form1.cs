@@ -33,7 +33,7 @@ namespace ReSOSgame
         private GameController gameController;
         private void SetContentPane()
         {
-            gameBoardCanvas = new GameBoardCanvas((int)numericUpDown1.Value);
+            gameBoardCanvas = new GameBoardCanvas(tablero);
             if(panel1.Controls.OfType<GameBoardCanvas>()==null)
                 panel1.Controls.Add(gameBoardCanvas);
             else
@@ -45,20 +45,38 @@ namespace ReSOSgame
             gameBoardCanvas.Location = new Point((panel1.Width-gameBoardCanvas.Width)/2,
                 (panel1.Height-gameBoardCanvas.Height)/2);
         }
-        public Tablero Tablero { get { return tablero; } }
         class GameBoardCanvas : Panel
         {
-            private readonly int tamanio;
+            private readonly Juego juego;
+            private readonly Tablero tablero;
 
-            public GameBoardCanvas(int tamanio)
+            public GameBoardCanvas(Tablero tablero)
             {
-                this.tamanio = tamanio;
+                this.tablero = tablero;
+                MouseClick += new MouseEventHandler(Clickeo);
             }
+
+            private void Clickeo(object sender, MouseEventArgs e)
+            {
+                if (tablero.EstadoDeJuego == "JUGANDO")
+                {
+                    int rowSelected = e.Y / (CANVAS_HEIGHT / tablero.Tamanio);
+                    int colSelected = e.X / (CANVAS_WIDTH / tablero.Tamanio);
+                    tablero.MakeMove(rowSelected, colSelected, tablero.Ficha);
+                }
+                else
+                {
+                    tablero.InitBoard();
+                }
+                Invalidate();
+            }
+
             protected override void OnPaint(PaintEventArgs e)
             {
                 base.OnPaint(e);
                 Graphics g = e.Graphics;
-                DrawGrid(g,tamanio,tamanio,GRID_WIDTH, Color.Black);
+                DrawGrid(g,tablero.Tamanio,tablero.Tamanio,GRID_WIDTH, Color.Black);
+                DrawBoard(g);
             }
             // Delinean lineas horizontales y verticales del tablero
             private void DrawGrid(Graphics g, int numRows, int numCols, int lineWidth, Color lineColor)
@@ -81,6 +99,44 @@ namespace ReSOSgame
                     g.DrawLine(new Pen(lineColor, lineWidth), x, 0, x, ClientSize.Height);
                 }
             }
+            private void DrawBoard(Graphics g)
+            {
+                Pen pen;
+                
+                for(int row =0;row<tablero.Tamanio;row++)
+                {
+                    for(int col=0;col<tablero.Tamanio;col++)
+                    {
+                        if (tablero.Jugador == "Azul")
+                        {
+                            pen = new Pen(Color.Blue, 10);
+                        }
+                        else
+                        {
+                            pen = new Pen(Color.Red, 10);
+                        }
+                        int x1= col*(CANVAS_HEIGHT/tablero.Tamanio)+ 
+                            (CANVAS_HEIGHT / tablero.Tamanio)/tablero.Tamanio;
+                        int y1 = row*(CANVAS_WIDTH/tablero.Tamanio)+ 
+                            (CANVAS_HEIGHT / tablero.Tamanio) / tablero.Tamanio;
+                        if(tablero.GetCell(row,col) == Tablero.Cell.S)
+                        {
+                            Point[] points = new Point[]
+                                {
+                                    new Point(50,50),
+                                    new Point(75,25),
+                                    new Point(125,75),
+                                    new Point(150,50)
+                                };
+                            g.DrawCurve(pen, points);
+                        }
+                        else if(tablero.GetCell(row, col) == Tablero.Cell.O)
+                        {
+                            g.DrawEllipse(pen,x1,y1,10,10);
+                        }
+                    }
+                }
+            }
         }
         // Al ir cambiando  el "numericUpDown1" se va cambiando el tamaño del tablero
         // Problemas: cuando se cambie de tamaño de juego se tendra que tener en cuenta el tipo de juego selecccionado con anterioridad , no se pondra cambiar luego de cambiar el tamaño.
@@ -97,7 +153,7 @@ namespace ReSOSgame
         {
             if(radioButton5.Checked)
             {
-                return new JuegoSimple(Tablero);
+                return new JuegoSimple(tablero);
             }
             else
             {
@@ -107,7 +163,7 @@ namespace ReSOSgame
 
         private void panel1_Paint(object sender, PaintEventArgs e)
         {
-
+            
         }
 
         private void Form1_Load(object sender, EventArgs e)

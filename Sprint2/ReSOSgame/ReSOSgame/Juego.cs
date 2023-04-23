@@ -12,13 +12,11 @@ namespace ReSOSgame
         public string jugador;
         public Tablero tablero;
         public string tipoDeJuego;
-        public string estadoDeJuego;
 
         public Juego(Tablero tablero,string tipoDeJuego,string estadoDeJuego)
         {
             this.tablero = tablero;
-            this.tipoDeJuego = tipoDeJuego;
-            this.estadoDeJuego= estadoDeJuego;  
+            this.tipoDeJuego = tipoDeJuego;  
         }
     }
     public class JuegoSimple : Juego,IJuegoTerminado,IJuegoGanado
