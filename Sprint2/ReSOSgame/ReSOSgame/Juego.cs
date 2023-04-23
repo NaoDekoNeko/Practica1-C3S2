@@ -12,16 +12,15 @@ namespace ReSOSgame
         public string jugador;
         public Tablero tablero;
         public string tipoDeJuego;
-
-        public Juego(Tablero tablero,string tipoDeJuego,string estadoDeJuego)
+        public Juego(Tablero tablero, string tipoDeJuego)
         {
             this.tablero = tablero;
-            this.tipoDeJuego = tipoDeJuego;  
+            this.tipoDeJuego = tipoDeJuego;
         }
     }
     public class JuegoSimple : Juego,IJuegoTerminado,IJuegoGanado
     {
-        public JuegoSimple(Tablero tablero) : base(tablero,"SIMPLE","JUGANDO")
+        public JuegoSimple(Tablero tablero) : base(tablero,"SIMPLE")
         {
             
         }
@@ -31,95 +30,43 @@ namespace ReSOSgame
             // revisa las filas
             for (int i = 0; i < tablero.Tamanio; i++)
             {
-                bool tieneS = false;
-                bool tieneO = false;
-
-                for (int j = 0; j < tablero.Tamanio; j++)
+                for (int j = 0; j < tablero.Tamanio-2; j++)
                 {
-                    if (tablero.GetCell(i, j) == Tablero.Cell.S)
+                    if (tablero.GetCell(i, j) == Tablero.Cell.S &&
+                        tablero.GetCell(i, j + 1) == Tablero.Cell.O &&
+                        tablero.GetCell(i, j + 2) == Tablero.Cell.S)
                     {
-                        tieneS = true;
+                        return true;
                     }
-                    else if (tablero.GetCell(i, j) == Tablero.Cell.O)
-                    {
-                        tieneO = true;
-                    }
-                }
-
-                if (tablero.Ficha=='S' && tieneS && !tieneO)
-                {
-                    return true;
-                }
-                else if (tablero.Ficha == 'O' && tieneO && !tieneS)
-                {
-                    return true;
                 }
             }
-
             // revisa las columnas
             for (int j = 0; j < tablero.Tamanio;j++)
                 {
-                bool tieneS = false;
-                bool tieneO = false;
-
-                for (int i = 0; i < tablero.Tamanio; i++)
+                for (int i = 0; i < tablero.Tamanio-2; i++)
                 {
-                    if (tablero.GetCell(i, j) == Tablero.Cell.S)
+                    if (tablero.GetCell(i, j) == Tablero.Cell.S &&
+                        tablero.GetCell(i+1,j) == Tablero.Cell.O &&
+                        tablero.GetCell(i+2,j) == Tablero.Cell.S)
                     {
-                        tieneS = true;
+                        return true;
                     }
-                    else if (tablero.GetCell(i, j) == Tablero.Cell.O)
-                    {
-                        tieneO = true;
-                    }
-                }
-
-                if (tablero.Ficha == 'S' && tieneS && !tieneO)
-                {
-                    return true;
-                }
-                else if (tablero.Ficha == 'O' && tieneO && !tieneS)
-                {
-                    return true;
                 }
             }
 
             // revisa las diagonales
-            bool tieneS1 = false;
-            bool tieneO1 = false;
-            bool tieneS2 = false;
-            bool tieneO2 = false;
-
-            for (int i = 0; i < tablero.Tamanio; i++)
+            for (int i = 0; i < tablero.Tamanio-2; i++)
             {
-                if (tablero.GetCell(i, i) == Tablero.Cell.S)
+                for(int j= 0;j<tablero.Tamanio-2;j++)
                 {
-                    tieneS1 = true;
-                }
-                else if (tablero.GetCell(i, i) == Tablero.Cell.O)
-                {
-                    tieneO1 = true;
-                }
-
-                if (tablero.GetCell(i, tablero.Tamanio - i - 1) == Tablero.Cell.S)
-                {
-                    tieneS2 = true;
-                }
-                else if (tablero.GetCell(i, tablero.Tamanio - i - 1) == Tablero.Cell.O)
-                {
-                    tieneO2 = true;
+                    if (tablero.GetCell(i, j) == Tablero.Cell.S &&
+                    tablero.GetCell(i + 1, j + 1) == Tablero.Cell.O &&
+                    tablero.GetCell(i + 2, j + 2) == Tablero.Cell.S)
+                    {
+                        return true;
+                    }
                 }
             }
-
-            if (tablero.Ficha == 'S' && ((tieneS1 && !tieneO1) || (tieneS2 && !tieneO2)))
-            {
-                return true;
-            }
-            else if (tablero.Ficha == 'S' && ((tieneO1 && !tieneS1) || (tieneO2 && !tieneS2)))
-            {
-                return true;
-            }
-
             return false;
         }
         public bool JuegoTerminado()
@@ -137,7 +84,7 @@ namespace ReSOSgame
     }
     public class JuegoGeneral : Juego
     {
-        public JuegoGeneral(Tablero tablero) : base(tablero,"GENERAL", "JUGANDO")
+        public JuegoGeneral(Tablero tablero) : base(tablero,"GENERAL")
         {
         }
     }

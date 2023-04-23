@@ -40,6 +40,7 @@ namespace ReSOSgame
                 ficha = _ficha;
                 grid[row,column] = (ficha == 'S')? Cell.S:Cell.O;
                 jugador = (jugador == "Azul")? "Rojo": "Azul";
+
             }
         }
 
