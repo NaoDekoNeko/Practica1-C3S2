@@ -11,6 +11,7 @@ namespace ReSOSgame
         public char ficha;
         public string jugador;
         public Tablero tablero;
+        public string tipoDeJuego;
         public Juego(Tablero tablero)
         {
             this.tablero = tablero;

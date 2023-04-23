@@ -19,7 +19,7 @@ namespace ReSOSgame
             InitializeComponent();
             tablero = new Tablero((int)numericUpDown1.Value);
             SetContentPane();
-            juego = SelectorJuego();
+            juego = SelectorGame();
         }
         public readonly static int CANVAS_WIDTH = 400;
         public readonly static int CANVAS_HEIGHT = 400;
@@ -30,6 +30,7 @@ namespace ReSOSgame
         private GameBoardCanvas gameBoardCanvas;
         private Tablero tablero;
         private Juego juego;
+        private GameController gameController;
         private void SetContentPane()
         {
             gameBoardCanvas = new GameBoardCanvas((int)numericUpDown1.Value);
@@ -81,16 +82,18 @@ namespace ReSOSgame
                 }
             }
         }
-        // Al ir cambiando  el "" se va cambiando el tamaño del tablero
-
+        // Al ir cambiando  el "numericUpDown1" se va cambiando el tamaño del tablero
+        // Problemas: cuando se cambie de tamaño de juego se tendra que tener en cuenta el tipo de juego selecccionado con anterioridad , no se pondra cambiar luego de cambiar el tamaño.
         private void SeleccionarTamanioTablero(object sender, EventArgs e)
         {
-            tablero = new Tablero((int)numericUpDown1.Value);
+            tablero = new Tablero((int)numericUpDown1.Value); // Se crea un nuevo tablero
             SetContentPane();
-            juego = SelectorJuego();
+            juego = SelectorGame(); // Se inicializa el juego segun el tipo de Juego
+            gameController = new GameController(juego,tablero); // Se inicializa el GameControler segun el tipo de juego y el tamaño del tablero
+            
         }
         // Retorna el tipo de juego segun el radio button seleccionado
-        private Juego SelectorJuego()
+        private Juego SelectorGame()
         {
             if(radioButton5.Checked)
             {
@@ -103,6 +106,11 @@ namespace ReSOSgame
         }
 
         private void panel1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
         {
 
         }

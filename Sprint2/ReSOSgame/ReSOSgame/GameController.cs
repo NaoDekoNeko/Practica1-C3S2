@@ -9,10 +9,13 @@ namespace ReSOSgame
     internal class GameController
     {
         private Juego juego;
-        public GameController() { 
+        private Tablero tablero;
         
-        
+        public GameController(Juego juego,Tablero tablero) {
+            this.juego = juego;
+            this.tablero = tablero;
         }
+                    
 
     }
 }
