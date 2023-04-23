@@ -1,7 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ReSOSgame;
-using System;
-using System.Security.Permissions;
 
 namespace PruebasSOSgame
 // HU :Historia de Usuario
