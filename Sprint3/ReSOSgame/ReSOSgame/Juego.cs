@@ -3,139 +3,135 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
+using static ReSOSgame.Tablero;
 
 namespace ReSOSgame
 {
     public abstract class Juego
     {
         public Tablero tablero;
+        public ScoreValidator validator;
         public Juego(Tablero tablero)
         {
             this.tablero = tablero;
+            validator = new ScoreValidator(tablero);
         }
-        public bool JuegoTerminado()
-        {
-            for (int i = 0; i < tablero.Tamanio; i++)
-            {
-                for (int j = 0; j < tablero.Tamanio; j++)
-                {
-                    if (tablero.GetCell(i, j) == Tablero.Cell.VACIA)
-                        return false;
-                }
-            }
-            return true;
-        }
+        public abstract void FinalGameState(); // Funcion que indica el estado final del juego
+        public abstract void MakeMove(int row,int col ,Cell ficha); // Funcion para realizar un movimiento
+        
     }
-    public class JuegoSimple : Juego,IJuegoGanado
+    public class JuegoSimple : Juego
     {
         public JuegoSimple(Tablero tablero) : base(tablero)
         {
-            
         }
-
-        public bool JuegoGanado()
+        // Funcion que verifica si se ha ganado el juego simple
+        // Funcion que actualiza el estado del juego Simple 
+        public override void FinalGameState() 
         {
-            // revisa las filas
-            for (int i = 0; i < tablero.Tamanio; i++)
+            if (validator.FullBoard()) 
             {
-                for (int j = 0; j < tablero.Tamanio-2; j++)
-                {
-                    if (tablero.GetCell(i, j) == Tablero.Cell.S &&
-                        tablero.GetCell(i, j + 1) == Tablero.Cell.O &&
-                        tablero.GetCell(i, j + 2) == Tablero.Cell.S)
-                    {
-                        return true;
-                    }
-                }
+                tablero.EstadoDeJuego = Tablero.GameState.EMPATE;
             }
-            // revisa las columnas
-            for (int j = 0; j < tablero.Tamanio;j++)
-                {
-                for (int i = 0; i < tablero.Tamanio-2; i++)
-                {
-                    if (tablero.GetCell(i, j) == Tablero.Cell.S &&
-                        tablero.GetCell(i+1,j) == Tablero.Cell.O &&
-                        tablero.GetCell(i+2,j) == Tablero.Cell.S)
-                    {
-                        return true;
-                    }
-                }
-            }
-            // revisa las diagonales
-            for (int i = 0; i < tablero.Tamanio-2; i++)
+            else
             {
-                for(int j= 0;j<tablero.Tamanio-2;j++)
+                tablero.EstadoDeJuego = tablero.Turno == Tablero.Jugador.AZUL ?
+                    Tablero.GameState.GANOAZUL : Tablero.GameState.GANOROJO;  // Cambia el estado del tablero
+            }
+        }
+        public override void MakeMove(int row, int column, Cell _ficha)
+        {
+            if(!validator.GameOver()) // Si es el estado de juego es JUGANDO
+            {
+                if (row >= 0 && row < tablero.Tamanio && column >= 0 && column < tablero.Tamanio
+                       && tablero.GetCell(row, column) == 0)
                 {
-                    if (tablero.GetCell(i, j) == Tablero.Cell.S &&
-                    tablero.GetCell(i + 1, j + 1) == Tablero.Cell.O &&
-                    tablero.GetCell(i + 2, j + 2) == Tablero.Cell.S)
+                    tablero.ValidMove = true;
+                    tablero.Ficha = _ficha;
+                    tablero.Grid[row, column] = _ficha;
+                    if(validator.HasOnePoint(row,column,tablero.Ficha) || validator.FullBoard() ) // Cuando se ha hecho ganado 1 punto 
                     {
-                        return true;
+                        FinalGameState();
+                    }
+
+                    if (tablero.EstadoDeJuego == GameState.JUGANDO)
+                    {
+                        tablero.Turno = (tablero.Turno == Jugador.AZUL) ? Jugador.ROJO : Jugador.AZUL;
                     }
                 }
+                else
+                {
+                    tablero.ValidMove = false;
+                }
             }
-            return false;
         }
     }
-    public class JuegoGeneral : Juego, IJuegoGanado
+    public class JuegoGeneral : Juego
     {
+        // Atributos para tener los puntajes de cada jugador
         private int puntajeAzul = 0;
         private int puntajeRojo = 0;
         public JuegoGeneral(Tablero tablero) : base(tablero)
         {
         }
+        // Funcion que verifica si se ha ganado en un Juego General
+        
+        public override void FinalGameState() // Calcula el estado final comparando los puntajes
+        {
 
-        public bool JuegoGanado()
-        {
-            // revisa las filas
-            for (int i = 0; i < tablero.Tamanio; i++)
+            if (puntajeAzul > puntajeRojo)
             {
-                for (int j = 0; j < tablero.Tamanio - 2; j++)
-                {
-                    if (tablero.GetCell(i, j) == Tablero.Cell.S &&
-                        tablero.GetCell(i, j + 1) == Tablero.Cell.O &&
-                        tablero.GetCell(i, j + 2) == Tablero.Cell.S)
-                    {
-                        AumentarPuntaje(tablero.Turno);
-                    }
-                }
+                tablero.EstadoDeJuego = Tablero.GameState.GANOAZUL; // Establece que el azul ha ganado
             }
-            // revisa las columnas
-            for (int j = 0; j < tablero.Tamanio; j++)
+            else if (puntajeAzul < puntajeRojo)
             {
-                for (int i = 0; i < tablero.Tamanio - 2; i++)
-                {
-                    if (tablero.GetCell(i, j) == Tablero.Cell.S &&
-                        tablero.GetCell(i + 1, j) == Tablero.Cell.O &&
-                        tablero.GetCell(i + 2, j) == Tablero.Cell.S)
-                    {
-                        AumentarPuntaje(tablero.Turno);
-                    }
-                }
+                tablero.EstadoDeJuego = Tablero.GameState.GANOROJO; // Establece que el rojo ha ganado
             }
-            // revisa las diagonales
-            for (int i = 0; i < tablero.Tamanio - 2; i++)
+            else if (puntajeRojo==puntajeAzul)
             {
-                for (int j = 0; j < tablero.Tamanio - 2; j++)
-                {
-                    if (tablero.GetCell(i, j) == Tablero.Cell.S &&
-                    tablero.GetCell(i + 1, j + 1) == Tablero.Cell.O &&
-                    tablero.GetCell(i + 2, j + 2) == Tablero.Cell.S)
-                    {
-                        AumentarPuntaje(tablero.Turno);
-                    }
-                }
+                tablero.EstadoDeJuego = Tablero.GameState.EMPATE; // Establece que ha habido un empate
             }
-            if (puntajeAzul != puntajeRojo)
-                return true;
-            return false;
+            //sino, el estado de juego es JUGANDO
         }
-        public void AumentarPuntaje(Tablero.Jugador turno)
+        public override void MakeMove(int row, int column, Cell _ficha)
         {
-            if (turno == Tablero.Jugador.AZUL)
-                puntajeAzul++;
+            if(!validator.GameOver())
+            {
+                if (row >= 0 && row < tablero.Tamanio && column >= 0 && column < tablero.Tamanio
+                       && tablero.Grid[row, column] == 0)
+                {
+                    tablero.ValidMove = true;
+                    tablero.Ficha = _ficha;
+                    tablero.Grid[row, column] = _ficha;
+                    if (validator.HasOnePoint(row, column, tablero.Ficha)) // Si se ha obtenido un punto
+                    {
+                        //en el turno del jugador AZUL
+                        if (tablero.Turno == Jugador.AZUL)
+                        {
+                            puntajeAzul++; // Se agrega un punto al jugador Azul
+                        }
+                        //en el turno del jugador ROJO
+                        else
+                        {
+                            puntajeRojo++; // Se agrega un punto al jugador Rojo
+                        }
+                    }
+                    if (validator.FullBoard())
+                    {
+                        FinalGameState(); // Actualiza el estado del juego cuando el tablero esta lleno
+                    }
+                    // Nota: esa funcion detiene el cambio de turno cuando ya se halla ganado o empatado
+                    if (tablero.EstadoDeJuego == GameState.JUGANDO) // Si se sigue jugando
+                    {
+                        tablero.Turno = (tablero.Turno == Jugador.AZUL) ? Jugador.ROJO : Jugador.AZUL; // Se cambia de turno al jugador contrario
+                    }
+                }
+            }
             else
-                puntajeRojo++;
+            {
+                tablero.ValidMove = false;
+            }
         }
     }
 }

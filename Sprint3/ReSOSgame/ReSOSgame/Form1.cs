@@ -60,6 +60,10 @@ namespace ReSOSgame
                 return new JuegoGeneral(tablero);
             }
         }
+        private void ShowGameStatus() 
+        {
+            label2.Text = tablero.EstadoDeJuego.ToString();
+        }
         private void CargarAlDataGrid()
         {
             dataGridView1.DataSource = ConvertToDataTable(tablero.Grid);
@@ -70,10 +74,13 @@ namespace ReSOSgame
             Tablero.Cell ficha = (turno == Tablero.Jugador.AZUL) ? (radioButton3.Checked == true ? Tablero.Cell.S:
                 Tablero.Cell.O):
                 (radioButton1.Checked == true ? Tablero.Cell.S:Tablero.Cell.O);
-            tablero.MakeMove(e.RowIndex,e.ColumnIndex,ficha);
+            juego.MakeMove(e.RowIndex,e.ColumnIndex,ficha);
             CargarAlDataGrid();
-            dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Style.ForeColor = 
-                (turno!=Tablero.Jugador.AZUL)?Color.Blue:Color.Red;
+            if (tablero.ValidMove)
+            {
+                dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Style.ForeColor =
+                (turno == Tablero.Jugador.AZUL) ? Color.Blue : Color.Red;
+            }
         }
         private void ReIniciarJuego()
         { 
