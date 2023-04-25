@@ -86,6 +86,7 @@ namespace ReSOSgame
     {
         public JuegoGeneral(Tablero tablero) : base(tablero,"GENERAL")
         {
+
         }
     }
 }
