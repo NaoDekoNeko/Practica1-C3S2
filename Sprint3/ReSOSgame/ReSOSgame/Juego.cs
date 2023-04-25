@@ -8,14 +8,10 @@ namespace ReSOSgame
 {
     public abstract class Juego
     {
-        public char ficha;
-        public string jugador;
         public Tablero tablero;
-        public string tipoDeJuego;
-        public Juego(Tablero tablero, string tipoDeJuego)
+        public Juego(Tablero tablero)
         {
             this.tablero = tablero;
-            this.tipoDeJuego = tipoDeJuego;
         }
         public bool JuegoTerminado()
         {
@@ -32,7 +28,7 @@ namespace ReSOSgame
     }
     public class JuegoSimple : Juego,IJuegoGanado
     {
-        public JuegoSimple(Tablero tablero) : base(tablero,"SIMPLE")
+        public JuegoSimple(Tablero tablero) : base(tablero)
         {
             
         }
@@ -65,7 +61,6 @@ namespace ReSOSgame
                     }
                 }
             }
-
             // revisa las diagonales
             for (int i = 0; i < tablero.Tamanio-2; i++)
             {
@@ -82,60 +77,65 @@ namespace ReSOSgame
             return false;
         }
     }
-    public class JuegoGeneral : Juego,IJuegoGanado
+    public class JuegoGeneral : Juego, IJuegoGanado
     {
         private int puntajeAzul = 0;
         private int puntajeRojo = 0;
-        public JuegoGeneral(Tablero tablero) : base(tablero,"GENERAL")
+        public JuegoGeneral(Tablero tablero) : base(tablero)
         {
         }
 
         public bool JuegoGanado()
         {
-            while (!JuegoTerminado())
+            // revisa las filas
+            for (int i = 0; i < tablero.Tamanio; i++)
             {
-                // revisa las filas
-                for (int i = 0; i < tablero.Tamanio; i++)
+                for (int j = 0; j < tablero.Tamanio - 2; j++)
                 {
-                    for (int j = 0; j < tablero.Tamanio - 2; j++)
+                    if (tablero.GetCell(i, j) == Tablero.Cell.S &&
+                        tablero.GetCell(i, j + 1) == Tablero.Cell.O &&
+                        tablero.GetCell(i, j + 2) == Tablero.Cell.S)
                     {
-                        if (tablero.GetCell(i, j) == Tablero.Cell.S &&
-                            tablero.GetCell(i, j + 1) == Tablero.Cell.O &&
-                            tablero.GetCell(i, j + 2) == Tablero.Cell.S)
-                        {
-                            return true;
-                        }
-                    }
-                }
-                // revisa las columnas
-                for (int j = 0; j < tablero.Tamanio; j++)
-                {
-                    for (int i = 0; i < tablero.Tamanio - 2; i++)
-                    {
-                        if (tablero.GetCell(i, j) == Tablero.Cell.S &&
-                            tablero.GetCell(i + 1, j) == Tablero.Cell.O &&
-                            tablero.GetCell(i + 2, j) == Tablero.Cell.S)
-                        {
-                            return true;
-                        }
-                    }
-                }
-
-                // revisa las diagonales
-                for (int i = 0; i < tablero.Tamanio - 2; i++)
-                {
-                    for (int j = 0; j < tablero.Tamanio - 2; j++)
-                    {
-                        if (tablero.GetCell(i, j) == Tablero.Cell.S &&
-                        tablero.GetCell(i + 1, j + 1) == Tablero.Cell.O &&
-                        tablero.GetCell(i + 2, j + 2) == Tablero.Cell.S)
-                        {
-                            return true;
-                        }
+                        AumentarPuntaje(tablero.Turno);
                     }
                 }
             }
+            // revisa las columnas
+            for (int j = 0; j < tablero.Tamanio; j++)
+            {
+                for (int i = 0; i < tablero.Tamanio - 2; i++)
+                {
+                    if (tablero.GetCell(i, j) == Tablero.Cell.S &&
+                        tablero.GetCell(i + 1, j) == Tablero.Cell.O &&
+                        tablero.GetCell(i + 2, j) == Tablero.Cell.S)
+                    {
+                        AumentarPuntaje(tablero.Turno);
+                    }
+                }
+            }
+            // revisa las diagonales
+            for (int i = 0; i < tablero.Tamanio - 2; i++)
+            {
+                for (int j = 0; j < tablero.Tamanio - 2; j++)
+                {
+                    if (tablero.GetCell(i, j) == Tablero.Cell.S &&
+                    tablero.GetCell(i + 1, j + 1) == Tablero.Cell.O &&
+                    tablero.GetCell(i + 2, j + 2) == Tablero.Cell.S)
+                    {
+                        AumentarPuntaje(tablero.Turno);
+                    }
+                }
+            }
+            if (puntajeAzul != puntajeRojo)
+                return true;
             return false;
+        }
+        public void AumentarPuntaje(Tablero.Jugador turno)
+        {
+            if (turno == Tablero.Jugador.AZUL)
+                puntajeAzul++;
+            else
+                puntajeRojo++;
         }
     }
 }

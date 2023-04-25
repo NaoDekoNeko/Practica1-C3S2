@@ -11,11 +11,13 @@ namespace ReSOSgame
     public class Tablero
     {
         public enum Cell { VACIA, INVALIDA, S,O}
+        public enum Jugador { AZUL,ROJO}
+        public enum EstadoJuego { JUGANDO,EMPATE,GANOAZUL,GANOROJO }
         private int tamanio;
         private Cell[,] grid;
-        private char ficha = 'S';
-        private string jugador = "Azul";
-        private string estadoDeJuego;
+        private Cell ficha;
+        private Jugador turno;
+        private EstadoJuego estadoDeJuego;
         public Tablero(int tamanio)
         {
             grid = new Cell[tamanio, tamanio];
@@ -28,19 +30,19 @@ namespace ReSOSgame
             else
                 return Cell.INVALIDA;
         }
-        public char Ficha { get { return ficha; } }
-        public string Jugador { get { return jugador; } }
+        public Cell Ficha { get { return ficha; } }
+        public Jugador Turno { get { return turno; } }
         public int Tamanio { get { return tamanio; } }
-        public string EstadoDeJuego {  get { return estadoDeJuego; } }
-        public void MakeMove(int row, int column, char _ficha)
+        public EstadoJuego EstadoDeJuego {  get { return estadoDeJuego; } }
+        public Cell[,] Grid { get { return grid; } }
+        public void MakeMove(int row, int column, Cell _ficha)
         {
             if (row >= 0 && row < tamanio && column >= 0 && column < tamanio
                        && grid[row,column] == 0)
             {
                 ficha = _ficha;
-                grid[row,column] = (ficha == 'S')? Cell.S:Cell.O;
-                jugador = (jugador == "Azul")? "Rojo": "Azul";
-
+                grid[row, column] = ficha;
+                turno = (turno == Jugador.AZUL)? Jugador.ROJO: Jugador.AZUL;
             }
         }
 
@@ -53,9 +55,9 @@ namespace ReSOSgame
                     grid[row, column] = Cell.VACIA;
                 }
             }
-            estadoDeJuego = "JUGANDO";
-            ficha = 'S';
-            jugador = "Azul";
+            estadoDeJuego = EstadoJuego.JUGANDO;
+            ficha = Cell.S;
+            turno = Jugador.AZUL;
         }
     }
 }
