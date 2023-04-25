@@ -41,7 +41,7 @@ namespace PruebasSOSgame
         {
             JuegoSimple juegoSimple;
             juegoSimple = new JuegoSimple(tablero);
-            Assert.AreEqual("SIMPLE", juegoSimple.tipoDeJuego);
+            Assert.IsTrue(juegoSimple is JuegoSimple);
         }
         //Criterio de aceptacion 2.2
         [TestMethod]
@@ -49,21 +49,21 @@ namespace PruebasSOSgame
         {
             JuegoGeneral juegoGeneral;
             juegoGeneral = new JuegoGeneral(tablero);
-            Assert.AreEqual("GENERAL", juegoGeneral.tipoDeJuego);
+            Assert.IsTrue(juegoGeneral is JuegoGeneral);
         }
     }
 
     [TestClass] // Clase de Codigo de Prueba HU.3
     public class TestShowGameState
     {
-        private Tablero t = new Tablero(6);
+        private Tablero tablero = new Tablero(6);
         
         //Criterio de aceptacion 3.1
         [TestMethod]
         public void ShowGameState() 
         {
-            t.InitBoard();
-            Assert.AreEqual("JUGANDO", t.EstadoDeJuego);
+            tablero.InitBoard();
+            Assert.AreEqual(Tablero.EstadoJuego.JUGANDO, tablero.EstadoDeJuego);
         }
     }
 
@@ -75,6 +75,7 @@ namespace PruebasSOSgame
         public void Init()
         {
             tablero = new Tablero(3);
+            tablero.InitBoard();
         }
         [TestCleanup]
         public void Teardown()
@@ -84,18 +85,18 @@ namespace PruebasSOSgame
         [TestMethod]
         public void MakeBlueMoveS_SimpleGame()
         {
-            tablero.MakeMove(1, 1, 'S');
+            tablero.MakeMove(1, 1, Tablero.Cell.S);
             Assert.AreEqual(Tablero.Cell.S, tablero.GetCell(1, 1));
-            Assert.AreEqual("Rojo", tablero.Jugador);
+            Assert.AreEqual(Tablero.Jugador.ROJO, tablero.Turno);
         }
         //Criterio de aceptacion 4.2
         [TestMethod]
         public void MakeRedMoveO_SimpleGame()
         {
-            tablero.MakeMove(0, 0, 'S');
-            tablero.MakeMove(2, 2, 'O');
+            tablero.MakeMove(0, 0, Tablero.Cell.S);
+            tablero.MakeMove(2, 2, Tablero.Cell.O);
             Assert.AreEqual(Tablero.Cell.O,tablero.GetCell(2, 2));
-            Assert.AreEqual("Azul", tablero.Jugador);
+            Assert.AreEqual(Tablero.Jugador.AZUL, tablero.Turno);
         }
     }
 
@@ -109,6 +110,7 @@ namespace PruebasSOSgame
         {
             tablero = new Tablero(3);
             juego = new JuegoSimple(tablero);
+            tablero.InitBoard();
         }
         [TestCleanup]
         public void Teardown()
@@ -118,31 +120,28 @@ namespace PruebasSOSgame
         [TestMethod]
         public void VictorybluePlayerWithS()
         {
-            
-            tablero.MakeMove(0, 0, 'S');
-            tablero.MakeMove(0, 1, '0');
-            tablero.MakeMove(1, 1, '0');
-            tablero.MakeMove(0, 2, '0');
-            tablero.MakeMove(2, 2, 'S');
+            tablero.MakeMove(0, 0, Tablero.Cell.S);
+            tablero.MakeMove(0, 1, Tablero.Cell.O);
+            tablero.MakeMove(1, 1, Tablero.Cell.O);
+            tablero.MakeMove(0, 2, Tablero.Cell.O);
+            tablero.MakeMove(2, 2, Tablero.Cell.S);
             new Consola(tablero).DisplayBoard();
-            Assert.AreEqual("Rojo", tablero.Jugador);
-            Assert.AreEqual('S', tablero.Ficha);
+            Assert.AreEqual(Tablero.Jugador.ROJO, tablero.Turno);
+            Assert.AreEqual(Tablero.Cell.S, tablero.Ficha);
             Assert.AreEqual(true, juego.JuegoGanado());
         }
         //Criterio de aceptacion 5.2
         [TestMethod]
         public void VictoryRedPlayerWithO()
         {
-            Assert.AreEqual("Azul", tablero.Jugador);
-            tablero.MakeMove(0, 0, 'S');
-            tablero.MakeMove(0, 2, 'S');
-            tablero.MakeMove(2, 2, 'S');
-            tablero.MakeMove(0, 1, 'O');
+            tablero.MakeMove(0, 0, Tablero.Cell.S);
+            tablero.MakeMove(0, 2, Tablero.Cell.S);
+            tablero.MakeMove(2, 2, Tablero.Cell.S);
+            tablero.MakeMove(0, 1, Tablero.Cell.O);
             new Consola(tablero).DisplayBoard();
-            Assert.AreEqual("Azul", tablero.Jugador);
-            Assert.AreEqual('O', tablero.Ficha );
+            Assert.AreEqual(Tablero.Jugador.AZUL, tablero.Turno);
+            Assert.AreEqual(Tablero.Cell.O, tablero.Ficha);
             Assert.AreEqual(true,juego.JuegoGanado());
-
         }
     }
 }
