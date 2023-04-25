@@ -32,10 +32,8 @@ namespace PruebasSOSgame
     [TestClass] // Clase de Codigo de Prueba HU.2
     public class TestSelectorModeGame
     {
-        //Criterio de aceptacion 2.1        
         private Tablero tablero = new Tablero(6);
-        
-
+        //Criterio de aceptacion 2.1
         [TestMethod]
         public void SelectSimpleGameMode()
         {
@@ -63,18 +61,20 @@ namespace PruebasSOSgame
         public void ShowGameState() 
         {
             tablero.InitBoard();
-            Assert.AreEqual(Tablero.EstadoJuego.JUGANDO, tablero.EstadoDeJuego);
+            Assert.AreEqual(Tablero.GameState.JUGANDO, tablero.EstadoDeJuego);
         }
     }
 
     [TestClass] // Clase de Codigo de Prueba HU.4
-    public class TestMakeMove
+    public class TestMakeMoveSimple
     {
         private Tablero tablero;
+        private Juego juego;
         [TestInitialize]
         public void Init()
         {
             tablero = new Tablero(3);
+            juego = new JuegoSimple(tablero);
             tablero.InitBoard();
         }
         [TestCleanup]
@@ -85,7 +85,7 @@ namespace PruebasSOSgame
         [TestMethod]
         public void MakeBlueMoveS_SimpleGame()
         {
-            tablero.MakeMove(1, 1, Tablero.Cell.S);
+            juego.MakeMove(1, 1, Tablero.Cell.S);
             Assert.AreEqual(Tablero.Cell.S, tablero.GetCell(1, 1));
             Assert.AreEqual(Tablero.Jugador.ROJO, tablero.Turno);
         }
@@ -93,15 +93,15 @@ namespace PruebasSOSgame
         [TestMethod]
         public void MakeRedMoveO_SimpleGame()
         {
-            tablero.MakeMove(0, 0, Tablero.Cell.S);
-            tablero.MakeMove(2, 2, Tablero.Cell.O);
+            juego.MakeMove(0, 0, Tablero.Cell.S);
+            juego.MakeMove(2, 2, Tablero.Cell.O);
             Assert.AreEqual(Tablero.Cell.O,tablero.GetCell(2, 2));
             Assert.AreEqual(Tablero.Jugador.AZUL, tablero.Turno);
         }
     }
 
     [TestClass] // Clase de Codigo de Prueba HU.5
-    public class TestGameVictory
+    public class TestSimpleGameVictory
     {
         private Tablero tablero;
         private JuegoSimple juego;
@@ -120,28 +120,148 @@ namespace PruebasSOSgame
         [TestMethod]
         public void VictorybluePlayerWithS()
         {
-            tablero.MakeMove(0, 0, Tablero.Cell.S);
-            tablero.MakeMove(0, 1, Tablero.Cell.O);
-            tablero.MakeMove(1, 1, Tablero.Cell.O);
-            tablero.MakeMove(0, 2, Tablero.Cell.O);
-            tablero.MakeMove(2, 2, Tablero.Cell.S);
+            juego.MakeMove(0, 0, Tablero.Cell.S);
+            juego.MakeMove(0, 1, Tablero.Cell.O);
+            juego.MakeMove(1, 1, Tablero.Cell.O);
+            juego.MakeMove(0, 2, Tablero.Cell.O);
+            juego.MakeMove(2, 2, Tablero.Cell.S);
             new Consola(tablero).DisplayBoard();
-            Assert.AreEqual(Tablero.Jugador.ROJO, tablero.Turno);
+            Assert.AreEqual(Tablero.Jugador.AZUL, tablero.Turno);
             Assert.AreEqual(Tablero.Cell.S, tablero.Ficha);
-            Assert.AreEqual(true, juego.JuegoGanado());
+            Assert.AreEqual(Tablero.GameState.GANOAZUL, tablero.EstadoDeJuego);
         }
         //Criterio de aceptacion 5.2
         [TestMethod]
         public void VictoryRedPlayerWithO()
         {
-            tablero.MakeMove(0, 0, Tablero.Cell.S);
-            tablero.MakeMove(0, 2, Tablero.Cell.S);
-            tablero.MakeMove(2, 2, Tablero.Cell.S);
-            tablero.MakeMove(0, 1, Tablero.Cell.O);
+            juego.MakeMove(0, 0, Tablero.Cell.S);
+            juego.MakeMove(0, 2, Tablero.Cell.S);
+            juego.MakeMove(2, 2, Tablero.Cell.S);
+            juego.MakeMove(0, 1, Tablero.Cell.O);
             new Consola(tablero).DisplayBoard();
-            Assert.AreEqual(Tablero.Jugador.AZUL, tablero.Turno);
+            Assert.AreEqual(Tablero.Jugador.ROJO, tablero.Turno);
             Assert.AreEqual(Tablero.Cell.O, tablero.Ficha);
-            Assert.AreEqual(true,juego.JuegoGanado());
+            Assert.AreEqual(Tablero.GameState.GANOROJO, tablero.EstadoDeJuego);
+        }
+    }
+    [TestClass]// Clase de Codigo de Prueba HU.6
+    public class TestMakeMoveGeneral
+    {
+        private Tablero tablero;
+        private Juego juego;
+        [TestInitialize]
+        public void Init()
+        {
+            tablero = new Tablero(3);
+            juego = new JuegoGeneral(tablero);
+            tablero.InitBoard();
+        }
+        [TestCleanup]
+        public void Teardown()
+        {
+        }
+        [TestMethod]//Criterio de aceptacion 6.1
+        public void MakeBlueMoveO_GeneralGame()
+        {
+            juego.MakeMove(0, 2, Tablero.Cell.O);
+            Assert.AreEqual(Tablero.Cell.O, tablero.GetCell(0, 2));
+            Assert.AreEqual(Tablero.Jugador.ROJO, tablero.Turno);
+
+        }
+        [TestMethod]//Criterio de aceptacion 6.2
+        public void MakeRedMoveS_GeneralGame()
+        {
+            juego.MakeMove(0, 0, Tablero.Cell.O);
+            juego.MakeMove(2, 2, Tablero.Cell.S);
+            Assert.AreEqual(Tablero.Cell.S, tablero.GetCell(2, 2));
+            Assert.AreEqual(Tablero.Jugador.AZUL, tablero.Turno);
+        }
+    }
+    [TestClass] // Clase de Codigo de Prueba HU.7
+    public class TestGeneralGameVictory
+    {
+        private Tablero tablero;
+        private JuegoSimple juego;
+        [TestInitialize]
+        public void Init()
+        {
+            tablero = new Tablero(3);
+            juego = new JuegoSimple(tablero);
+            tablero.InitBoard();
+        }
+        [TestCleanup]
+        public void Teardown()
+        {
+        }
+        //Criterio de aceptacion 7.1
+        [TestMethod]
+        public void FullBoard()
+        {
+            Random rd = new Random();
+            int n;
+            for (int i = 0; i < tablero.Tamanio; i++)
+            {
+                for(int j = 0; j< tablero.Tamanio;j++)
+                {
+                    n = rd.Next(100);
+                    if(n%2 ==0)
+                    {
+                        juego.MakeMove(i, j, Tablero.Cell.S);
+                    }
+                    else
+                    {
+                        juego.MakeMove(i, j, Tablero.Cell.O);
+                    }
+                }
+            }
+            new Consola(tablero).DisplayBoard();
+            Assert.IsTrue(juego.validator.FullBoard());
+        }
+        //Criterio de aceptacion 7.2
+        [TestMethod]
+        public void VictoryFullboardBlue()
+        {
+            juego.MakeMove(0, 2, Tablero.Cell.S);
+            juego.MakeMove(1, 1, Tablero.Cell.O);
+            juego.MakeMove(2, 0, Tablero.Cell.S);
+            juego.MakeMove(0, 0, Tablero.Cell.O);
+            juego.MakeMove(0, 1, Tablero.Cell.O);
+            juego.MakeMove(2, 1, Tablero.Cell.O);
+            juego.MakeMove(2, 2, Tablero.Cell.S);
+            juego.MakeMove(1, 2, Tablero.Cell.O);
+            juego.MakeMove(1, 0, Tablero.Cell.S);
+            new Consola(tablero).DisplayBoard();
+            Assert.AreEqual(Tablero.GameState.GANOAZUL, tablero.EstadoDeJuego);
+        }
+        //Criterio de aceptacion 7.3
+        [TestMethod]
+        public void VictoryFullboardRed()
+        {
+            juego.MakeMove(0, 0, Tablero.Cell.S);
+            juego.MakeMove(0, 1, Tablero.Cell.S);
+            juego.MakeMove(0, 2, Tablero.Cell.S);
+            juego.MakeMove(1, 0, Tablero.Cell.O);
+            juego.MakeMove(1, 1, Tablero.Cell.S);
+            juego.MakeMove(1, 2, Tablero.Cell.S);
+            juego.MakeMove(2, 1, Tablero.Cell.S);
+            juego.MakeMove(2, 0, Tablero.Cell.S);
+            juego.MakeMove(2, 2, Tablero.Cell.O);
+            new Consola(tablero).DisplayBoard();
+            Assert.AreEqual(Tablero.GameState.GANOROJO, tablero.EstadoDeJuego);
+        }
+        //Criterio de aceptacion 7.4
+        [TestMethod]
+        public void DrawFullBoardS()
+        {
+            for(int i=0;i<tablero.Tamanio;i++)
+            {
+                for(int j=0;j<tablero.Tamanio;j++)
+                {
+                    juego.MakeMove(i, j, Tablero.Cell.S);
+                }
+            }
+            new Consola(tablero).DisplayBoard();
+            Assert.AreEqual(Tablero.GameState.EMPATE, tablero.EstadoDeJuego);
         }
     }
 }
