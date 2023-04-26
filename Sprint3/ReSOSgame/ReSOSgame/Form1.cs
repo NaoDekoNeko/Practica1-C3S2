@@ -17,19 +17,11 @@ namespace ReSOSgame
         public Form1()
         {
             InitializeComponent();
-            tablero = new Tablero((int)numericUpDown1.Value);
-            ReIniciarJuego();
         }
         private Tablero tablero;
         private Juego juego;
-       // Al ir cambiando  el "numericUpDown1" se va cambiando el tamaño del tablero
-        // Problemas: cuando se cambie de tamaño de juego se tendra que tener en
-        // cuenta el tipo de juego selecccionado con anterioridad , no se pondra cambiar luego de cambiar el tamaño.
-        private void SeleccionarTamanioTablero(object sender, EventArgs e)
-        {
-            tablero = new Tablero((int)numericUpDown1.Value); // Se crea un nuevo tablero
-            ReIniciarJuego();
-        }
+        //Este método convierte un array 2D de cualquier tipo
+        //a un DataTable;
         private DataTable ConvertToDataTable<T>(T[,] array)
         {
             DataTable table = new DataTable();
@@ -46,12 +38,17 @@ namespace ReSOSgame
                 }
                 table.Rows.Add(row);
             }
+            //acá se hará el primer resize del DataGridView
+            for (int i = 0; i < tablero.Tamanio; i++)
+            {
+                dataGridView1.RowTemplate.Height = dataGridView1.Height / (int)numericUpDown1.Value;
+            }
             return table;
         }
         // Retorna el tipo de juego segun el radio button seleccionado
         private Juego GameSelector()
         {
-            if(radioButton5.Checked)
+            if (radioButton5.Checked)
             {
                 return new JuegoSimple(tablero);
             }
@@ -60,34 +57,84 @@ namespace ReSOSgame
                 return new JuegoGeneral(tablero);
             }
         }
-        private void ShowGameStatus() 
+        private void ShowGameStatus()
         {
-            label2.Text = tablero.EstadoDeJuego.ToString();
+            switch(tablero.EstadoDeJuego)
+            {
+                case Tablero.GameState.JUGANDO:
+                    label2.Text = "JUGANDO";
+                    label2.ForeColor = Color.Black;
+                    break;
+                case Tablero.GameState.GANOROJO:
+                    label2.Text = "GANÓ EL JUGADOR ROJO";
+                    label2.ForeColor = Color.Red;
+                    break;
+                case Tablero.GameState.GANOAZUL:
+                    label2.Text = "GANÓ EL JUGADOR AZUL";
+                    label2.ForeColor = Color.Blue;
+                    break;
+                case Tablero.GameState.EMPATE:
+                    label2.Text = "EMPATE";
+                    label2.ForeColor = Color.Green;
+                    break;
+            }
+            
         }
+        //Este método cargará los datos de Grid
+        //al DataGridView
         private void CargarAlDataGrid()
         {
             dataGridView1.DataSource = ConvertToDataTable(tablero.Grid);
+            //Hace que al principio el color de la fuente 
+            //sea blanca para que coincida con el color de fondo
+            dataGridView1.DefaultCellStyle.ForeColor = Color.White;
+            //Segundo resize del DataGridView
+            for (int i = 0; i < tablero.Tamanio; i++)
+            {
+                dataGridView1.RowTemplate.Height = dataGridView1.Height / ((int)numericUpDown1.Value + 1);
+            }
+            //Que ninguna celda empiece seleccionada
+            dataGridView1.CurrentCell = null;
         }
         private void ClickeoGrid(object sender, DataGridViewCellEventArgs e)
         {
             Tablero.Jugador turno = tablero.Turno;
-            Tablero.Cell ficha = (turno == Tablero.Jugador.AZUL) ? (radioButton3.Checked == true ? Tablero.Cell.S:
-                Tablero.Cell.O):
-                (radioButton1.Checked == true ? Tablero.Cell.S:Tablero.Cell.O);
-            juego.MakeMove(e.RowIndex,e.ColumnIndex,ficha);
-            CargarAlDataGrid();
+            Tablero.Cell ficha = (turno == Tablero.Jugador.AZUL) ?
+                (radioButton3.Checked == true ?
+                Tablero.Cell.S : Tablero.Cell.O) :
+                (radioButton1.Checked == true ?
+                Tablero.Cell.S : Tablero.Cell.O);
+            juego.MakeMove(e.RowIndex, e.ColumnIndex, ficha);
             if (tablero.ValidMove)
             {
+                dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = ficha;
                 dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Style.ForeColor =
                 (turno == Tablero.Jugador.AZUL) ? Color.Blue : Color.Red;
             }
+            ShowGameStatus();
+            ShowTurn();
         }
+        // Restricción: no se puede cambiar el tamaño ni modo de juego durante una partida
         private void ReIniciarJuego()
-        { 
-            if(juego!=null)
+        {
+            // Al ir cambiando  el "numericUpDown1" se va cambiando el tamaño del tablero
+            tablero = new Tablero((int)numericUpDown1.Value);
+            if (juego != null)
                 GC.SuppressFinalize(juego);
             juego = GameSelector();
             CargarAlDataGrid();
+            ShowGameStatus();
+            ShowTurn();
+        }
+
+        private void NuevaPartida(object sender, EventArgs e)
+        {
+            ReIniciarJuego();
+        }
+        private void ShowTurn()
+        {
+            label3.Text = tablero.Turno.ToString();
+            label3.ForeColor = tablero.Turno == Tablero.Jugador.AZUL ? Color.Blue : Color.Red;
         }
     }
 }
