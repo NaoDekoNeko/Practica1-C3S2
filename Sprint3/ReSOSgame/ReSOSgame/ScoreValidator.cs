@@ -41,8 +41,9 @@ namespace ReSOSgame
                     (tablero.GetCell(row - 1, col) == Cell.O && tablero.GetCell(row - 2, col) == Cell.S);
             }
             return (tablero.GetCell(row - 1, col - 1) == Cell.S && tablero.GetCell(row + 1, col + 1) == Cell.S) ||
-                    (tablero.GetCell(row, col - 1) == Cell.S && tablero.GetCell(row, col + 1) == Cell.S) ||
-                    (tablero.GetCell(row+1, col) == Cell.S && tablero.GetCell(row-1, col) == Cell.S);
+                    (tablero.GetCell(row+1,col-1) == Cell.S && tablero.GetCell(row-1,col+1) == Cell.S) ||
+                    (tablero.GetCell(row-1,col) == Cell.S && tablero.GetCell(row + 1, col) == Cell.S)||
+                    (tablero.GetCell(row,col-1) == Cell.S && tablero.GetCell(row,col+1) == Cell.S);
         }
         // Funcion que verifica si el juego se ha terminado
         public bool GameOver()

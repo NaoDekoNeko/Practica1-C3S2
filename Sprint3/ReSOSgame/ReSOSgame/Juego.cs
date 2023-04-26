@@ -30,7 +30,7 @@ namespace ReSOSgame
         // Funcion que actualiza el estado del juego Simple 
         public override void FinalGameState() 
         {
-            if (validator.FullBoard()) 
+            if (validator.FullBoard())
             {
                 tablero.EstadoDeJuego = Tablero.GameState.EMPATE;
             }
@@ -50,11 +50,10 @@ namespace ReSOSgame
                     tablero.ValidMove = true;
                     tablero.Ficha = _ficha;
                     tablero.Grid[row, column] = _ficha;
-                    if(validator.HasOnePoint(row,column,tablero.Ficha) || validator.FullBoard() ) // Cuando se ha hecho ganado 1 punto 
+                    if(validator.HasOnePoint(row,column,tablero.Ficha) || validator.FullBoard()) // Cuando se ha hecho ganado 1 punto 
                     {
                         FinalGameState();
                     }
-
                     if (tablero.EstadoDeJuego == GameState.JUGANDO)
                     {
                         tablero.Turno = (tablero.Turno == Jugador.AZUL) ? Jugador.ROJO : Jugador.AZUL;
@@ -64,6 +63,10 @@ namespace ReSOSgame
                 {
                     tablero.ValidMove = false;
                 }
+            }
+            else
+            {
+                tablero.ValidMove = false;
             }
         }
     }
