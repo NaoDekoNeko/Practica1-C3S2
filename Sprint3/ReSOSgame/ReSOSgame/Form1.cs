@@ -126,6 +126,7 @@ namespace ReSOSgame
             CargarAlDataGrid();
             ShowGameStatus();
             ShowTurn();
+            dataGridView1.CurrentCell = null;
         }
 
         private void NuevaPartida(object sender, EventArgs e)

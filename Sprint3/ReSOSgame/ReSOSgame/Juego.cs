@@ -78,8 +78,10 @@ namespace ReSOSgame
         public JuegoGeneral(Tablero tablero) : base(tablero)
         {
         }
+        public int PuntajeAzul { get { return puntajeAzul; } }
+        public int PuntajeRojo { get { return puntajeRojo; } }
         // Funcion que verifica si se ha ganado en un Juego General
-        
+
         public override void FinalGameState() // Calcula el estado final comparando los puntajes
         {
 
@@ -113,10 +115,8 @@ namespace ReSOSgame
                         if (tablero.Turno == Jugador.AZUL)
                         {
                             puntajeAzul++; // Se agrega un punto al jugador Azul
-                        }
-                        //en el turno del jugador ROJO
-                        else
-                        {
+                        } //en el turno del jugador ROJO
+                        else                        {
                             puntajeRojo++; // Se agrega un punto al jugador Rojo
                         }
                     }
