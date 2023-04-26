@@ -57,6 +57,5 @@ namespace ReSOSgame
                 tablero.EstadoDeJuego == Tablero.GameState.GANOROJO;
         }
 
-
     }
 }

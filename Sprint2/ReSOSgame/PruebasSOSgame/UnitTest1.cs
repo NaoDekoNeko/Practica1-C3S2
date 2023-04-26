@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Microsoft.Win32;
 using ReSOSgame;
 using System;
 
@@ -23,6 +24,7 @@ namespace PruebasSOSgame
                     Assert.AreEqual(tablero.GetCell(row, column), Tablero.Cell.VACIA);
                 }
             }
+            Assert.AreEqual(preferredSize,tablero.Tamanio);
             // Esto podria ser otro criterio de aceptacion no manual ni automatico
             // Assert.AreEqual(tablero.Ficha, 'S');
             // Assert.AreEqual(tablero.Jugador, "Azul");
