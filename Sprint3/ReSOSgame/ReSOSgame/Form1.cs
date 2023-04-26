@@ -111,6 +111,7 @@ namespace ReSOSgame
                 dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Style.ForeColor =
                 (turno == Tablero.Jugador.AZUL) ? Color.Blue : Color.Red;
             }
+            dataGridView1.CurrentCell = null;
             ShowGameStatus();
             ShowTurn();
         }
