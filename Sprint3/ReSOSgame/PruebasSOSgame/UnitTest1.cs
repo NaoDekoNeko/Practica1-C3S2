@@ -181,12 +181,12 @@ namespace PruebasSOSgame
     public class TestGeneralGameVictory
     {
         private Tablero tablero;
-        private JuegoSimple juego;
+        private JuegoGeneral juego;
         [TestInitialize]
         public void Init()
         {
             tablero = new Tablero(3);
-            juego = new JuegoSimple(tablero);
+            juego = new JuegoGeneral(tablero);
             tablero.InitBoard();
         }
         [TestCleanup]
@@ -221,17 +221,22 @@ namespace PruebasSOSgame
         [TestMethod]
         public void VictoryFullboardBlue()
         {
-            juego.MakeMove(0, 2, Tablero.Cell.S);
-            juego.MakeMove(1, 1, Tablero.Cell.O);
-            juego.MakeMove(2, 0, Tablero.Cell.S);
-            juego.MakeMove(0, 0, Tablero.Cell.O);
-            juego.MakeMove(0, 1, Tablero.Cell.O);
-            juego.MakeMove(2, 1, Tablero.Cell.O);
-            juego.MakeMove(2, 2, Tablero.Cell.S);
-            juego.MakeMove(1, 2, Tablero.Cell.O);
-            juego.MakeMove(1, 0, Tablero.Cell.S);
-            new Consola(tablero).DisplayBoard();
+            juego.MakeMove(0, 0, Tablero.Cell.S); ImprimirTest();
+            juego.MakeMove(1, 1, Tablero.Cell.O); ImprimirTest();
+            juego.MakeMove(2, 2, Tablero.Cell.S); ImprimirTest();
+            juego.MakeMove(1, 0, Tablero.Cell.S); ImprimirTest();
+            juego.MakeMove(0, 1, Tablero.Cell.S); ImprimirTest();
+            juego.MakeMove(1, 2, Tablero.Cell.O); ImprimirTest();
+            juego.MakeMove(2, 1, Tablero.Cell.O); ImprimirTest();
+            juego.MakeMove(0, 2, Tablero.Cell.O); ImprimirTest();
+            juego.MakeMove(2, 0, Tablero.Cell.S); ImprimirTest();
             Assert.AreEqual(Tablero.GameState.GANOAZUL, tablero.EstadoDeJuego);
+        }
+        public void ImprimirTest() 
+        {
+            new Consola(tablero).DisplayBoard();
+            System.Console.WriteLine("Puntaje Azul: " + juego.PuntajeAzul);
+            System.Console.WriteLine("Puntaje Rojo: " + juego.PuntajeRojo);
         }
         //Criterio de aceptacion 7.3
         [TestMethod]
