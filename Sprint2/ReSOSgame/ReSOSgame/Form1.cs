@@ -160,7 +160,7 @@ namespace ReSOSgame
         private void SeleccionarTamanioTablero(object sender, EventArgs e)
         {
             tablero = new Tablero((int)numericUpDown1.Value); // Se crea un nuevo tablero
-            SetContentPane();
+            SetContentPane();// Dibuja el tablero
             juego = GameSelector(); // Se inicializa el juego segun el tipo de Juego
             
         }
@@ -175,6 +175,11 @@ namespace ReSOSgame
             {
                 return new JuegoGeneral(tablero);
             }
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }
