@@ -1,0 +1,11 @@
+C:\Users\Ademar\OneDrive\Desktop\Practica1-C3S2\Sprint3\ReSOSgame\ReSOSgame\bin\Release\ReSOSgame.exe.config
+C:\Users\Ademar\OneDrive\Desktop\Practica1-C3S2\Sprint3\ReSOSgame\ReSOSgame\bin\Release\ReSOSgame.exe
+C:\Users\Ademar\OneDrive\Desktop\Practica1-C3S2\Sprint3\ReSOSgame\ReSOSgame\bin\Release\ReSOSgame.pdb
+C:\Users\Ademar\OneDrive\Desktop\Practica1-C3S2\Sprint3\ReSOSgame\ReSOSgame\obj\Release\ReSOSgame.csproj.AssemblyReference.cache
+C:\Users\Ademar\OneDrive\Desktop\Practica1-C3S2\Sprint3\ReSOSgame\ReSOSgame\obj\Release\ReSOSgame.csproj.SuggestedBindingRedirects.cache
+C:\Users\Ademar\OneDrive\Desktop\Practica1-C3S2\Sprint3\ReSOSgame\ReSOSgame\obj\Release\ReSOSgame.Form1.resources
+C:\Users\Ademar\OneDrive\Desktop\Practica1-C3S2\Sprint3\ReSOSgame\ReSOSgame\obj\Release\ReSOSgame.Properties.Resources.resources
+C:\Users\Ademar\OneDrive\Desktop\Practica1-C3S2\Sprint3\ReSOSgame\ReSOSgame\obj\Release\ReSOSgame.csproj.GenerateResource.cache
+C:\Users\Ademar\OneDrive\Desktop\Practica1-C3S2\Sprint3\ReSOSgame\ReSOSgame\obj\Release\ReSOSgame.csproj.CoreCompileInputs.cache
+C:\Users\Ademar\OneDrive\Desktop\Practica1-C3S2\Sprint3\ReSOSgame\ReSOSgame\obj\Release\ReSOSgame.exe
+C:\Users\Ademar\OneDrive\Desktop\Practica1-C3S2\Sprint3\ReSOSgame\ReSOSgame\obj\Release\ReSOSgame.pdb
