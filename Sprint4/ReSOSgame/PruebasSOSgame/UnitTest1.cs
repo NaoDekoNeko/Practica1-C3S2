@@ -70,11 +70,14 @@ namespace PruebasSOSgame
     {
         private Tablero tablero;
         private Juego juego;
+        private Player player1, player2;
         [TestInitialize]
         public void Init()
         {
             tablero = new Tablero(3);
             juego = new JuegoSimple(tablero);
+            player1 = new Human(Tablero.Jugador.JAZUL);
+            player2 = new Human(Tablero.Jugador.JROJO);
             tablero.InitBoard();
         }
         [TestCleanup]
@@ -85,9 +88,9 @@ namespace PruebasSOSgame
         [TestMethod]
         public void MakeBlueMoveS_SimpleGame()
         {
-            juego.MakeMove(1, 1, Tablero.Cell.S);
+            player1.MakeMove(1, 1, Tablero.Cell.S,juego);
             Assert.AreEqual(Tablero.Cell.S, tablero.GetCell(1, 1));
-            Assert.AreEqual(Tablero.Jugador.ROJO, tablero.Turno);
+            Assert.AreEqual(Tablero.Jugador.JROJO, tablero.Turno);
         }
         //Criterio de aceptacion 4.2
         [TestMethod]
@@ -96,7 +99,7 @@ namespace PruebasSOSgame
             juego.MakeMove(0, 0, Tablero.Cell.S);
             juego.MakeMove(2, 2, Tablero.Cell.O);
             Assert.AreEqual(Tablero.Cell.O,tablero.GetCell(2, 2));
-            Assert.AreEqual(Tablero.Jugador.AZUL, tablero.Turno);
+            Assert.AreEqual(Tablero.Jugador.JAZUL, tablero.Turno);
         }
     }
 
@@ -126,7 +129,7 @@ namespace PruebasSOSgame
             juego.MakeMove(0, 2, Tablero.Cell.O);
             juego.MakeMove(2, 2, Tablero.Cell.S);
             new Consola(tablero).DisplayBoard();
-            Assert.AreEqual(Tablero.Jugador.AZUL, tablero.Turno);
+            Assert.AreEqual(Tablero.Jugador.JAZUL, tablero.Turno);
             Assert.AreEqual(Tablero.Cell.S, tablero.Ficha);
             Assert.AreEqual(Tablero.GameState.GANOAZUL, tablero.EstadoDeJuego);
         }
@@ -139,7 +142,7 @@ namespace PruebasSOSgame
             juego.MakeMove(2, 2, Tablero.Cell.S);
             juego.MakeMove(0, 1, Tablero.Cell.O);
             new Consola(tablero).DisplayBoard();
-            Assert.AreEqual(Tablero.Jugador.ROJO, tablero.Turno);
+            Assert.AreEqual(Tablero.Jugador.JROJO, tablero.Turno);
             Assert.AreEqual(Tablero.Cell.O, tablero.Ficha);
             Assert.AreEqual(Tablero.GameState.GANOROJO, tablero.EstadoDeJuego);
         }
@@ -165,7 +168,7 @@ namespace PruebasSOSgame
         {
             juego.MakeMove(0, 2, Tablero.Cell.O);
             Assert.AreEqual(Tablero.Cell.O, tablero.GetCell(0, 2));
-            Assert.AreEqual(Tablero.Jugador.ROJO, tablero.Turno);
+            Assert.AreEqual(Tablero.Jugador.JROJO, tablero.Turno);
 
         }
         [TestMethod]//Criterio de aceptacion 6.2
@@ -174,7 +177,7 @@ namespace PruebasSOSgame
             juego.MakeMove(0, 0, Tablero.Cell.O);
             juego.MakeMove(2, 2, Tablero.Cell.S);
             Assert.AreEqual(Tablero.Cell.S, tablero.GetCell(2, 2));
-            Assert.AreEqual(Tablero.Jugador.AZUL, tablero.Turno);
+            Assert.AreEqual(Tablero.Jugador.JAZUL, tablero.Turno);
         }
     }
     [TestClass] // Clase de Codigo de Prueba HU.7
@@ -269,4 +272,75 @@ namespace PruebasSOSgame
             Assert.AreEqual(Tablero.GameState.EMPATE, tablero.EstadoDeJuego);
         }
     }
+
+    [TestClass] // Clase de Codigo de Prueba HU.8
+    public class TestSelectTypePlayer
+    {
+        private Player player1 = new Computer(Tablero.Jugador.JAZUL);
+        private Player player2 = new Computer(Tablero.Jugador.JROJO);
+        //Criterio de aceptacion 8.1
+        [TestMethod]
+        public void SelectBlueComputerPlayer()
+        {
+            Assert.IsTrue(player1 is Computer);
+            Assert.AreEqual(player1.Jugador, Tablero.Jugador.JAZUL);
+        }
+        //Criterio de aceptacion 8.2
+        [TestMethod]
+        public void SelectRedComputerPlayer()
+        {
+            Assert.IsTrue(player2 is Computer);
+            Assert.AreEqual(player2.Jugador, Tablero.Jugador.JROJO);
+        }
+    }
+
+    [TestClass] //Clase de Codigo de Prueba HU.9
+    public class TestPlayAgainstComputer 
+    {
+        private Tablero tablero;
+        private Juego juego;
+        private Player player1, player2;
+        [TestInitialize]
+        public void Init()
+        {
+            tablero = new Tablero(3);
+            juego = new JuegoSimple(tablero);
+        }
+        //Criterio de aceptacion 9.1
+        [TestMethod]
+        public void ComputerMakesFirstMove()
+        {
+            player1 = new Computer(Tablero.Jugador.JAZUL);
+            player2 = new Human(Tablero.Jugador.JROJO);
+            tablero.JugadorActual = player1;
+            player1.MakeMove(0, 0, Tablero.Cell.S, juego);
+            Assert.IsTrue(tablero.JugadorActual is Computer);
+            Assert.IsTrue(tablero.ValidMove);
+            tablero.JugadorActual = (tablero.Turno == Tablero.Jugador.JAZUL) ? player1 : player2;
+            Assert.IsTrue(tablero.JugadorActual is Human);
+            new Consola(tablero).DisplayBoard();
+        }
+        //Criterio de aceptacion 9.2
+        [TestMethod]
+        public void ComputerMakesSecondMove()
+        {
+            player1 = new Human(Tablero.Jugador.JAZUL);
+            player2 = new Computer(Tablero.Jugador.JROJO);
+            tablero.JugadorActual = player1; //Debe asignarse de forma automática
+            player1.MakeMove(0, 0, Tablero.Cell.S, juego);
+            tablero.JugadorActual = (tablero.Turno == Tablero.Jugador.JAZUL) ? player1 : player2; //Debe asignarse de forma automática
+            Assert.IsTrue(tablero.JugadorActual is Computer);
+            player2.MakeMove(0, 0, Tablero.Cell.S, juego);
+            tablero.JugadorActual = (tablero.Turno == Tablero.Jugador.JAZUL) ? player1 : player2;
+            Assert.IsTrue(tablero.JugadorActual is Human);
+            new Consola(tablero).DisplayBoard();
+        }
+        //Criterio de aceptacion 9.3
+        [TestMethod]
+        public void ComputerWinsGame()
+        {
+
+        }
+    }
+
 }

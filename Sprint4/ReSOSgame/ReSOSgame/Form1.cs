@@ -19,7 +19,10 @@ namespace ReSOSgame
             InitializeComponent();
         }
         private Tablero tablero;
+        public Tablero Tablero { get { return tablero; } }
         private Juego juego;
+
+        private Player player1,player2;
         //Este método convierte un array 2D de cualquier tipo
         //a un DataTable;
         private DataTable ConvertToDataTable<T>(T[,] array)
@@ -50,6 +53,7 @@ namespace ReSOSgame
         {
             if (radioButton5.Checked)
             {
+
                 return new JuegoSimple(tablero);
             }
             else
@@ -96,24 +100,51 @@ namespace ReSOSgame
             //Que ninguna celda empiece seleccionada
             dataGridView1.CurrentCell = null;
         }
-        private void ClickeoGrid(object sender, DataGridViewCellEventArgs e)
+
+        private void AsignarFicha(Player player)
         {
-            Tablero.Jugador turno = tablero.Turno;
-            Tablero.Cell ficha = (turno == Tablero.Jugador.AZUL) ?
+            player.Ficha = (tablero.Turno == Tablero.Jugador.JAZUL) ?
                 (radioButton3.Checked == true ?
                 Tablero.Cell.S : Tablero.Cell.O) :
                 (radioButton1.Checked == true ?
                 Tablero.Cell.S : Tablero.Cell.O);
-            juego.MakeMove(e.RowIndex, e.ColumnIndex, ficha);
-            if (tablero.ValidMove)
+        }
+
+        private void ClickeoGrid(object sender, DataGridViewCellEventArgs e)
+        {
+            Tablero.Jugador turno = tablero.Turno;
+            Player playerActual = tablero.JugadorActual;
+            AsignarFicha(playerActual);
+            juego.MakeMove(e.RowIndex, e.ColumnIndex, playerActual.Ficha);
+            if(tablero.ValidMove)
             {
-                dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = ficha;
+                dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = playerActual.Ficha;
                 dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Style.ForeColor =
-                (turno == Tablero.Jugador.AZUL) ? Color.Blue : Color.Red;
+                (turno == Tablero.Jugador.JAZUL) ? Color.Blue : Color.Red;
+                tablero.JugadorActual = (turno == Tablero.Jugador.JAZUL) ? player2 :player1;
+                dataGridView1.CurrentCell = null;
             }
-            dataGridView1.CurrentCell = null;
             ShowGameStatus();
             ShowTurn();
+        }
+        // Inicializa el tipo de jugador Azul segun los radiobutton
+        private Player BluePlayerSelector()
+        {
+            if(radioButton10.Checked)
+            {
+                return new Human(Tablero.Jugador.JAZUL);
+            }
+            return new Computer(Tablero.Jugador.JAZUL);
+        }
+        // Inicializa el tipo de jugador Rojo segun los radiobutton
+        private Player RedPlayerSelector()
+        {
+            if (radioButton8.Checked)
+            {
+                return new Human(Tablero.Jugador.JROJO);
+            }
+            return new Computer(Tablero.Jugador.JROJO);
+            
         }
         // Restricción: no se puede cambiar el tamaño ni modo de juego durante una partida
         private void ReIniciarJuego()
@@ -123,6 +154,9 @@ namespace ReSOSgame
             if (juego != null)
                 GC.SuppressFinalize(juego);
             juego = GameSelector();
+            player1 = BluePlayerSelector();
+            player2 = RedPlayerSelector();
+            tablero.JugadorActual = player1;
             CargarAlDataGrid();
             ShowGameStatus();
             ShowTurn();
@@ -133,10 +167,16 @@ namespace ReSOSgame
         {
             ReIniciarJuego();
         }
+
+        private void UpdateGrid(object sender, DataGridViewCellEventArgs e)
+        {
+            
+        }
+
         private void ShowTurn()
         {
             label3.Text = tablero.Turno.ToString();
-            label3.ForeColor = tablero.Turno == Tablero.Jugador.AZUL ? Color.Blue : Color.Red;
+            label3.ForeColor = tablero.Turno == Tablero.Jugador.JAZUL ? Color.Blue : Color.Red;
         }
     }
 }

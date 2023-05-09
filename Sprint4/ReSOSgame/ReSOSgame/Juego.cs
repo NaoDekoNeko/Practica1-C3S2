@@ -36,7 +36,7 @@ namespace ReSOSgame
             }
             else
             {
-                tablero.EstadoDeJuego = tablero.Turno == Tablero.Jugador.AZUL ?
+                tablero.EstadoDeJuego = tablero.Turno == Tablero.Jugador.JAZUL ?
                     Tablero.GameState.GANOAZUL : Tablero.GameState.GANOROJO;  // Cambia el estado del tablero
             }
         }
@@ -56,7 +56,7 @@ namespace ReSOSgame
                     }
                     if (tablero.EstadoDeJuego == GameState.JUGANDO)
                     {
-                        tablero.Turno = (tablero.Turno == Jugador.AZUL) ? Jugador.ROJO : Jugador.AZUL;
+                        tablero.Turno = (tablero.Turno == Jugador.JAZUL) ? Jugador.JROJO : Jugador.JAZUL;
                     }
                 }
                 else
@@ -111,11 +111,11 @@ namespace ReSOSgame
                     tablero.Grid[row, column] = _ficha;
                     if (validator.HasOnePoint(row, column, tablero.Ficha)) // Si se ha obtenido un punto
                     {
-                        //en el turno del jugador AZUL
-                        if (tablero.Turno == Jugador.AZUL)
+                        //en el turno del jugador JAZUL
+                        if (tablero.Turno == Jugador.JAZUL)
                         {
                             puntajeAzul++; // Se agrega un punto al jugador Azul
-                        } //en el turno del jugador ROJO
+                        } //en el turno del jugador JROJO
                         else                        {
                             puntajeRojo++; // Se agrega un punto al jugador Rojo
                         }
@@ -127,7 +127,7 @@ namespace ReSOSgame
                     // Nota: esa funcion detiene el cambio de turno cuando ya se halla ganado o empatado
                     if (tablero.EstadoDeJuego == GameState.JUGANDO) // Si se sigue jugando
                     {
-                        tablero.Turno = (tablero.Turno == Jugador.AZUL) ? Jugador.ROJO : Jugador.AZUL; // Se cambia de turno al jugador contrario
+                        tablero.Turno = (tablero.Turno == Jugador.JAZUL) ? Jugador.JROJO : Jugador.JAZUL; // Se cambia de turno al jugador contrario
                     }
                 }
             }
