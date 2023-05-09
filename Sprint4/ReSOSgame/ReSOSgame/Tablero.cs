@@ -11,13 +11,15 @@ namespace ReSOSgame
     public class Tablero
     {
         public enum Cell { VACIA, INVALIDA, S,O}
-        public enum Jugador { AZUL,ROJO}
+        public enum Jugador { JAZUL,JROJO}
         public enum GameState { JUGANDO,EMPATE,GANOAZUL,GANOROJO }
         private int tamanio;
         private Cell[,] grid;
         private Cell ficha;
         private Jugador turno; //  Jugador que va hacer la jugada "MakeMove"
         private GameState estadoDeJuego;
+        private Player jugadorActual;
+        public Player JugadorActual { get { return jugadorActual; } set { jugadorActual = value; } }
         private bool validMove = false;
         public Tablero(int tamanio)
         {
@@ -53,7 +55,7 @@ namespace ReSOSgame
             }
             estadoDeJuego = GameState.JUGANDO;
             ficha = Cell.S;
-            turno = Jugador.AZUL;
+            turno = Jugador.JAZUL;
         }
         
     }
