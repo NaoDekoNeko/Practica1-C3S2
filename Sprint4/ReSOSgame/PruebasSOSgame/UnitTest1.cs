@@ -297,43 +297,43 @@ namespace PruebasSOSgame
     [TestClass] //Clase de Codigo de Prueba HU.9
     public class TestPlayAgainstComputer 
     {
-        private Tablero tablero;
-        private Juego juego;
-        private Player player1, player2;
+        private Controller controller;
+
         [TestInitialize]
         public void Init()
         {
-            tablero = new Tablero(3);
-            juego = new JuegoSimple(tablero);
+            controller = new Controller();
+            controller.Tablero = new Tablero(3);
+            controller.Juego = new JuegoSimple(controller.Tablero);
         }
         //Criterio de aceptacion 9.1
         [TestMethod]
         public void ComputerMakesFirstMove()
         {
-            player1 = new Computer(Tablero.Jugador.JAZUL);
-            player2 = new Human(Tablero.Jugador.JROJO);
-            tablero.JugadorActual = player1;
-            player1.MakeMove(0, 0, Tablero.Cell.S, juego);
-            Assert.IsTrue(tablero.JugadorActual is Computer);
-            Assert.IsTrue(tablero.ValidMove);
-            tablero.JugadorActual = (tablero.Turno == Tablero.Jugador.JAZUL) ? player1 : player2;
-            Assert.IsTrue(tablero.JugadorActual is Human);
-            new Consola(tablero).DisplayBoard();
+            controller.Player1 = new Computer(Tablero.Jugador.JAZUL);
+            controller.Player2 = new Human(Tablero.Jugador.JROJO);
+            controller.InitTurn();
+            controller.Player1.MakeMove(0, 0, Tablero.Cell.S, controller.Juego);
+            Assert.IsTrue(controller.CurrentPlayer is Computer);
+            Assert.IsTrue(controller.Tablero.ValidMove);
+            controller.ChangeTurn();
+            Assert.IsTrue(controller.CurrentPlayer is Human);
+            new Consola(controller.Tablero).DisplayBoard();
         }
         //Criterio de aceptacion 9.2
         [TestMethod]
         public void ComputerMakesSecondMove()
         {
-            player1 = new Human(Tablero.Jugador.JAZUL);
-            player2 = new Computer(Tablero.Jugador.JROJO);
-            tablero.JugadorActual = player1; //Debe asignarse de forma automática
-            player1.MakeMove(0, 0, Tablero.Cell.S, juego);
-            tablero.JugadorActual = (tablero.Turno == Tablero.Jugador.JAZUL) ? player1 : player2; //Debe asignarse de forma automática
-            Assert.IsTrue(tablero.JugadorActual is Computer);
-            player2.MakeMove(0, 0, Tablero.Cell.S, juego);
-            tablero.JugadorActual = (tablero.Turno == Tablero.Jugador.JAZUL) ? player1 : player2;
-            Assert.IsTrue(tablero.JugadorActual is Human);
-            new Consola(tablero).DisplayBoard();
+            controller.Player1 = new Human(Tablero.Jugador.JAZUL);
+            controller.Player2 = new Computer(Tablero.Jugador.JROJO);
+            controller.InitTurn();
+            controller.Player1.MakeMove(0, 0, Tablero.Cell.S, controller.Juego);
+            controller.ChangeTurn();
+            Assert.IsTrue(controller.CurrentPlayer is Computer);
+            controller.Player2.MakeMove(0, 0, Tablero.Cell.S, controller.Juego);
+            controller.ChangeTurn();
+            Assert.IsTrue(controller.CurrentPlayer is Human);
+            new Consola(controller.Tablero).DisplayBoard();
         }
         //Criterio de aceptacion 9.3
         [TestMethod]
