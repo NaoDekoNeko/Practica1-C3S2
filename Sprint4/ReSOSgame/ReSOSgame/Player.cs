@@ -12,11 +12,17 @@ namespace ReSOSgame
     {
         private Tablero.Jugador player;
         private Tablero.Cell ficha;
+        private int Cord_X_ficha;
+        private int Cord_Y_ficha;
+        public int X { get { return Cord_X_ficha; } set { Cord_X_ficha = value; } }
+        public int Y { get { return Cord_Y_ficha; } set { Cord_Y_ficha = value; } }
         public Tablero.Jugador Jugador {  get { return player; } }
         public Tablero.Cell Ficha { get { return ficha; } set { ficha = value; } }
         public Player(Tablero.Jugador player)
         {
             this.player = player;
+            X = -1;
+            Y = -1;
         }
         public abstract void MakeMove(int row, int col, Tablero.Cell _ficha, Juego juego);
     }
@@ -26,10 +32,20 @@ namespace ReSOSgame
         {
         }
         public override void MakeMove(int row, int col, Tablero.Cell _ficha, Juego juego)
-        {
+        {   
             juego.MakeMove(row, col, _ficha);
             if (juego.tablero.ValidMove)
+            {
                 Ficha = _ficha;
+                X = row;
+                Y = col;
+            }
+            else
+            {
+                X = -1;
+                Y = -1;
+            }
+                
         }
     }
 
@@ -38,15 +54,18 @@ namespace ReSOSgame
         public Computer(Tablero.Jugador player) : base(player)
         {
         }
-        public override void MakeMove(int row,int col,Tablero.Cell _ficha,Juego juego)
+        public override void MakeMove(int row, int col, Tablero.Cell _ficha, Juego juego)
         {
             Random rd = new Random();
             Tablero.Cell fichaAux;
+            int rowAux;
+            int colAux;
+            X = -1; Y = -1;
             do {
                 //un número de fila aleatorio escogido entre el numero de celdas dividido por el numero de filas
-                int rowAux = rd.Next(juego.tablero.Tamanio * juego.tablero.Tamanio) / juego.tablero.Tamanio; //   
-                int colAux = rd.Next(juego.tablero.Tamanio * juego.tablero.Tamanio) % juego.tablero.Tamanio; // 
-                int aux = rd.Next(juego.tablero.Tamanio*juego.tablero.Tamanio)%2;
+                rowAux = rd.Next(juego.Tamanio * juego.Tamanio) / juego.Tamanio; //   
+                colAux = rd.Next(juego.Tamanio * juego.Tamanio) % juego.Tamanio; //                                                                   
+                int aux = rd.Next(juego.Tamanio*juego.Tamanio)%2;
                 if (aux == 0)
                     fichaAux = Tablero.Cell.S;
                 else
@@ -54,6 +73,8 @@ namespace ReSOSgame
                 juego.MakeMove(rowAux,colAux,fichaAux);
             } while (!juego.tablero.ValidMove);
             Ficha = fichaAux;
+            X = rowAux;
+            Y = colAux;
         }
     }
 }
