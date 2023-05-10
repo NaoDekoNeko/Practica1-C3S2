@@ -110,22 +110,29 @@ namespace ReSOSgame
 
         private void ClickeoGrid(object sender, DataGridViewCellEventArgs e)
         {
-            Tablero.Jugador turno = controller.Turno;
+            Tablero.Jugador turno = controller.Turno; // rellena el turno 
             Player playerActual = controller.CurrentPlayer;
-            AsignarFicha(playerActual);
-            controller.CurrentPlayer.MakeMove(e.RowIndex, e.ColumnIndex, playerActual.Ficha,controller.Juego);
-            if(controller.Tablero.ValidMove)
+            if(playerActual is Human)
             {
-                dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = playerActual.Ficha;
-                dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Style.ForeColor =
-                (turno == Tablero.Jugador.JAZUL) ? Color.Blue : Color.Red;
-                controller.CurrentPlayer = (turno == Tablero.Jugador.JAZUL) ? controller.Player2 :controller.Player1;
-                dataGridView1.CurrentCell = null;
-            }
-            ShowGameStatus();
-            ShowTurn();
-            controller.Juego.MakeMove(e.RowIndex, e.ColumnIndex, playerActual.Ficha);
-            controller.CurrentPlayer.MakeMove(0,0,Tablero.Cell.O,controller.Juego);
+                AsignarFicha(playerActual);
+                controller.CurrentPlayer.MakeMove(e.RowIndex, e.ColumnIndex, playerActual.Ficha, controller.Juego);
+                if(controller.Tablero.ValidMove && controller.CurrentPlayer is Human)
+                {
+                    PaintGrid();
+                }
+                ShowGameStatus();
+                ShowTurn();
+            }    
+        }
+        private void PaintGrid()
+        {
+            dataGridView1.CellValueChanged -= UpdateGrid;
+            dataGridView1.Rows[controller.X].Cells[controller.Y].Value = controller.Ficha;
+            dataGridView1.Rows[controller.X].Cells[controller.Y].Style.ForeColor =
+                (controller.Turno == Tablero.Jugador.JAZUL) ? Color.Blue : Color.Red;
+            //Es posible que la asignación de turnos esté fallando aquí
+            dataGridView1.CurrentCell = null;
+            dataGridView1.CellValueChanged += UpdateGrid;
         }
         // Inicializa el tipo de jugador Azul segun los radiobutton
         private Player BluePlayerSelector()
@@ -146,6 +153,7 @@ namespace ReSOSgame
             return new Computer(Tablero.Jugador.JROJO);
             
         }
+       
         // Restricción: no se puede cambiar el tamaño ni modo de juego durante una partida
         private void ReIniciarJuego()
         {
@@ -161,14 +169,10 @@ namespace ReSOSgame
             ShowGameStatus();
             ShowTurn();
             dataGridView1.CurrentCell = null;
-            if (controller.Player1 is Computer && controller.Player2 is Computer)
+            if(controller.Player1 is Computer && controller.Player2 is Human)
             {
-                dataGridView1.CellContentClick -= ClickeoGrid; //desactiva el evento de clickeo
+                controller.Player1.MakeMove(0,0,0,controller.Juego); // El player1 que es un Computer hace la primera jugada ,inicializa las coordenadas e inicializa la ficha
 
-            }
-            else
-            {
-                dataGridView1.CellContentClick += ClickeoGrid; //Reactiva el evento de clikeo
             }
         }
 
@@ -179,8 +183,9 @@ namespace ReSOSgame
 
         private void UpdateGrid(object sender, DataGridViewCellEventArgs e)
         {
-            
+            PaintGrid();
         }
+
 
         private void ShowTurn()
         {

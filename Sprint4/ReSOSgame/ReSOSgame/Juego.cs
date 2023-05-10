@@ -12,6 +12,7 @@ namespace ReSOSgame
     {
         public Tablero tablero;
         public ScoreValidator validator;
+        public int Tamanio { get { return tablero.Tamanio; } }
         public Juego(Tablero tablero)
         {
             this.tablero = tablero;
