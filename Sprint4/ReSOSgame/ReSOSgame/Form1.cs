@@ -17,12 +17,10 @@ namespace ReSOSgame
         public Form1()
         {
             InitializeComponent();
+            controller = new Controller();
         }
-        private Tablero tablero;
-        public Tablero Tablero { get { return tablero; } }
-        private Juego juego;
-
-        private Player player1,player2;
+        private Controller controller;
+        
         //Este método convierte un array 2D de cualquier tipo
         //a un DataTable;
         private DataTable ConvertToDataTable<T>(T[,] array)
@@ -42,7 +40,7 @@ namespace ReSOSgame
                 table.Rows.Add(row);
             }
             //acá se hará el primer resize del DataGridView
-            for (int i = 0; i < tablero.Tamanio; i++)
+            for (int i = 0; i < controller.Tamanio; i++)
             {
                 dataGridView1.RowTemplate.Height = dataGridView1.Height / (int)numericUpDown1.Value;
             }
@@ -54,16 +52,16 @@ namespace ReSOSgame
             if (radioButton5.Checked)
             {
 
-                return new JuegoSimple(tablero);
+                return new JuegoSimple(controller.Tablero);
             }
             else
             {
-                return new JuegoGeneral(tablero);
+                return new JuegoGeneral(controller.Tablero);
             }
         }
         private void ShowGameStatus()
         {
-            switch(tablero.EstadoDeJuego)
+            switch(controller.Tablero.EstadoDeJuego)
             {
                 case Tablero.GameState.JUGANDO:
                     label2.Text = "JUGANDO";
@@ -88,12 +86,12 @@ namespace ReSOSgame
         //al DataGridView
         private void CargarAlDataGrid()
         {
-            dataGridView1.DataSource = ConvertToDataTable(tablero.Grid);
+            dataGridView1.DataSource = ConvertToDataTable(controller.Tablero.Grid);
             //Hace que al principio el color de la fuente 
             //sea blanca para que coincida con el color de fondo
             dataGridView1.DefaultCellStyle.ForeColor = Color.White;
             //Segundo resize del DataGridView
-            for (int i = 0; i < tablero.Tamanio; i++)
+            for (int i = 0; i < controller.Tamanio; i++)
             {
                 dataGridView1.RowTemplate.Height = dataGridView1.Height / ((int)numericUpDown1.Value + 1);
             }
@@ -103,7 +101,7 @@ namespace ReSOSgame
 
         private void AsignarFicha(Player player)
         {
-            player.Ficha = (tablero.Turno == Tablero.Jugador.JAZUL) ?
+            player.Ficha = (controller.Turno == Tablero.Jugador.JAZUL) ?
                 (radioButton3.Checked == true ?
                 Tablero.Cell.S : Tablero.Cell.O) :
                 (radioButton1.Checked == true ?
@@ -112,20 +110,22 @@ namespace ReSOSgame
 
         private void ClickeoGrid(object sender, DataGridViewCellEventArgs e)
         {
-            Tablero.Jugador turno = tablero.Turno;
-            Player playerActual = tablero.JugadorActual;
+            Tablero.Jugador turno = controller.Turno;
+            Player playerActual = controller.CurrentPlayer;
             AsignarFicha(playerActual);
-            juego.MakeMove(e.RowIndex, e.ColumnIndex, playerActual.Ficha);
-            if(tablero.ValidMove)
+            controller.CurrentPlayer.MakeMove(e.RowIndex, e.ColumnIndex, playerActual.Ficha,controller.Juego);
+            if(controller.Tablero.ValidMove)
             {
                 dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = playerActual.Ficha;
                 dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Style.ForeColor =
                 (turno == Tablero.Jugador.JAZUL) ? Color.Blue : Color.Red;
-                tablero.JugadorActual = (turno == Tablero.Jugador.JAZUL) ? player2 :player1;
+                controller.CurrentPlayer = (turno == Tablero.Jugador.JAZUL) ? controller.Player2 :controller.Player1;
                 dataGridView1.CurrentCell = null;
             }
             ShowGameStatus();
             ShowTurn();
+            controller.Juego.MakeMove(e.RowIndex, e.ColumnIndex, playerActual.Ficha);
+            controller.CurrentPlayer.MakeMove(0,0,Tablero.Cell.O,controller.Juego);
         }
         // Inicializa el tipo de jugador Azul segun los radiobutton
         private Player BluePlayerSelector()
@@ -150,17 +150,26 @@ namespace ReSOSgame
         private void ReIniciarJuego()
         {
             // Al ir cambiando  el "numericUpDown1" se va cambiando el tamaño del tablero
-            tablero = new Tablero((int)numericUpDown1.Value);
-            if (juego != null)
-                GC.SuppressFinalize(juego);
-            juego = GameSelector();
-            player1 = BluePlayerSelector();
-            player2 = RedPlayerSelector();
-            tablero.JugadorActual = player1;
+            controller.Tablero = new Tablero((int)numericUpDown1.Value);
+            if (controller.Juego != null)
+                GC.SuppressFinalize(controller.Juego);
+            controller.Juego = GameSelector();
+            controller.Player1 = BluePlayerSelector();
+            controller.Player2 = RedPlayerSelector();
+            controller.InitTurn();
             CargarAlDataGrid();
             ShowGameStatus();
             ShowTurn();
             dataGridView1.CurrentCell = null;
+            if (controller.Player1 is Computer && controller.Player2 is Computer)
+            {
+                dataGridView1.CellContentClick -= ClickeoGrid; //desactiva el evento de clickeo
+
+            }
+            else
+            {
+                dataGridView1.CellContentClick += ClickeoGrid; //Reactiva el evento de clikeo
+            }
         }
 
         private void NuevaPartida(object sender, EventArgs e)
@@ -175,8 +184,8 @@ namespace ReSOSgame
 
         private void ShowTurn()
         {
-            label3.Text = tablero.Turno.ToString();
-            label3.ForeColor = tablero.Turno == Tablero.Jugador.JAZUL ? Color.Blue : Color.Red;
+            label3.Text = controller.Tablero.Turno.ToString();
+            label3.ForeColor = controller.Tablero.Turno == Tablero.Jugador.JAZUL ? Color.Blue : Color.Red;
         }
     }
 }
