@@ -20,7 +20,6 @@ namespace ReSOSgame
         }
         public abstract void FinalGameState(); // Funcion que indica el estado final del juego
         public abstract void MakeMove(int row,int col ,Cell ficha); // Funcion para realizar un movimiento
-        
     }
     public class JuegoSimple : Juego
     {

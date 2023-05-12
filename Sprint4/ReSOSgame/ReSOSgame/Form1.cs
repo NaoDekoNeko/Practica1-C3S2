@@ -128,8 +128,12 @@ namespace ReSOSgame
         {
             dataGridView1.CellValueChanged -= UpdateGrid;
             dataGridView1.Rows[controller.X].Cells[controller.Y].Value = controller.Ficha;
-            dataGridView1.Rows[controller.X].Cells[controller.Y].Style.ForeColor =
-                (controller.Turno == Tablero.Jugador.JAZUL) ? Color.Blue : Color.Red;
+            if(controller.Tablero.EstadoDeJuego == Tablero.GameState.JUGANDO)
+                dataGridView1.Rows[controller.X].Cells[controller.Y].Style.ForeColor =
+                    (controller.Turno == Tablero.Jugador.JROJO) ? Color.Blue : Color.Red;
+            else
+                dataGridView1.Rows[controller.X].Cells[controller.Y].Style.ForeColor =
+                (controller.Turno == Tablero.Jugador.JROJO) ? Color.Red : Color.Blue;
             //Es posible que la asignación de turnos esté fallando aquí
             dataGridView1.CurrentCell = null;
             dataGridView1.CellValueChanged += UpdateGrid;
