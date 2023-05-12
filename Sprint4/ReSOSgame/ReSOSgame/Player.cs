@@ -54,6 +54,7 @@ namespace ReSOSgame
         public Computer(Tablero.Jugador player) : base(player)
         {
         }
+        /*
         public override void MakeMove(int row, int col, Tablero.Cell _ficha, Juego juego)
         {
             Random rd = new Random();
@@ -76,5 +77,53 @@ namespace ReSOSgame
             X = rowAux;
             Y = colAux;
         }
+        */
+        public override void MakeMove(int row, int col, Tablero.Cell _ficha, Juego juego)
+        {
+            Random rd = new Random();
+            Tablero.Cell fichaAux;
+            int rowAux;
+            int colAux;
+            X = -1; Y = -1;
+
+            // Verificar si hay alguna posición en la que se pueda hacer un movimiento ganador
+            for (int i = 0; i < juego.Tamanio; i++)
+            {
+                for (int j = 0; j < juego.Tamanio; j++)
+                {
+                    if (juego.tablero.GetCell(i, j) == Tablero.Cell.VACIA &&
+                        (juego.validator.HasOnePoint(i, j, Tablero.Cell.S) ||
+                         juego.validator.HasOnePoint(i, j, Tablero.Cell.O)))
+                    {
+                        juego.MakeMove(i, j, _ficha);
+                        Ficha = _ficha;
+                        X = i;
+                        Y = j;
+                        return;
+                    }
+                }
+            }
+
+            // Si no encontramos una posición ganadora, hacemos un movimiento aleatorio
+            do
+            {
+                // Generar números aleatorios para la fila y la columna
+                rowAux = rd.Next(juego.Tamanio);
+                colAux = rd.Next(juego.Tamanio);
+                int aux = rd.Next(2);
+                if (aux == 0)
+                    fichaAux = Tablero.Cell.S;
+                else
+                    fichaAux = Tablero.Cell.O;
+
+                // Hacer el movimiento
+                juego.MakeMove(rowAux, colAux, fichaAux);
+            } while (!juego.tablero.ValidMove);
+
+            Ficha = fichaAux;
+            X = rowAux;
+            Y = colAux;
+        }
+
     }
 }

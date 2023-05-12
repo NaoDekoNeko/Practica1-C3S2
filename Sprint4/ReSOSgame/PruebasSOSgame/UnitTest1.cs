@@ -336,10 +336,19 @@ namespace PruebasSOSgame
             new Consola(controller.Tablero).DisplayBoard();
         }
         //Criterio de aceptacion 9.3
+        //Termina cuando haya ganador o empate
         [TestMethod]
-        public void ComputerWinsGame()
+        public void ComputerVsComputer()
         {
-
+            controller.Player1 = new Computer(Tablero.Jugador.JAZUL);
+            controller.Player2 = new Computer(Tablero.Jugador.JROJO);
+            while(controller.Tablero.EstadoDeJuego == Tablero.GameState.JUGANDO)
+            {
+                controller.Player1.MakeMove(0, 0, Tablero.Cell.S, controller.Juego);
+                controller.Player2.MakeMove(0, 0, Tablero.Cell.O, controller.Juego);
+            }
+            new Consola(controller.Tablero).DisplayBoard();
+            Assert.IsTrue(controller.Tablero.EstadoDeJuego != Tablero.GameState.JUGANDO);
         }
     }
 

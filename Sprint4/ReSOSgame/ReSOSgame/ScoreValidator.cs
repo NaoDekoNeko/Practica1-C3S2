@@ -10,8 +10,8 @@ namespace ReSOSgame
     public class ScoreValidator
     {
         Tablero tablero;
-        public ScoreValidator(Tablero tablero) 
-        { 
+        public ScoreValidator(Tablero tablero)
+        {
             this.tablero = tablero;
         }
         // Funcion booleana que verifica si el tablero esta lleno
@@ -31,19 +31,23 @@ namespace ReSOSgame
         }
         public bool HasOnePoint(int row, int col, Cell ficha)
         {
-            if(ficha == Cell.S)
+            if (ficha == Cell.S)
             {
-                return (tablero.GetCell(row + 1, col + 1) == Cell.O && tablero.GetCell(row + 2, col + 2) == Cell.S)||
-                    (tablero.GetCell(row-1,col-1) == Cell.O && tablero.GetCell(row-2,col-2) == Cell.S)||
-                    (tablero.GetCell(row, col + 1) == Cell.O && tablero.GetCell(row, col + 2) == Cell.S)||
-                    (tablero.GetCell(row, col - 1) == Cell.O && tablero.GetCell(row, col - 2) == Cell.S)||
-                    (tablero.GetCell(row + 1, col) == Cell.O && tablero.GetCell(row + 2, col) == Cell.S)||
+                return (tablero.GetCell(row + 1, col + 1) == Cell.O && tablero.GetCell(row + 2, col + 2) == Cell.S) ||
+                    (tablero.GetCell(row - 1, col - 1) == Cell.O && tablero.GetCell(row - 2, col - 2) == Cell.S) ||
+                    (tablero.GetCell(row, col + 1) == Cell.O && tablero.GetCell(row, col + 2) == Cell.S) ||
+                    (tablero.GetCell(row, col - 1) == Cell.O && tablero.GetCell(row, col - 2) == Cell.S) ||
+                    (tablero.GetCell(row + 1, col) == Cell.O && tablero.GetCell(row + 2, col) == Cell.S) ||
                     (tablero.GetCell(row - 1, col) == Cell.O && tablero.GetCell(row - 2, col) == Cell.S);
             }
-            return (tablero.GetCell(row - 1, col - 1) == Cell.S && tablero.GetCell(row + 1, col + 1) == Cell.S) ||
-                    (tablero.GetCell(row+1,col-1) == Cell.S && tablero.GetCell(row-1,col+1) == Cell.S) ||
-                    (tablero.GetCell(row-1,col) == Cell.S && tablero.GetCell(row + 1, col) == Cell.S)||
-                    (tablero.GetCell(row,col-1) == Cell.S && tablero.GetCell(row,col+1) == Cell.S);
+            else if (ficha == Cell.O)
+            {
+                return (tablero.GetCell(row - 1, col - 1) == Cell.S && tablero.GetCell(row + 1, col + 1) == Cell.S) ||
+                    (tablero.GetCell(row + 1, col - 1) == Cell.S && tablero.GetCell(row - 1, col + 1) == Cell.S) ||
+                    (tablero.GetCell(row - 1, col) == Cell.S && tablero.GetCell(row + 1, col) == Cell.S) ||
+                    (tablero.GetCell(row, col - 1) == Cell.S && tablero.GetCell(row, col + 1) == Cell.S);
+            }
+            return false;
         }
         // Funcion que verifica si el juego se ha terminado
         public bool GameOver()
@@ -56,6 +60,5 @@ namespace ReSOSgame
             return tablero.EstadoDeJuego == Tablero.GameState.GANOAZUL ||
                 tablero.EstadoDeJuego == Tablero.GameState.GANOROJO;
         }
-
     }
 }
