@@ -54,32 +54,11 @@ namespace ReSOSgame
         public Computer(Tablero.Jugador player) : base(player)
         {
         }
-        /*
+        
         public override void MakeMove(int row, int col, Tablero.Cell _ficha, Juego juego)
         {
-            Random rd = new Random();
-            Tablero.Cell fichaAux;
-            int rowAux;
-            int colAux;
-            X = -1; Y = -1;
-            do {
-                //un número de fila aleatorio escogido entre el numero de celdas dividido por el numero de filas
-                rowAux = rd.Next(juego.Tamanio * juego.Tamanio) / juego.Tamanio; //   
-                colAux = rd.Next(juego.Tamanio * juego.Tamanio) % juego.Tamanio; //                                                                   
-                int aux = rd.Next(juego.Tamanio*juego.Tamanio)%2;
-                if (aux == 0)
-                    fichaAux = Tablero.Cell.S;
-                else
-                    fichaAux = Tablero.Cell.O;
-                juego.MakeMove(rowAux,colAux,fichaAux);
-            } while (!juego.tablero.ValidMove);
-            Ficha = fichaAux;
-            X = rowAux;
-            Y = colAux;
-        }
-        */
-        public override void MakeMove(int row, int col, Tablero.Cell _ficha, Juego juego)
-        {
+            // Nota: Esta funcion busca aleatorio entre todas las casillas sin importar si esta vacia o no, lo cual 
+            // genera que se demore cuando la maquina va jugar consigo misma.
             Random rd = new Random();
             Tablero.Cell fichaAux;
             int rowAux;

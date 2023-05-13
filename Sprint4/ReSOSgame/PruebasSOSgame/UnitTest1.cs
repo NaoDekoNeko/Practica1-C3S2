@@ -316,8 +316,8 @@ namespace PruebasSOSgame
             controller.Player1.MakeMove(0, 0, Tablero.Cell.S, controller.Juego);
             Assert.IsTrue(controller.CurrentPlayer is Computer);
             Assert.IsTrue(controller.Tablero.ValidMove);
-            controller.ChangeTurn();
-            Assert.IsTrue(controller.CurrentPlayer is Human);
+            controller.ChangeTurn(); // hace el cambio de turno
+            Assert.IsTrue(controller.CurrentPlayer is Human);// valida que se ha hecho el cambio de turno
             new Consola(controller.Tablero).DisplayBoard();
         }
         //Criterio de aceptacion 9.2
