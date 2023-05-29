@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -145,7 +146,6 @@ namespace ReSOSgame
             }
             if (controller.CurrentPlayer is Computer)
             {
-
                 controller.CurrentPlayer.MakeMove(0, 0, 0, controller.Juego); // Realiza el movimiento del jugador de tipo Computer
                 PaintGrid();
                 ShowGameStatus();
@@ -204,6 +204,11 @@ namespace ReSOSgame
                 StartComputerVsComputerGame();
             }
             EnableSettings();
+            if (Record.Checked)
+            {
+                controller.FilePath = null;
+                controller.SaveGame();
+            }
         }
         private void StartComputerVsComputerGame()
         {
