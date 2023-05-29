@@ -12,6 +12,7 @@ namespace ReSOSgame
     
     public class Controller
     {
+        public string FilePath { get; set; }
         private Tablero tablero;
         public Tablero Tablero { get { return tablero; } set { tablero = value; } }
         private Juego juego;
@@ -37,7 +38,7 @@ namespace ReSOSgame
 
         public void PrintGame()
         {
-            const string filePath = "game.txt";
+            //const string filePath = "game.txt";
             string contenido = "Turno: ";
             contenido += Turno == Tablero.Jugador.JAZUL ? "Azul\n" : "Rojo\n";
             // Construir el contenido a escribir
@@ -73,20 +74,19 @@ namespace ReSOSgame
                     contenido += "EMPATE\n";
                     break;
             }
+            
             // Verificar si el archivo existe
-            if (!File.Exists(filePath))
+            if (!File.Exists(FilePath))
             {
-                // Crear el archivo si no existe
-                using (File.Create(filePath))
-                {
-                    // El archivo se crea y se cierra automáticamente
-                }
+                // si no existe, regresa
+                return;
             }
+            
 
             if (Tablero.ValidMove)
             {
                 // Añadir contenido al archivo existente o al archivo recién creado
-                using (StreamWriter sw = File.AppendText(filePath))
+                using (StreamWriter sw = File.AppendText(FilePath))
                 {
                     sw.Write(contenido);
                 }
@@ -106,6 +106,26 @@ namespace ReSOSgame
                 default:
                     return " ";
             }
+        }
+
+        private string ObtenerRutaNuevoArchivo()
+        {
+            return "game_" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".txt";
+        }
+
+        public void SaveGame()
+        {
+            FilePath = ObtenerRutaNuevoArchivo();
+            // Verificar si el archivo existe
+            if (!File.Exists(FilePath))
+            {
+                // Crear el archivo si no existe
+                using (File.Create(FilePath))
+                {
+                    // El archivo se crea y se cierra automáticamente
+                }
+            }
+            PrintGame();
         }
     }
 }
