@@ -1,64 +1,22 @@
-﻿
+﻿using System;
+using System.IO;
+using ReSOSGame;
 
-namespace ReSOSGame
+namespace ReSOSgame
 {
-
-    public class Controller
+    public class GameRecorder
     {
-        private Tablero tablero;
-
-        public Tablero Tablero
+        private Tablero Tablero { get; }
+        private Tablero.Jugador Turno { get; }
+        private Juego Juego { get; }
+        public string FilePath { get; set; }
+        public GameRecorder(Juego juego)
         {
-            get { return tablero; }
-            set { tablero = value; }
+            Tablero = juego.Tablero;
+            Juego = juego;
+            Turno = Tablero.Turno;
         }
 
-        private Juego juego;
-        private Player player1, player2;
-
-        public Juego Juego
-        {
-            get { return juego; }
-            set { juego = value; }
-        }
-
-        public Player Player1
-        {
-            get { return player1; }
-            set { player1 = value; }
-        }
-
-        public Player Player2
-        {
-            get { return player2; }
-            set { player2 = value; }
-        }
-
-        public Player CurrentPlayer
-        {
-            get { return Tablero.JugadorActual; }
-            set { Tablero.JugadorActual = value; }
-        }
-
-        public Tablero.Jugador Turno => Tablero.Turno;
-        public Tablero.Cell Ficha => CurrentPlayer.Ficha;
-        public int X => CurrentPlayer.X;
-        public int Y => CurrentPlayer.Y;
-        public int Tamanio => Tablero.Tamanio;
-
-        public void InitTurn()
-        {
-            // Nota: Antes de usar el init turn debe haberse inicializado el player1
-            CurrentPlayer = player1;
-        }
-
-        //cambia de jugador
-        public void ChangeTurn()
-        {
-            CurrentPlayer = (tablero.Turno == Tablero.Jugador.JAZUL) ? player1 : player2;
-        }
-        
-        /*
         public void PrintGame()
         {
             //const string filePath = "game.txt";
@@ -66,17 +24,17 @@ namespace ReSOSGame
             contenido += Turno == Tablero.Jugador.JAZUL ? "Azul\n" : "Rojo\n";
             // Construir el contenido a escribir
             contenido += "-------\n";
-            for (var row = 0; row < tablero.Tamanio; row++)
+            for (var row = 0; row < Tablero.Tamanio; row++)
             {
-                for (var column = 0; column < tablero.Tamanio; column++)
+                for (var column = 0; column < Tablero.Tamanio; column++)
                 {
-                    contenido += "|" + Symbol(tablero[row, column]);
+                    contenido += "|" + Symbol(Tablero[row, column]);
                 }
                 contenido += "|\n";
             }
             contenido += "-------\n";
             if (Juego is JuegoGeneral aux)
-            { 
+            {
                 contenido += "Puntaje Azul: " + aux.PuntajeAzul + "\n";
                 contenido += "Puntaje Rojo: " + aux.PuntajeRojo + "\n";
             }
@@ -104,7 +62,7 @@ namespace ReSOSGame
                 // si no existe, regresa
                 return;
             }
-            
+
 
             if (Tablero.ValidMove)
             {
@@ -169,6 +127,5 @@ namespace ReSOSGame
             }
             PrintGame();
         }
-        */
     }
 }

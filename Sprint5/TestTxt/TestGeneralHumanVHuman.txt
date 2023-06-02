@@ -1,4 +1,4 @@
-Turno: Rojo
+Turno: Azul
 -------
 |S| | |
 | | | |
@@ -16,7 +16,7 @@ Turno: Azul
 Puntaje Azul: 0
 Puntaje Rojo: 0
 Estado de juego: JUGANDO
-Turno: Rojo
+Turno: Azul
 -------
 |S|S|S|
 | | | |
@@ -34,7 +34,7 @@ Turno: Azul
 Puntaje Azul: 0
 Puntaje Rojo: 0
 Estado de juego: JUGANDO
-Turno: Rojo
+Turno: Azul
 -------
 |S|S|S|
 |O|S| |
@@ -52,7 +52,7 @@ Turno: Azul
 Puntaje Azul: 0
 Puntaje Rojo: 0
 Estado de juego: JUGANDO
-Turno: Rojo
+Turno: Azul
 -------
 |S|S|S|
 |O|S|S|
