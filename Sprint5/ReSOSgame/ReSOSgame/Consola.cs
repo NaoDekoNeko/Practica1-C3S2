@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static ReSOSgame.Tablero;
+using static ReSOSGame.Tablero;
 
-namespace ReSOSgame
+namespace ReSOSGame
 {
     public class Consola
     {
@@ -30,12 +30,12 @@ namespace ReSOSgame
             System.Console.WriteLine("-------");
         }
 
-        private char Symbol(Cell cell)
+        private char Symbol(Tablero.Cell cell)
         {
-            if (cell == Cell.S)
+            if (cell == Tablero.Cell.S)
                 return 'S';
             else
-            if (cell == Cell.O)
+            if (cell == Tablero.Cell.O)
                 return 'O';
             else return ' ';
         }

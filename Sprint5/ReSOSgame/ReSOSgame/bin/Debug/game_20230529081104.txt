@@ -1,0 +1,24 @@
+Turno: Rojo
+-------
+| | |
+| |S|
+-------
+Estado de juego: JUGANDO
+Turno: Azul
+-------
+| |O|
+| |S|
+-------
+Estado de juego: JUGANDO
+Turno: Rojo
+-------
+|O|O|
+| |S|
+-------
+Estado de juego: JUGANDO
+Turno: Rojo
+-------
+|O|O|
+|O|S|
+-------
+Estado de juego: EMPATE

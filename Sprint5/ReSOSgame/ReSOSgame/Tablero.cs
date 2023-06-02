@@ -4,9 +4,9 @@ using System.Data.Common;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static ReSOSgame.Tablero;
+using static ReSOSGame.Tablero;
 
-namespace ReSOSgame
+namespace ReSOSGame
 { 
     public class Tablero
     {
@@ -21,6 +21,29 @@ namespace ReSOSgame
         private Player jugadorActual;
         public Player JugadorActual { get { return jugadorActual; } set { jugadorActual = value; } }
         private bool validMove;
+        public Cell Ficha
+        {
+            get { return ficha; }
+            set { ficha = value; }
+        }
+        public Jugador Turno
+        {
+            get { return turno; }
+            set { turno = value; }
+        }
+        public int Tamanio { get { return tamanio; } }
+        public GameState EstadoDeJuego
+        {
+            get { return estadoDeJuego; }
+            set { estadoDeJuego = value; }
+        }
+        public Cell[,] Grid { get { return grid; } }
+        public bool ValidMove
+        {
+            get { return validMove; }
+            set { validMove = value; }
+        }
+
         public Tablero(int tamanio)
         {
             grid = new Cell[tamanio, tamanio];
@@ -33,17 +56,8 @@ namespace ReSOSgame
             else
                 return Cell.INVALIDA;
         }
-        public Cell Ficha { get { return ficha; }
-        set { ficha = value; } }
-        public Jugador Turno { get { return turno; }
-            set { turno = value; }}
-        public int Tamanio { get { return tamanio; } }
-        public GameState EstadoDeJuego { get { return estadoDeJuego; } 
-            set { estadoDeJuego = value; } }
-        public Cell[,] Grid { get { return grid; } }
-        public bool ValidMove { get { return validMove; }
-            set { validMove = value; }}
         
+        //Inicia el tablero
         public void InitBoard()
         {
             for(int row = 0; row < tamanio; row++)

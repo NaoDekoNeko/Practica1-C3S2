@@ -1,0 +1,140 @@
+Turno: Rojo
+-------
+| | | | | | |
+| | |S| | | |
+| | | | | | |
+| | | | | | |
+| | | | | | |
+| | | | | | |
+-------
+Estado de juego: JUGANDO
+Turno: Azul
+-------
+| | | | | | |
+| | |S| | | |
+| | |S| | | |
+| | | | | | |
+| | | | | | |
+| | | | | | |
+-------
+Estado de juego: JUGANDO
+Turno: Rojo
+-------
+| | | | | | |
+| | |S| | | |
+| | |S| | | |
+| | | | | | |
+|O| | | | | |
+| | | | | | |
+-------
+Estado de juego: JUGANDO
+Turno: Azul
+-------
+| | | | | | |
+| | |S| | | |
+| | |S| |O| |
+| | | | | | |
+|O| | | | | |
+| | | | | | |
+-------
+Estado de juego: JUGANDO
+Turno: Rojo
+-------
+| | | | | | |
+| | |S| | | |
+| | |S| |O| |
+| | | | | | |
+|O| |O| | | |
+| | | | | | |
+-------
+Estado de juego: JUGANDO
+Turno: Azul
+-------
+| | | | | | |
+| | |S| | | |
+| | |S| |O|O|
+| | | | | | |
+|O| |O| | | |
+| | | | | | |
+-------
+Estado de juego: JUGANDO
+Turno: Rojo
+-------
+| | | | | | |
+| |S|S| | | |
+| | |S| |O|O|
+| | | | | | |
+|O| |O| | | |
+| | | | | | |
+-------
+Estado de juego: JUGANDO
+Turno: Azul
+-------
+| | | | | | |
+| |S|S| | | |
+| | |S| |O|O|
+| | |O| | | |
+|O| |O| | | |
+| | | | | | |
+-------
+Estado de juego: JUGANDO
+Turno: Rojo
+-------
+| | | | | | |
+| |S|S| | | |
+| | |S| |O|O|
+| | |O| | | |
+|O| |O| | | |
+| | | | |S| |
+-------
+Estado de juego: JUGANDO
+Turno: Azul
+-------
+| | | | | | |
+| |S|S| | | |
+| | |S| |O|O|
+| | |O| | | |
+|O| |O|S| | |
+| | | | |S| |
+-------
+Estado de juego: JUGANDO
+Turno: Rojo
+-------
+| | | | | | |
+| |S|S| | | |
+| | |S| |O|O|
+|O| |O| | | |
+|O| |O|S| | |
+| | | | |S| |
+-------
+Estado de juego: JUGANDO
+Turno: Azul
+-------
+| | | | | | |
+| |S|S| | | |
+| | |S| |O|O|
+|O| |O| | | |
+|O| |O|S| | |
+| | | |O|S| |
+-------
+Estado de juego: JUGANDO
+Turno: Rojo
+-------
+| | | | | | |
+| |S|S| |S| |
+| | |S| |O|O|
+|O| |O| | | |
+|O| |O|S| | |
+| | | |O|S| |
+-------
+Estado de juego: JUGANDO
+Turno: Rojo
+-------
+| | | | | | |
+| |S|S| |S| |
+| | |S| |O|O|
+|O| |O| |S| |
+|O| |O|S| | |
+| | | |O|S| |
+-------
+Estado de juego: GANÓ EL JUGADOR ROJO

@@ -1,0 +1,81 @@
+Turno: Rojo
+-------
+|S| | |
+| | | |
+| | | |
+-------
+Puntaje Azul: 0
+Puntaje Rojo: 0
+Estado de juego: JUGANDO
+Turno: Azul
+-------
+|S|S| |
+| | | |
+| | | |
+-------
+Puntaje Azul: 0
+Puntaje Rojo: 0
+Estado de juego: JUGANDO
+Turno: Rojo
+-------
+|S|S|S|
+| | | |
+| | | |
+-------
+Puntaje Azul: 0
+Puntaje Rojo: 0
+Estado de juego: JUGANDO
+Turno: Azul
+-------
+|S|S|S|
+|O| | |
+| | | |
+-------
+Puntaje Azul: 0
+Puntaje Rojo: 0
+Estado de juego: JUGANDO
+Turno: Rojo
+-------
+|S|S|S|
+|O|S| |
+| | | |
+-------
+Puntaje Azul: 0
+Puntaje Rojo: 0
+Estado de juego: JUGANDO
+Turno: Azul
+-------
+|S|S|S|
+|O|S|S|
+| | | |
+-------
+Puntaje Azul: 0
+Puntaje Rojo: 0
+Estado de juego: JUGANDO
+Turno: Rojo
+-------
+|S|S|S|
+|O|S|S|
+| |S| |
+-------
+Puntaje Azul: 0
+Puntaje Rojo: 0
+Estado de juego: JUGANDO
+Turno: Azul
+-------
+|S|S|S|
+|O|S|S|
+|S|S| |
+-------
+Puntaje Azul: 0
+Puntaje Rojo: 1
+Estado de juego: JUGANDO
+Turno: Azul
+-------
+|S|S|S|
+|O|S|S|
+|S|S|O|
+-------
+Puntaje Azul: 0
+Puntaje Rojo: 1
+Estado de juego: GANÓ EL JUGADOR ROJO

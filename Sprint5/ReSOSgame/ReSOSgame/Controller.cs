@@ -7,7 +7,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ReSOSgame
+namespace ReSOSGame
 {
     
     public class Controller
@@ -53,9 +53,9 @@ namespace ReSOSgame
             }
             contenido += "-------\n";
             if (Juego is JuegoGeneral aux)
-            {
-                contenido += aux.PuntajeAzul + "\n";
-                contenido += aux.PuntajeRojo + "\n";
+            { 
+                contenido += "Puntaje Azul: " + aux.PuntajeAzul + "\n";
+                contenido += "Puntaje Rojo: " + aux.PuntajeRojo + "\n";
             }
 
             contenido += "Estado de juego: ";
@@ -74,7 +74,7 @@ namespace ReSOSgame
                     contenido += "EMPATE\n";
                     break;
             }
-            
+
             // Verificar si el archivo existe
             if (!File.Exists(FilePath))
             {
@@ -85,11 +85,30 @@ namespace ReSOSgame
 
             if (Tablero.ValidMove)
             {
-                // Añadir contenido al archivo existente o al archivo recién creado
-                using (StreamWriter sw = File.AppendText(FilePath))
+                //Cuando se intente escribir en un archivo que es de solo lectura, no hará nada
+                //caso contrario, agregará el contenido
+                try
                 {
-                    sw.Write(contenido);
+                    // Añadir contenido al archivo existente o al archivo recién creado
+                    using (StreamWriter sw = File.AppendText(FilePath))
+                    {
+                        sw.Write(contenido);
+                    }
                 }
+                catch (UnauthorizedAccessException)
+                {
+                    return;
+                }
+                catch (Exception)
+                {
+                    return;
+                }
+            }
+
+            if (Tablero.EstadoDeJuego != Tablero.GameState.JUGANDO)
+            {
+                //Cuando la partida acabe, hace que el archivo sea de solo lectura
+                File.SetAttributes(FilePath, FileAttributes.ReadOnly);
             }
         }
 
@@ -110,7 +129,7 @@ namespace ReSOSgame
 
         private string ObtenerRutaNuevoArchivo()
         {
-            return "game_" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".txt";
+            return @"C:\Users\Ademar\OneDrive\Desktop\Practica1-C3S2\Sprint5\Registros\game_" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".txt";
         }
 
         public void SaveGame()
