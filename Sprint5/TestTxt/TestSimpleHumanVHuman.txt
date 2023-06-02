@@ -1,4 +1,4 @@
-Turno: Rojo
+Turno: Azul
 -------
 |S| | |
 | | | |
@@ -12,14 +12,14 @@ Turno: Azul
 | | | |
 -------
 Estado de juego: JUGANDO
-Turno: Rojo
+Turno: Azul
 -------
 |S| |S|
 | | | |
 | | |S|
 -------
 Estado de juego: JUGANDO
-Turno: Rojo
+Turno: Azul
 -------
 |S|O|S|
 | | | |

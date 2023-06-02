@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using static ReSOSGame.Tablero;
 
 namespace ReSOSGame
@@ -20,24 +16,29 @@ namespace ReSOSGame
         {
             for (int row = 0; row < tablero.Tamanio; row++)
             {
-                System.Console.WriteLine("-------");
+                Console.WriteLine("-------");
                 for (int column = 0; column < tablero.Tamanio; column++)
                 {
-                    System.Console.Write("|" + Symbol(tablero.GetCell(row, column)));
+                    Console.Write("|" + Symbol(tablero[row, column]));
                 }
-                System.Console.WriteLine("|");
+                Console.WriteLine("|");
             }
-            System.Console.WriteLine("-------");
+            Console.WriteLine("-------");
         }
 
-        private char Symbol(Tablero.Cell cell)
+        private char Symbol(Cell cell)
         {
-            if (cell == Tablero.Cell.S)
-                return 'S';
-            else
-            if (cell == Tablero.Cell.O)
-                return 'O';
-            else return ' ';
+            switch (cell)
+            {
+                case Cell.S:
+                    return 'S';
+                case Cell.O:
+                    return 'O';
+                case Cell.VACIA:
+                case Cell.INVALIDA:
+                default:
+                    return ' ';
+            }
         }
     }
 }

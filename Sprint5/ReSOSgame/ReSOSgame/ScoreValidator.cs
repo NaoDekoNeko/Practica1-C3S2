@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using static ReSOSGame.Tablero;
+﻿using static ReSOSGame.Tablero;
 namespace ReSOSGame
 {
     public class ScoreValidator
@@ -21,7 +15,7 @@ namespace ReSOSGame
             {
                 for (int j = 0; j < tablero.Tamanio; j++)
                 {
-                    if (tablero.GetCell(i, j) == Tablero.Cell.VACIA)
+                    if (tablero[i, j] == Cell.VACIA)
                     {
                         return false;
                     }
@@ -30,37 +24,40 @@ namespace ReSOSGame
             return true;
         }
 
-        public bool HasOnePoint(int row, int col, Tablero.Cell ficha)
+        public bool HasOnePoint(int row, int col, Cell ficha)
         {
-            if (ficha == Tablero.Cell.S)
+            switch (ficha)
             {
-                return (tablero.GetCell(row + 1, col + 1) == Tablero.Cell.O && tablero.GetCell(row + 2, col + 2) == Tablero.Cell.S) ||
-                    (tablero.GetCell(row - 1, col - 1) == Tablero.Cell.O && tablero.GetCell(row - 2, col - 2) == Tablero.Cell.S) ||
-                    (tablero.GetCell(row, col + 1) == Tablero.Cell.O && tablero.GetCell(row, col + 2) == Tablero.Cell.S) ||
-                    (tablero.GetCell(row, col - 1) == Tablero.Cell.O && tablero.GetCell(row, col - 2) == Tablero.Cell.S) ||
-                    (tablero.GetCell(row + 1, col) == Tablero.Cell.O && tablero.GetCell(row + 2, col) == Tablero.Cell.S) ||
-                    (tablero.GetCell(row - 1, col) == Tablero.Cell.O && tablero.GetCell(row - 2, col) == Tablero.Cell.S);
+                case Cell.S:
+                    return (tablero[row + 1, col + 1] == Cell.O && tablero[row + 2, col + 2] == Cell.S) ||
+                           (tablero[row - 1, col - 1] == Cell.O && tablero[row - 2, col - 2] == Cell.S) ||
+                           (tablero[row, col + 1] == Cell.O && tablero[row, col + 2] == Cell.S) ||
+                           (tablero[row, col - 1] == Cell.O && tablero[row, col - 2] == Cell.S) ||
+                           (tablero[row + 1, col] == Cell.O && tablero[row + 2, col] == Cell.S) ||
+                           (tablero[row - 1, col] == Cell.O && tablero[row - 2, col] == Cell.S);
+                case Cell.O:
+                    return (tablero[row - 1, col - 1] == Cell.S &&
+                            tablero[row + 1, col + 1] == Cell.S) ||
+                           (tablero[row + 1, col - 1] == Cell.S && tablero[row - 1, col + 1] == Cell.S) ||
+                           (tablero[row - 1, col] == Cell.S && tablero[row + 1, col] == Cell.S) ||
+                           (tablero[row, col - 1] == Cell.S && tablero[row, col + 1] == Cell.S);
+                case Cell.VACIA:
+                case Cell.INVALIDA:
+                default:
+                    return false;
             }
-            else if (ficha == Tablero.Cell.O)
-            {
-                return (tablero.GetCell(row - 1, col - 1) == Tablero.Cell.S && tablero.GetCell(row + 1, col + 1) == Tablero.Cell.S) ||
-                    (tablero.GetCell(row + 1, col - 1) == Tablero.Cell.S && tablero.GetCell(row - 1, col + 1) == Tablero.Cell.S) ||
-                    (tablero.GetCell(row - 1, col) == Tablero.Cell.S && tablero.GetCell(row + 1, col) == Tablero.Cell.S) ||
-                    (tablero.GetCell(row, col - 1) == Tablero.Cell.S && tablero.GetCell(row, col + 1) == Tablero.Cell.S);
-            }
-            return false;
         }
 
         // Funcion que verifica si el juego se ha terminado
         public bool GameOver()
         {
-            return tablero.EstadoDeJuego != Tablero.GameState.JUGANDO;
+            return tablero.EstadoDeJuego != GameState.JUGANDO;
         }
         // Funcion que verifica si algunos de los dos jugadores ha ganado
         public bool HasWon()
         {
-            return tablero.EstadoDeJuego == Tablero.GameState.GANOAZUL ||
-                tablero.EstadoDeJuego == Tablero.GameState.GANOROJO;
+            return tablero.EstadoDeJuego == GameState.GANOAZUL ||
+                tablero.EstadoDeJuego == GameState.GANOROJO;
         }
     }
 }

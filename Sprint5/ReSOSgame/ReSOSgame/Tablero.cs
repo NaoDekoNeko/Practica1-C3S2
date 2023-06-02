@@ -1,76 +1,65 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Common;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static ReSOSGame.Tablero;
-
-namespace ReSOSGame
+﻿namespace ReSOSGame
 { 
     public class Tablero
     {
         public enum Cell { VACIA, INVALIDA, S,O}
         public enum Jugador { JAZUL,JROJO}
         public enum GameState { JUGANDO,EMPATE,GANOAZUL,GANOROJO }
-        private int tamanio;
-        private Cell[,] grid;
-        private Cell ficha;
-        private Jugador turno; //  Jugador que va hacer la jugada "MakeMove"
-        private GameState estadoDeJuego;
-        private Player jugadorActual;
-        public Player JugadorActual { get { return jugadorActual; } set { jugadorActual = value; } }
+
+        public Player JugadorActual { get; set; }
+
         private bool validMove;
-        public Cell Ficha
+        public Cell Ficha { get; set; }
+
+        public Jugador Turno { get; set; }
+
+        public int Tamanio { get; }
+
+        public GameState EstadoDeJuego { get; set; }
+
+        public Cell[,] Grid { get; }
+
+        public Cell this[int row, int column]
         {
-            get { return ficha; }
-            set { ficha = value; }
+            get
+            {
+                if (row >= 0 && column >= 0 && row < Tamanio && column < Tamanio)
+                    return Grid[row, column];
+                return Cell.INVALIDA;
+            }
+            set
+            {
+                if (row >= 0 && column >= 0 && row < Tamanio && column < Tamanio)
+                    Grid[row, column] = value;
+            }
         }
-        public Jugador Turno
-        {
-            get { return turno; }
-            set { turno = value; }
-        }
-        public int Tamanio { get { return tamanio; } }
-        public GameState EstadoDeJuego
-        {
-            get { return estadoDeJuego; }
-            set { estadoDeJuego = value; }
-        }
-        public Cell[,] Grid { get { return grid; } }
+
         public bool ValidMove
         {
-            get { return validMove; }
-            set { validMove = value; }
+            get => validMove;
+            set => validMove = value;
         }
 
         public Tablero(int tamanio)
         {
-            grid = new Cell[tamanio, tamanio];
-            this.tamanio = tamanio;
+            //se espera que el tamaño del tablero sea mínimo 1 y como máximo 12
+            Grid = new Cell[tamanio, tamanio];
+            this.Tamanio = tamanio;
         }
-        public Cell GetCell(int row, int column)
-        {
-            if (row >= 0 && column >= 0 && row < tamanio && column < tamanio)
-                return grid[row, column];
-            else
-                return Cell.INVALIDA;
-        }
-        
+
         //Inicia el tablero
         public void InitBoard()
         {
-            for(int row = 0; row < tamanio; row++)
+            for(int row = 0; row < Tamanio; row++)
             {
-                for(int column = 0; column < tamanio; column++)
+                for(int column = 0; column < Tamanio; column++)
                 {
-                    grid[row, column] = Cell.VACIA;
+                    Grid[row, column] = Cell.VACIA;
                 }
             }
-            estadoDeJuego = GameState.JUGANDO;
-            ficha = Cell.S;
-            turno = Jugador.JAZUL;
+            EstadoDeJuego = GameState.JUGANDO;
+            Ficha = Cell.S;
+            Turno = Jugador.JAZUL;
         }
-        
     }
 }

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Data;
 using System.Drawing;
-using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using ReSOSgame;
 
 namespace ReSOSGame
 {
@@ -11,11 +11,19 @@ namespace ReSOSGame
     {
         // Inicializa las componente e instancia el objeto controller
         private Controller controller;
+        //se tendrá el recorder
+        private GameRecorder gameRecorder;
         //private bool actualizarGrid = false;
         public Form1()
         {
             InitializeComponent();
             controller = new Controller();
+        }
+
+        private void StartRecording()
+        {
+            gameRecorder = new GameRecorder(controller.Juego);
+            gameRecorder.SaveGame();
         }
 
         //Este método convierte un array 2D de cualquier tipo a un DataTable;        
@@ -99,30 +107,27 @@ namespace ReSOSGame
         //Este metodo pinta y coloca la ficha de la casilla en el DatagridView 
         private void PaintGrid()
         {
-
-            if (controller.X >= 0 && controller.X < controller.Tablero.Tamanio &&
-                controller.Y >= 0 && controller.Y < controller.Tablero.Tamanio)
-            {
-                // Desactiva la escucha para el update y no entre de nuevo a la funcion que captura el evento de updategrid
-                dataGridView1.CellValueChanged -= UpdateGrid;
-                controller.Tablero.Grid[controller.X, controller.Y] = controller.Ficha;
-                dataGridView1.Rows[controller.X].Cells[controller.Y].Value = controller.Ficha;
+            if (controller.X < 0 || controller.X >= controller.Tablero.Tamanio ||
+                controller.Y < 0 || controller.Y >= controller.Tablero.Tamanio) return;
+            // Desactiva la escucha para el update y no entre de nuevo a la funcion que captura el evento de updategrid
+            dataGridView1.CellValueChanged -= UpdateGrid;
+            controller.Tablero[controller.X, controller.Y] = controller.Ficha;
+            dataGridView1.Rows[controller.X].Cells[controller.Y].Value = controller.Ficha;
 
 
-                // Mientras se siga jugando (Estado de juego == JUGANDO) Va pintar el valor del datagrid
-                if (controller.Tablero.EstadoDeJuego == Tablero.GameState.JUGANDO)
-                    dataGridView1.Rows[controller.X].Cells[controller.Y].Style.ForeColor =
-                        (controller.Turno == Tablero.Jugador.JROJO) ? Color.Blue : Color.Red;
-                else
-                    dataGridView1.Rows[controller.X].Cells[controller.Y].Style.ForeColor =
-                        (controller.Turno == Tablero.Jugador.JROJO) ? Color.Red : Color.Blue;
-                //Es posible que la asignación de turnos esté fallando aquí
-                dataGridView1.CurrentCell = null; // Cuando se ahce click en el data grid ya no se sombreea azul
-                dataGridView1.CellValueChanged += UpdateGrid; // Se vuelve a activar al escucha a este updategrid
-                UpdateScore();
-                if (Record.Checked)
-                    controller.PrintGame();
-            }
+            // Mientras se siga jugando (Estado de juego == JUGANDO) Va pintar el valor del datagrid
+            if (controller.Tablero.EstadoDeJuego == Tablero.GameState.JUGANDO)
+                dataGridView1.Rows[controller.X].Cells[controller.Y].Style.ForeColor =
+                    (controller.Turno == Tablero.Jugador.JROJO) ? Color.Blue : Color.Red;
+            else
+                dataGridView1.Rows[controller.X].Cells[controller.Y].Style.ForeColor =
+                    (controller.Turno == Tablero.Jugador.JROJO) ? Color.Red : Color.Blue;
+            //Es posible que la asignación de turnos esté fallando aquí
+            dataGridView1.CurrentCell = null; // Cuando se ahce click en el data grid ya no se sombreea azul
+            dataGridView1.CellValueChanged += UpdateGrid; // Se vuelve a activar al escucha a este updategrid
+            UpdateScore();
+            if (Record.Checked)
+                gameRecorder.PrintGame();
         }
 
         //Este metodo escucha cuando se clikea en la casilla de una Datagrid
@@ -144,15 +149,14 @@ namespace ReSOSGame
                 controller.ChangeTurn();
                 UpdateScore();
             }
-            if (controller.CurrentPlayer is Computer)
-            {
-                controller.CurrentPlayer.MakeMove(0, 0, 0, controller.Juego); // Realiza el movimiento del jugador de tipo Computer
-                PaintGrid();
-                ShowGameStatus();
-                ShowTurn();
-                controller.ChangeTurn();
-                UpdateScore();
-            }
+
+            if (!(controller.CurrentPlayer is Computer)) return;
+            controller.CurrentPlayer.MakeMove(0, 0, 0, controller.Juego); // Realiza el movimiento del jugador de tipo Computer
+            PaintGrid();
+            ShowGameStatus();
+            ShowTurn();
+            controller.ChangeTurn();
+            UpdateScore();
         }
 
         // Inicializa el tipo de jugador Azul segun los radiobutton
@@ -186,29 +190,29 @@ namespace ReSOSGame
             controller.Player1 = BluePlayerSelector(); // Verrifica el radio button y se asigna como jugador azul al primer player
             controller.Player2 = RedPlayerSelector(); // Verrifica el radio button y se asigna como jugador rojo al segundo player
             controller.InitTurn(); // Inicializa el CurrentPlayer como palyer1 , es decir el player1 empieza el juego
+            if (Record.Checked)
+            {
+                StartRecording();
+            }
             CargarAlDataGrid(); // Carga los datos al dataGrid
             ShowGameStatus(); // muestra en un label el estado del juego
             ShowTurn(); // muetra en un label el turno
             dataGridView1.CurrentCell = null; // Se desaparece que este sombreado azul en el datagrid
-            if (controller.Player1 is Computer && controller.Player2 is Human)
+            switch (controller.Player1)
             {
-                controller.CurrentPlayer.MakeMove(0, 0, 0, controller.Juego); // Realiza el movimiento del jugador de tipo Computer
-                PaintGrid();
-                ShowGameStatus();
-                ShowTurn();
-                controller.ChangeTurn();
-                UpdateScore();
-            } 
-            else if (controller.Player1 is Computer && controller.Player2 is Computer)
-            {
-                StartComputerVsComputerGame();
+                case Computer _ when controller.Player2 is Human:
+                    controller.CurrentPlayer.MakeMove(0, 0, 0, controller.Juego); // Realiza el movimiento del jugador de tipo Computer
+                    PaintGrid();
+                    ShowGameStatus();
+                    ShowTurn();
+                    controller.ChangeTurn();
+                    UpdateScore();
+                    break;
+                case Computer _ when controller.Player2 is Computer:
+                    StartComputerVsComputerGame();
+                    break;
             }
             EnableSettings();
-            if (Record.Checked)
-            {
-                controller.FilePath = null;
-                controller.SaveGame();
-            }
         }
         private void StartComputerVsComputerGame()
         {

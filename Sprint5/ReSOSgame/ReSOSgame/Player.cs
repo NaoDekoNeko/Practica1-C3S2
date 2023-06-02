@@ -1,43 +1,36 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.ExceptionServices;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using static ReSOSGame.Tablero;
 
 namespace ReSOSGame
 {
     public abstract class Player
     {
-        private Tablero.Jugador player;
-        private Tablero.Cell ficha;
-        private int Cord_X_ficha;
-        private int Cord_Y_ficha;
-        public int X { get { return Cord_X_ficha; } set { Cord_X_ficha = value; } }
-        public int Y { get { return Cord_Y_ficha; } set { Cord_Y_ficha = value; } }
-        public Tablero.Jugador Jugador => player;
-        public Tablero.Cell Ficha { get { return ficha; } set { ficha = value; } }
-        public Player(Tablero.Jugador player)
+        //Almacenar coordenadas del movimiento 
+        public int X { get; protected set; }
+        public int Y { get; protected set; }
+
+        public Jugador Jugador { get; }
+        public Cell Ficha { get; set; }
+
+        protected Player(Jugador player)
         {
-            this.player = player;
+            this.Jugador = player;
             X = -1;
             Y = -1;
         }
-        public abstract void MakeMove(int row, int col, Tablero.Cell _ficha, Juego juego);
+        public abstract void MakeMove(int row, int col, Cell ficha, Juego juego);
     }
     public class Human:Player
     {
-        public Human(Tablero.Jugador player):base(player)
+        public Human(Jugador player):base(player)
         {
         }
-        public override void MakeMove(int row, int col, Tablero.Cell _ficha, Juego juego)
+        public override void MakeMove(int row, int col, Cell ficha, Juego juego)
         {   
-            juego.MakeMove(row, col, _ficha);
-            if (juego.tablero.ValidMove)
+            juego.MakeMove(row, col, ficha);
+            if (juego.Tablero.ValidMove)
             {
-                Ficha = _ficha;
+                Ficha = ficha;
                 X = row;
                 Y = col;
             }
@@ -52,61 +45,38 @@ namespace ReSOSGame
 
     public class Computer : Player
     {
-        public Computer(Tablero.Jugador player) : base(player)
+        public Computer(Jugador player) : base(player)
         {
         }
 
-        public override void MakeMove(int row, int col, Tablero.Cell _ficha, Juego juego)
+        public override void MakeMove(int row, int col, Tablero.Cell ficha, Juego juego)
         {
             //esta solución hace más eficaz que la computadora llene casillas vacías sin hacer movimientos inválidos
-            int numberOfEmptyCells = GetNumberOfEmptyCells(juego);
+            int numberOfEmptyCells = juego.NumberOfEmptyCells;
             Random random = new Random();
             int targetMove = random.Next(numberOfEmptyCells);
             int index = 0;
-            for (int i = 0; i < juego.tablero.Tamanio; ++i)
+            for (int i = 0; i < juego.Tablero.Tamanio; ++i)
             {
-                for (int j = 0; j< juego.tablero.Tamanio; ++j)
+                for (int j = 0; j< juego.Tablero.Tamanio; ++j)
                 {
-                    if (juego.tablero.GetCell(i, j) == 0)
+                    if (juego.Tablero[i, j] != 0) continue;
+                    if (targetMove == index)
                     {
-                        if (targetMove == index)
-                        {
-                            //Relleno la ficha , cordenadax y cordenada y del player para que lo pinte
-                            Ficha = (Tablero.Cell)(random.Next(2) + 2);
-                            X = i;
-                            Y = j;
-                            juego.MakeMove(i, j, Ficha);
-                            Console.WriteLine("Movimiento de la computadora:");
-                            Console.WriteLine("Casilla: [{0}, {1}]", i, j);
-                            Console.WriteLine("Valor de ficha: {0}", _ficha);
+                        //Relleno la ficha , cordenadax y cordenada y del player para que lo pinte
+                        Ficha = (Cell)(random.Next(2) + 2);
+                        X = i;
+                        Y = j;
+                        juego.MakeMove(i, j, Ficha);
+                        Console.WriteLine("Movimiento de la computadora:");
+                        Console.WriteLine("Casilla: [{0}, {1}]", i, j);
+                        Console.WriteLine("Valor de ficha: {0}", ficha);
 
-                            return;
-                        }
-                        else
-                        {
-                            index++;
-                        }
+                        return;
                     }
+                    index++;
                 }
             }
-
         }
-
-        private int GetNumberOfEmptyCells(Juego juego)
-        {
-            int numberOfEmptyCells = 0;
-            for (int row = 0; row < juego.tablero.Tamanio; ++row)
-            {
-                for (int col = 0; col < juego.tablero.Tamanio; ++col)
-                {
-                    if (juego.tablero.GetCell(row, col) == Tablero.Cell.VACIA)
-                    {
-                        numberOfEmptyCells++;
-                    }
-                }
-            }
-            return numberOfEmptyCells;
-        }
-
     }
 }
