@@ -5,9 +5,9 @@ using System.Runtime.ExceptionServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using static ReSOSgame.Tablero;
+using static ReSOSGame.Tablero;
 
-namespace ReSOSgame
+namespace ReSOSGame
 {
     public abstract class Player
     {
@@ -72,7 +72,7 @@ namespace ReSOSgame
                         if (targetMove == index)
                         {
                             //Relleno la ficha , cordenadax y cordenada y del player para que lo pinte
-                            Ficha = (Cell)(random.Next(2) + 2);
+                            Ficha = (Tablero.Cell)(random.Next(2) + 2);
                             X = i;
                             Y = j;
                             juego.MakeMove(i, j, Ficha);
@@ -99,7 +99,7 @@ namespace ReSOSgame
             {
                 for (int col = 0; col < juego.tablero.Tamanio; ++col)
                 {
-                    if (juego.tablero.GetCell(row, col) == Cell.VACIA)
+                    if (juego.tablero.GetCell(row, col) == Tablero.Cell.VACIA)
                     {
                         numberOfEmptyCells++;
                     }

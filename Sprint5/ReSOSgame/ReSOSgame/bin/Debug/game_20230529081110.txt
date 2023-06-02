@@ -1,0 +1,63 @@
+Turno: Rojo
+-------
+| | |O|
+| | | |
+| | | |
+-------
+Estado de juego: JUGANDO
+Turno: Azul
+-------
+| | |O|
+|S| | |
+| | | |
+-------
+Estado de juego: JUGANDO
+Turno: Rojo
+-------
+|S| |O|
+|S| | |
+| | | |
+-------
+Estado de juego: JUGANDO
+Turno: Azul
+-------
+|S| |O|
+|S| | |
+| | |O|
+-------
+Estado de juego: JUGANDO
+Turno: Rojo
+-------
+|S|S|O|
+|S| | |
+| | |O|
+-------
+Estado de juego: JUGANDO
+Turno: Azul
+-------
+|S|S|O|
+|S| | |
+| |S|O|
+-------
+Estado de juego: JUGANDO
+Turno: Rojo
+-------
+|S|S|O|
+|S|S| |
+| |S|O|
+-------
+Estado de juego: JUGANDO
+Turno: Azul
+-------
+|S|S|O|
+|S|S|S|
+| |S|O|
+-------
+Estado de juego: JUGANDO
+Turno: Azul
+-------
+|S|S|O|
+|S|S|S|
+|O|S|O|
+-------
+Estado de juego: EMPATE

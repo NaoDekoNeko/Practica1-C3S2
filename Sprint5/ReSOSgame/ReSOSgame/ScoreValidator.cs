@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using static ReSOSgame.Tablero;
-namespace ReSOSgame
+using static ReSOSGame.Tablero;
+namespace ReSOSGame
 {
     public class ScoreValidator
     {
@@ -30,23 +30,23 @@ namespace ReSOSgame
             return true;
         }
 
-        public bool HasOnePoint(int row, int col, Cell ficha)
+        public bool HasOnePoint(int row, int col, Tablero.Cell ficha)
         {
-            if (ficha == Cell.S)
+            if (ficha == Tablero.Cell.S)
             {
-                return (tablero.GetCell(row + 1, col + 1) == Cell.O && tablero.GetCell(row + 2, col + 2) == Cell.S) ||
-                    (tablero.GetCell(row - 1, col - 1) == Cell.O && tablero.GetCell(row - 2, col - 2) == Cell.S) ||
-                    (tablero.GetCell(row, col + 1) == Cell.O && tablero.GetCell(row, col + 2) == Cell.S) ||
-                    (tablero.GetCell(row, col - 1) == Cell.O && tablero.GetCell(row, col - 2) == Cell.S) ||
-                    (tablero.GetCell(row + 1, col) == Cell.O && tablero.GetCell(row + 2, col) == Cell.S) ||
-                    (tablero.GetCell(row - 1, col) == Cell.O && tablero.GetCell(row - 2, col) == Cell.S);
+                return (tablero.GetCell(row + 1, col + 1) == Tablero.Cell.O && tablero.GetCell(row + 2, col + 2) == Tablero.Cell.S) ||
+                    (tablero.GetCell(row - 1, col - 1) == Tablero.Cell.O && tablero.GetCell(row - 2, col - 2) == Tablero.Cell.S) ||
+                    (tablero.GetCell(row, col + 1) == Tablero.Cell.O && tablero.GetCell(row, col + 2) == Tablero.Cell.S) ||
+                    (tablero.GetCell(row, col - 1) == Tablero.Cell.O && tablero.GetCell(row, col - 2) == Tablero.Cell.S) ||
+                    (tablero.GetCell(row + 1, col) == Tablero.Cell.O && tablero.GetCell(row + 2, col) == Tablero.Cell.S) ||
+                    (tablero.GetCell(row - 1, col) == Tablero.Cell.O && tablero.GetCell(row - 2, col) == Tablero.Cell.S);
             }
-            else if (ficha == Cell.O)
+            else if (ficha == Tablero.Cell.O)
             {
-                return (tablero.GetCell(row - 1, col - 1) == Cell.S && tablero.GetCell(row + 1, col + 1) == Cell.S) ||
-                    (tablero.GetCell(row + 1, col - 1) == Cell.S && tablero.GetCell(row - 1, col + 1) == Cell.S) ||
-                    (tablero.GetCell(row - 1, col) == Cell.S && tablero.GetCell(row + 1, col) == Cell.S) ||
-                    (tablero.GetCell(row, col - 1) == Cell.S && tablero.GetCell(row, col + 1) == Cell.S);
+                return (tablero.GetCell(row - 1, col - 1) == Tablero.Cell.S && tablero.GetCell(row + 1, col + 1) == Tablero.Cell.S) ||
+                    (tablero.GetCell(row + 1, col - 1) == Tablero.Cell.S && tablero.GetCell(row - 1, col + 1) == Tablero.Cell.S) ||
+                    (tablero.GetCell(row - 1, col) == Tablero.Cell.S && tablero.GetCell(row + 1, col) == Tablero.Cell.S) ||
+                    (tablero.GetCell(row, col - 1) == Tablero.Cell.S && tablero.GetCell(row, col + 1) == Tablero.Cell.S);
             }
             return false;
         }
@@ -54,7 +54,7 @@ namespace ReSOSgame
         // Funcion que verifica si el juego se ha terminado
         public bool GameOver()
         {
-            return tablero.EstadoDeJuego != GameState.JUGANDO;
+            return tablero.EstadoDeJuego != Tablero.GameState.JUGANDO;
         }
         // Funcion que verifica si algunos de los dos jugadores ha ganado
         public bool HasWon()

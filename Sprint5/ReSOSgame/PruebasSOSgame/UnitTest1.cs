@@ -1,6 +1,9 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ReSOSgame;
+using ReSOSGame;
 using System;
+using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace PruebasSOSgame
 // HU :Historia de Usuario
@@ -352,4 +355,137 @@ namespace PruebasSOSgame
         }
     }
 
+    [TestClass] //Clase de código de prueba HU 20
+    public  class TestGameToText
+    {
+        private Controller controller;
+        [TestInitialize]
+        public void Init()
+        {
+            controller = new Controller();
+            controller.Tablero = new Tablero(3);
+        }
+        private static bool FileCompare(string file1, string file2)
+        {
+            int file1Byte;
+            int file2Byte;
+            FileStream fs1;
+            FileStream fs2;
+
+            // Verifica si los tamaños de los archivos son iguales
+            if (new FileInfo(file1).Length != new FileInfo(file2).Length)
+            {
+                return false;
+            }
+
+            // Abre los archivos en modo lectura binaria
+            fs1 = new FileStream(file1, FileMode.Open, FileAccess.Read);
+            fs2 = new FileStream(file2, FileMode.Open, FileAccess.Read);
+
+            // Compara byte a byte
+            do
+            {
+                // Lee un byte de cada archivo
+                file1Byte = fs1.ReadByte();
+                file2Byte = fs2.ReadByte();
+            }
+            while ((file1Byte == file2Byte) && (file1Byte != -1));
+
+            // Cierra los archivos
+            fs1.Close();
+            fs2.Close();
+
+            // Si los bytes leídos son iguales, los archivos son iguales
+            return (file1Byte - file2Byte) == 0;
+        }
+        //Criterio de aceptación 20.1
+        [TestMethod]
+        public void SaveSimpleHumanVHumanGame()
+        {
+            controller.Juego = new JuegoSimple(controller.Tablero);
+            controller.Player1 = new Human(Tablero.Jugador.JAZUL);
+            controller.Player2 = new Human(Tablero.Jugador.JROJO);
+            var aux = controller.FilePath;
+            // Para que no sobreescriba el archivo de la prueba anterior
+            // Al retrasar un segundo su ejecución, se crea un nuevo archivo por el segundo de diferencia
+            // Las pruebas deben ser ejecutadas en paralelo para que no ocurran problemas durante su ejecución
+            Thread.Sleep(TimeSpan.FromSeconds(2));
+            controller.SaveGame();
+            controller.Player1.MakeMove(0, 0, Tablero.Cell.S, controller.Juego);
+            controller.PrintGame();
+            controller.Player2.MakeMove(0, 2, Tablero.Cell.S, controller.Juego);
+            controller.PrintGame();
+            controller.Player1.MakeMove(2, 2, Tablero.Cell.S, controller.Juego);
+            controller.PrintGame();
+            controller.Player2.MakeMove(0, 1, Tablero.Cell.O, controller.Juego);
+            controller.PrintGame();
+            Assert.IsTrue(FileCompare(controller.FilePath, @"C:\Users\Ademar\OneDrive\Desktop\Practica1-C3S2\Sprint5\TestTxt\TestSimpleHumanVHuman.txt"));
+            
+        }
+        //Criterio de aceptación 20.2
+        [TestMethod]
+        public void SaveSimpleComputerVComputerGame()
+        {
+            controller.Juego = new JuegoSimple(controller.Tablero);
+            controller.Player1 = new Computer(Tablero.Jugador.JAZUL);
+            controller.Player2 = new Computer(Tablero.Jugador.JROJO);
+            Thread.Sleep(TimeSpan.FromSeconds(1));
+            controller.SaveGame();
+            while (controller.Tablero.EstadoDeJuego == Tablero.GameState.JUGANDO)
+            {
+                controller.Player1.MakeMove(0, 0, (Tablero.Cell)1, controller.Juego);
+                controller.PrintGame();
+                controller.Player2.MakeMove(0, 0, (Tablero.Cell)2, controller.Juego);
+                controller.PrintGame();
+            }
+            Assert.IsTrue(File.Exists(controller.FilePath));
+        }
+        [TestMethod]
+        public void SaveGeneralHumanVHuman()
+        {
+            controller.Juego = new JuegoGeneral(controller.Tablero);
+            controller.Player1 = new Human(Tablero.Jugador.JAZUL);
+            controller.Player2 = new Human(Tablero.Jugador.JROJO);
+            Thread.Sleep(TimeSpan.FromSeconds(1));
+            controller.SaveGame();
+            controller.Player1.MakeMove(0, 0, Tablero.Cell.S, controller.Juego);
+            controller.PrintGame();
+            controller.Player2.MakeMove(0, 1, Tablero.Cell.S, controller.Juego);
+            controller.PrintGame();
+            controller.Player1.MakeMove(0, 2, Tablero.Cell.S, controller.Juego);
+            controller.PrintGame();
+            controller.Player2.MakeMove(1, 0, Tablero.Cell.O, controller.Juego);
+            controller.PrintGame();
+            controller.Player1.MakeMove(1, 1, Tablero.Cell.S, controller.Juego);
+            controller.PrintGame();
+            controller.Player2.MakeMove(1, 2, Tablero.Cell.S, controller.Juego);
+            controller.PrintGame();
+            controller.Player1.MakeMove(2, 1, Tablero.Cell.S, controller.Juego);
+            controller.PrintGame();
+            controller.Player2.MakeMove(2, 0, Tablero.Cell.S, controller.Juego);
+            controller.PrintGame();
+            controller.Player1.MakeMove(2, 2, Tablero.Cell.O, controller.Juego);
+            controller.PrintGame();
+            Assert.IsTrue(FileCompare(controller.FilePath, @"C:\Users\Ademar\OneDrive\Desktop\Practica1-C3S2\Sprint5\TestTxt\TestGeneralHumanVHuman.txt"));
+        }
+
+        [TestMethod]
+        public void SaveGeneralComputerVComputer()
+        {
+            controller.Juego = new JuegoGeneral(controller.Tablero);
+            controller.Player1 = new Computer(Tablero.Jugador.JAZUL);
+            controller.Player2 = new Computer(Tablero.Jugador.JROJO);
+            Thread.Sleep(TimeSpan.FromSeconds(1));
+            controller.SaveGame();
+            while (controller.Tablero.EstadoDeJuego == Tablero.GameState.JUGANDO)
+            {
+                controller.Player1.MakeMove(0, 0, (Tablero.Cell)1, controller.Juego);
+                controller.PrintGame();
+                controller.Player2.MakeMove(0, 0, (Tablero.Cell)2, controller.Juego);
+                controller.PrintGame();
+            }
+            Console.WriteLine(controller.FilePath);
+            Assert.IsTrue(File.Exists(controller.FilePath));
+        }
+    }
 }

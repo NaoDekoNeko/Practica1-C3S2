@@ -5,7 +5,7 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace ReSOSgame
+namespace ReSOSGame
 {
     public partial class Form1 : Form
     {
@@ -103,7 +103,7 @@ namespace ReSOSgame
             if (controller.X >= 0 && controller.X < controller.Tablero.Tamanio &&
                 controller.Y >= 0 && controller.Y < controller.Tablero.Tamanio)
             {
-                // Desactiva la escucha para el update y no entre de neuvo a la funcion que captura el evento de updategrid
+                // Desactiva la escucha para el update y no entre de nuevo a la funcion que captura el evento de updategrid
                 dataGridView1.CellValueChanged -= UpdateGrid;
                 controller.Tablero.Grid[controller.X, controller.Y] = controller.Ficha;
                 dataGridView1.Rows[controller.X].Cells[controller.Y].Value = controller.Ficha;

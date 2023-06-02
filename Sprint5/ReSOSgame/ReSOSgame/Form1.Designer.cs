@@ -1,6 +1,6 @@
 ﻿using System.Windows.Forms;
 
-namespace ReSOSgame
+namespace ReSOSGame
 {
     partial class Form1
     {
