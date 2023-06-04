@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>C:\Users\Ademar\OneDrive\Desktop\Practica1-C3S2\Sprint5\ReSOSgame\ReSOSgame\GameRecorder.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using System;
+using System.IO;
+
+namespace ReSOSGame
+{
+    public class GameRecorder
+    {
+        private Tablero Tablero { get; }
+        private Tablero.Jugador Turno { get; }
+        private Juego Juego { get; }
+        public string FilePath { get; set; }
+        public GameRecorder(Juego juego)
+        {
+            Tablero = juego.Tablero;
+            Juego = juego;
+            Turno = Tablero.Turno;
+        }
+
+        //va a imprimir en un txt el tablero adem&#225;s de otros elementos
+        public void PrintGame()
+        {
+            //const string filePath = &quot;game.txt&quot;;
+            string contenido = &quot;Turno: &quot;;
+            contenido += Turno == Tablero.Jugador.JAZUL ? &quot;Azul\n&quot; : &quot;Rojo\n&quot;;
+            // Construir el contenido a escribir
+            contenido += &quot;-------\n&quot;;
+            for (var row = 0; row &lt; Tablero.Tamanio; row++)
+            {
+                for (var column = 0; column &lt; Tablero.Tamanio; column++)
+                {
+                    contenido += &quot;|&quot; + Symbol(Tablero[row, column]);
+                }
+                contenido += &quot;|\n&quot;;
+            }
+            contenido += &quot;-------\n&quot;;
+            if (Juego is JuegoGeneral aux)
+            {
+                contenido += &quot;Puntaje Azul: &quot; + aux.PuntajeAzul + &quot;\n&quot;;
+                contenido += &quot;Puntaje Rojo: &quot; + aux.PuntajeRojo + &quot;\n&quot;;
+            }
+
+            contenido += &quot;Estado de juego: &quot;;
+            switch (Tablero.EstadoDeJuego)
+            {
+                case Tablero.GameState.JUGANDO:
+                    contenido += &quot;JUGANDO\n&quot;;
+                    break;
+                case Tablero.GameState.GANOROJO:
+                    contenido += &quot;GAN&#211; EL JUGADOR ROJO\n&quot;;
+                    break;
+                case Tablero.GameState.GANOAZUL:
+                    contenido += &quot;GAN&#211; EL JUGADOR AZUL\n&quot;;
+                    break;
+                case Tablero.GameState.EMPATE:
+                    contenido += &quot;EMPATE\n&quot;;
+                    break;
+            }
+
+            // Verificar si el archivo existe
+            if (!File.Exists(FilePath))
+            {
+                // si no existe, regresa
+                return;
+            }
+
+
+            if (Tablero.ValidMove)
+            {
+                //Cuando se intente escribir en un archivo que es de solo lectura, no har&#225; nada
+                //caso contrario, agregar&#225; el contenido
+                try
+                {
+                    // A&#241;adir contenido al archivo existente o al archivo reci&#233;n creado
+                    using (StreamWriter sw = File.AppendText(FilePath))
+                    {
+                        sw.Write(contenido);
+                    }
+                }
+                catch (UnauthorizedAccessException)
+                {
+                    return;
+                }
+                catch (Exception)
+                {
+                    return;
+                }
+            }
+
+            if (Tablero.EstadoDeJuego != Tablero.GameState.JUGANDO)
+            {
+                //Cuando la partida acabe, hace que el archivo sea de solo lectura
+                File.SetAttributes(FilePath, FileAttributes.ReadOnly);
+            }
+        }
+        //convierte las fichas de tipo Cell a strings
+        private static string Symbol(Tablero.Cell a)
+        {
+            switch (a)
+            {
+                case Tablero.Cell.S:
+                    return &quot;S&quot;;
+                case Tablero.Cell.O:
+                    return &quot;O&quot;;
+                case Tablero.Cell.VACIA:
+                case Tablero.Cell.INVALIDA:
+                default:
+                    return &quot; &quot;;
+            }
+        }
+
+        private static string ObtenerRutaNuevoArchivo()
+        {
+            return @&quot;C:\Users\Ademar\OneDrive\Desktop\Practica1-C3S2\Sprint5\Registros\game_&quot; + 
+                   DateTime.Now.ToString(&quot;yyyyMMddHHmmss&quot;) + &quot;.txt&quot;;
+        }
+
+        //Inicia el grabado de juego
+        public void SaveGame()
+        {
+            FilePath = ObtenerRutaNuevoArchivo();
+            // Verificar si el archivo existe
+            if (!File.Exists(FilePath))
+            {
+                // Crear el archivo si no existe
+                using (File.Create(FilePath))
+                {
+                    // El archivo se crea y se cierra autom&#225;ticamente
+                }
+            }
+            PrintGame();
+        }
+    }
+}
+
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[8,35,8,39,1],[9,41,9,45,1],[10,31,10,35,1],[11,34,11,38,1],[11,39,11,43,1],[12,9,12,41,1],[13,9,13,10,1],[14,13,14,37,1],[15,13,15,27,1],[16,13,16,35,1],[17,9,17,10,1],[21,9,21,10,1],[23,13,23,42,1],[24,13,24,79,1],[26,13,26,38,1],[27,18,27,29,1],[27,31,27,52,1],[27,54,27,59,1],[28,13,28,14,1],[29,22,29,36,1],[29,38,29,62,1],[29,64,29,72,1],[30,17,30,18,1],[31,21,31,69,1],[32,17,32,18,1],[33,17,33,36,1],[34,13,34,14,1],[35,13,35,38,1],[36,13,36,43,1],[37,13,37,14,1],[38,17,38,72,1],[39,17,39,72,1],[40,13,40,14,1],[42,13,42,46,1],[43,13,43,43,1],[46,21,46,46,1],[47,21,47,27,1],[49,21,49,59,1],[50,21,50,27,1],[52,21,52,59,1],[53,21,53,27,1],[55,21,55,45,1],[56,21,56,27,1],[60,13,60,40,1],[61,13,61,14,0],[63,17,63,24,0],[67,13,67,35,1],[68,13,68,14,1],[72,17,72,18,1],[74,28,74,71,1],[75,21,75,22,1],[76,25,76,45,1],[77,21,77,22,1],[78,17,78,18,1],[79,17,79,52,0],[80,17,80,18,0],[81,21,81,28,0],[83,17,83,34,0],[84,17,84,18,0],[85,21,85,28,0],[87,13,87,14,1],[89,13,89,68,1],[90,13,90,14,1],[92,17,92,71,1],[93,13,93,14,1],[94,9,94,10,1],[97,9,97,10,1],[98,13,98,23,1],[101,21,101,32,1],[103,21,103,32,1],[107,21,107,32,1],[109,9,109,10,1],[112,9,112,10,1],[113,13,114,69,1],[115,9,115,10,1],[119,9,119,10,1],[120,13,120,50,1],[122,13,122,40,1],[123,13,123,14,1],[125,17,125,46,1],[126,17,126,18,1],[128,17,128,18,1],[129,13,129,14,1],[130,13,130,25,1],[131,9,131,10,1]]);
+    </script>
+  </body>
+</html>

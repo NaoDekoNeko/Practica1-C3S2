@@ -3,8 +3,6 @@ using ReSOSGame;
 using System;
 using System.IO;
 using System.Threading;
-using System.Threading.Tasks;
-using ReSOSgame;
 
 namespace PruebasSOSgame
 // HU :Historia de Usuario
@@ -12,8 +10,9 @@ namespace PruebasSOSgame
     [TestClass] // Clase de Codigo de Prueba HU.1
     public class TestEmptyBoard
     {
-        static readonly int preferredSize = 7;
-        private Tablero tablero = new Tablero(preferredSize);
+        private const int PreferredSize = 7;
+
+        private Tablero tablero = new Tablero(PreferredSize);
         //Criterio de aceptacion 1.1
         [TestMethod]
         public void NewTablero()
@@ -36,7 +35,8 @@ namespace PruebasSOSgame
     [TestClass] // Clase de Codigo de Prueba HU.2
     public class TestSelectorModeGame
     {
-        private Tablero tablero = new Tablero(6);
+        private const int PreferredSize = 6;
+        private Tablero tablero = new Tablero(PreferredSize);
         //Criterio de aceptacion 2.1
         [TestMethod]
         public void SelectSimpleGameMode()
@@ -58,7 +58,8 @@ namespace PruebasSOSgame
     [TestClass] // Clase de Codigo de Prueba HU.3
     public class TestShowGameState
     {
-        private Tablero tablero = new Tablero(6);
+        private const int PreferredSize = 6;
+        private Tablero tablero = new Tablero(PreferredSize);
         
         //Criterio de aceptacion 3.1
         [TestMethod]
@@ -75,18 +76,15 @@ namespace PruebasSOSgame
         private Tablero tablero;
         private Juego juego;
         private Player player1, player2;
+        private const int PreferredSize = 3;
         [TestInitialize]
-        public void Init()
+        public void SetUp()
         {
-            tablero = new Tablero(3);
+            tablero = new Tablero(PreferredSize);
             juego = new JuegoSimple(tablero);
             player1 = new Human(Tablero.Jugador.JAZUL);
             player2 = new Human(Tablero.Jugador.JROJO);
             tablero.InitBoard();
-        }
-        [TestCleanup]
-        public void Teardown()
-        {
         }
         //Criterio de aceptacion 4.1
         [TestMethod]
@@ -112,16 +110,13 @@ namespace PruebasSOSgame
     {
         private Tablero tablero;
         private JuegoSimple juego;
+        private const int PreferredSize = 3;
         [TestInitialize]
-        public void Init()
+        public void SetUp()
         {
-            tablero = new Tablero(3);
+            tablero = new Tablero(PreferredSize);
             juego = new JuegoSimple(tablero);
             tablero.InitBoard();
-        }
-        [TestCleanup]
-        public void Teardown()
-        {
         }
         //Criterio de aceptacion 5.1
         [TestMethod]
@@ -156,16 +151,13 @@ namespace PruebasSOSgame
     {
         private Tablero tablero;
         private Juego juego;
+        private const int PreferredSize = 3;
         [TestInitialize]
-        public void Init()
+        public void SetUp()
         {
-            tablero = new Tablero(3);
+            tablero = new Tablero(PreferredSize);
             juego = new JuegoGeneral(tablero);
             tablero.InitBoard();
-        }
-        [TestCleanup]
-        public void Teardown()
-        {
         }
         [TestMethod]//Criterio de aceptacion 6.1
         public void MakeBlueMoveO_GeneralGame()
@@ -189,16 +181,13 @@ namespace PruebasSOSgame
     {
         private Tablero tablero;
         private JuegoGeneral juego;
+        private const int PreferredSize = 3;
         [TestInitialize]
-        public void Init()
+        public void SetUp()
         {
-            tablero = new Tablero(3);
+            tablero = new Tablero(PreferredSize);
             juego = new JuegoGeneral(tablero);
             tablero.InitBoard();
-        }
-        [TestCleanup]
-        public void Teardown()
-        {
         }
         //Criterio de aceptacion 7.1
         [TestMethod]
@@ -302,12 +291,13 @@ namespace PruebasSOSgame
     public class TestPlayAgainstComputer 
     {
         private Controller controller;
+        private const int PreferredSize = 3;
 
         [TestInitialize]
-        public void Init()
+        public void SetUp()
         {
             controller = new Controller();
-            controller.Tablero = new Tablero(3);
+            controller.Tablero = new Tablero(PreferredSize);
             controller.Juego = new JuegoSimple(controller.Tablero);
         }
         //Criterio de aceptacion 9.1
@@ -361,11 +351,22 @@ namespace PruebasSOSgame
     {
         private Controller controller;
         private GameRecorder gameRecorder;
+        private const int PreferredSize = 3;
         [TestInitialize]
-        public void Init()
+        public void Setup()
         {
             controller = new Controller();
-            controller.Tablero = new Tablero(3);
+            controller.Tablero = new Tablero(PreferredSize);
+        }
+
+        [TestCleanup]
+        public void TearDown()
+        {
+            if (!File.Exists(gameRecorder.FilePath)) return;
+            //quitamos el atributo de solo lectura
+            File.SetAttributes(gameRecorder.FilePath, FileAttributes.Normal);
+            //borramos la partida para que los test no lo acumulen
+            File.Delete(gameRecorder.FilePath);
         }
         private static bool FileCompare(string file1, string file2)
         {
@@ -404,25 +405,25 @@ namespace PruebasSOSgame
         [TestMethod]
         public void SaveSimpleHumanVHumanGame()
         {
+            Thread.Sleep(TimeSpan.FromSeconds(1));
             controller.Juego = new JuegoSimple(controller.Tablero);
             controller.Player1 = new Human(Tablero.Jugador.JAZUL);
             controller.Player2 = new Human(Tablero.Jugador.JROJO);
             gameRecorder = new GameRecorder(controller.Juego);
-            Thread.Sleep(TimeSpan.FromSeconds(1));
             gameRecorder.SaveGame();
+            controller.InitTurn();
             // Para que no sobreescriba el archivo de la prueba anterior
             // Al retrasar un segundo su ejecución, se crea un nuevo archivo por el segundo de diferencia
             // Las pruebas deben ser ejecutadas en paralelo para que no ocurran problemas durante su ejecución
-            gameRecorder.SaveGame();
-            controller.Player1.MakeMove(0, 0, Tablero.Cell.S, controller.Juego);
+            controller.CurrentPlayer.MakeMove(0, 0, Tablero.Cell.S, controller.Juego);
             gameRecorder.PrintGame();
-            controller.Player2.MakeMove(0, 2, Tablero.Cell.S, controller.Juego);
+            controller.CurrentPlayer.MakeMove(0, 2, Tablero.Cell.S, controller.Juego);
             gameRecorder.PrintGame();
-            controller.Player1.MakeMove(2, 2, Tablero.Cell.S, controller.Juego);
+            controller.CurrentPlayer.MakeMove(2, 2, Tablero.Cell.S, controller.Juego);
             gameRecorder.PrintGame();
-            controller.Player2.MakeMove(0, 1, Tablero.Cell.O, controller.Juego);
+            controller.CurrentPlayer.MakeMove(0, 1, Tablero.Cell.O, controller.Juego);
             gameRecorder.PrintGame();
-            Console.WriteLine(gameRecorder.FilePath);
+            //Console.WriteLine(gameRecorder.FilePath);
             Assert.IsTrue(FileCompare(gameRecorder.FilePath, @"C:\Users\Ademar\OneDrive\Desktop\Practica1-C3S2\Sprint5\TestTxt\TestSimpleHumanVHuman.txt"));
             
         }
@@ -430,17 +431,16 @@ namespace PruebasSOSgame
         [TestMethod]
         public void SaveSimpleComputerVComputerGame()
         {
+            Thread.Sleep(TimeSpan.FromSeconds(1));
             controller.Juego = new JuegoSimple(controller.Tablero);
             controller.Player1 = new Computer(Tablero.Jugador.JAZUL);
             controller.Player2 = new Computer(Tablero.Jugador.JROJO);
             gameRecorder = new GameRecorder(controller.Juego);
-            Thread.Sleep(TimeSpan.FromSeconds(1));
             gameRecorder.SaveGame();
+            controller.InitTurn();
             while (controller.Tablero.EstadoDeJuego == Tablero.GameState.JUGANDO)
             {
-                controller.Player1.MakeMove(0, 0, (Tablero.Cell)1, controller.Juego);
-                gameRecorder.PrintGame();
-                controller.Player2.MakeMove(0, 0, (Tablero.Cell)2, controller.Juego);
+                controller.CurrentPlayer.MakeMove(0, 0, (Tablero.Cell)1, controller.Juego);
                 gameRecorder.PrintGame();
             }
             Assert.IsTrue(File.Exists(gameRecorder.FilePath));
@@ -448,31 +448,32 @@ namespace PruebasSOSgame
         [TestMethod]
         public void SaveGeneralHumanVHuman()
         {
+            Thread.Sleep(TimeSpan.FromSeconds(1));
             controller.Juego = new JuegoGeneral(controller.Tablero);
             controller.Player1 = new Human(Tablero.Jugador.JAZUL);
             controller.Player2 = new Human(Tablero.Jugador.JROJO);
             gameRecorder = new GameRecorder(controller.Juego);
-            Thread.Sleep(TimeSpan.FromSeconds(1));
             gameRecorder.SaveGame();
-            controller.Player1.MakeMove(0, 0, Tablero.Cell.S, controller.Juego);
+            controller.InitTurn();
+            controller.CurrentPlayer.MakeMove(0, 0, Tablero.Cell.S, controller.Juego); 
             gameRecorder.PrintGame();
-            controller.Player2.MakeMove(0, 1, Tablero.Cell.S, controller.Juego);
+            controller.CurrentPlayer.MakeMove(1, 1, Tablero.Cell.O, controller.Juego);
             gameRecorder.PrintGame();
-            controller.Player1.MakeMove(0, 2, Tablero.Cell.S, controller.Juego);
+            controller.CurrentPlayer.MakeMove(2, 2, Tablero.Cell.S, controller.Juego);
             gameRecorder.PrintGame();
-            controller.Player2.MakeMove(1, 0, Tablero.Cell.O, controller.Juego);
+            controller.CurrentPlayer.MakeMove(1, 0, Tablero.Cell.S, controller.Juego);
             gameRecorder.PrintGame();
-            controller.Player1.MakeMove(1, 1, Tablero.Cell.S, controller.Juego);
+            controller.CurrentPlayer.MakeMove(0, 1, Tablero.Cell.S, controller.Juego);
             gameRecorder.PrintGame();
-            controller.Player2.MakeMove(1, 2, Tablero.Cell.S, controller.Juego);
+            controller.CurrentPlayer.MakeMove(1, 2, Tablero.Cell.O, controller.Juego);
             gameRecorder.PrintGame();
-            controller.Player1.MakeMove(2, 1, Tablero.Cell.S, controller.Juego);
+            controller.CurrentPlayer.MakeMove(2, 1, Tablero.Cell.O, controller.Juego);
             gameRecorder.PrintGame();
-            controller.Player2.MakeMove(2, 0, Tablero.Cell.S, controller.Juego);
+            controller.CurrentPlayer.MakeMove(0, 2, Tablero.Cell.O, controller.Juego);
             gameRecorder.PrintGame();
-            controller.Player1.MakeMove(2, 2, Tablero.Cell.O, controller.Juego);
+            controller.CurrentPlayer.MakeMove(2, 0, Tablero.Cell.S, controller.Juego);
             gameRecorder.PrintGame();
-            Console.WriteLine(gameRecorder.FilePath);
+            //Console.WriteLine(gameRecorder.FilePath);
             Assert.IsTrue(FileCompare(gameRecorder.FilePath, @"C:\Users\Ademar\OneDrive\Desktop\Practica1-C3S2\Sprint5\TestTxt\TestGeneralHumanVHuman.txt"));
         }
 
@@ -485,14 +486,13 @@ namespace PruebasSOSgame
             controller.Player2 = new Computer(Tablero.Jugador.JROJO);
             gameRecorder = new GameRecorder(controller.Juego);
             gameRecorder.SaveGame();
+            controller.InitTurn();
             while (controller.Tablero.EstadoDeJuego == Tablero.GameState.JUGANDO)
             {
-                controller.Player1.MakeMove(0, 0, (Tablero.Cell)1, controller.Juego);
-                gameRecorder.PrintGame();
-                controller.Player2.MakeMove(0, 0, (Tablero.Cell)2, controller.Juego);
+                controller.CurrentPlayer.MakeMove(0, 0, (Tablero.Cell)1, controller.Juego);
                 gameRecorder.PrintGame();
             }
-            Console.WriteLine(gameRecorder.FilePath);
+            //Console.WriteLine(gameRecorder.FilePath);
             Assert.IsTrue(File.Exists(gameRecorder.FilePath));
         }
     }

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>C:\Users\Ademar\OneDrive\Desktop\Practica1-C3S2\Sprint5\ReSOSgame\ReSOSgame\Tablero.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+namespace ReSOSGame
+{ 
+    public class Tablero
+    {
+        public enum Cell { VACIA, INVALIDA, S,O}
+        public enum Jugador { JAZUL,JROJO}
+        public enum GameState { JUGANDO,EMPATE,GANOAZUL,GANOROJO }
+        
+        public bool ValidMove { get; set; }
+        public Player JugadorActual { get; set; }
+        public Cell Ficha { get; set; }
+        public Jugador Turno { get; set; }
+        public int Tamanio { get; }
+        public GameState EstadoDeJuego { get; set; }
+        public Cell[,] Grid { get; }
+
+        public Cell this[int row, int column]
+        {
+            get
+            {
+                if (row &gt;= 0 &amp;&amp; column &gt;= 0 &amp;&amp; row &lt; Tamanio &amp;&amp; column &lt; Tamanio)
+                    return Grid[row, column];
+                return Cell.INVALIDA;
+            }
+            set
+            {
+                if (row &gt;= 0 &amp;&amp; column &gt;= 0 &amp;&amp; row &lt; Tamanio &amp;&amp; column &lt; Tamanio)
+                    Grid[row, column] = value;
+            }
+        }
+
+        public Tablero(int tamanio)
+        {
+            //se espera que el tama&#241;o del tablero sea m&#237;nimo 1 y como m&#225;ximo 12
+            Grid = new Cell[tamanio, tamanio];
+            this.Tamanio = tamanio;
+        }
+
+        //Inicia el tablero
+        public void InitBoard()
+        {
+            for(int row = 0; row &lt; Tamanio; row++)
+            {
+                for(int column = 0; column &lt; Tamanio; column++)
+                {
+                    Grid[row, column] = Cell.VACIA;
+                }
+            }
+            EstadoDeJuego = GameState.JUGANDO;
+            Ficha = Cell.S;
+            Turno = Jugador.JAZUL;
+        }
+    }
+}
+
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[9,33,9,37,1],[9,38,9,42,1],[10,39,10,43,1],[10,44,10,48,1],[11,29,11,33,1],[11,34,11,38,1],[12,32,12,36,1],[12,37,12,41,1],[13,30,13,34,1],[14,42,14,46,1],[14,47,14,51,1],[15,31,15,35,1],[20,13,20,14,1],[21,17,21,82,1],[22,21,22,46,1],[23,17,23,38,1],[24,13,24,14,1],[26,13,26,14,1],[27,17,27,82,1],[28,21,28,47,1],[29,13,29,14,1],[32,9,32,36,1],[33,9,33,10,1],[35,13,35,47,1],[36,13,36,36,1],[37,9,37,10,1],[41,9,41,10,1],[42,17,42,28,1],[42,30,42,43,1],[42,45,42,50,1],[43,13,43,14,1],[44,21,44,35,1],[44,37,44,53,1],[44,55,44,63,1],[45,17,45,18,1],[46,21,46,52,1],[47,17,47,18,1],[48,13,48,14,1],[49,13,49,47,1],[50,13,50,28,1],[51,13,51,35,1],[52,9,52,10,1]]);
+    </script>
+  </body>
+</html>

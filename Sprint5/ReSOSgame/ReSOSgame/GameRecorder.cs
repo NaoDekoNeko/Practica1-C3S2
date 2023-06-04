@@ -1,8 +1,7 @@
 ﻿using System;
 using System.IO;
-using ReSOSGame;
 
-namespace ReSOSgame
+namespace ReSOSGame
 {
     public class GameRecorder
     {
@@ -17,6 +16,7 @@ namespace ReSOSgame
             Turno = Tablero.Turno;
         }
 
+        //va a imprimir en un txt el tablero además de otros elementos
         public void PrintGame()
         {
             //const string filePath = "game.txt";
@@ -92,7 +92,7 @@ namespace ReSOSgame
                 File.SetAttributes(FilePath, FileAttributes.ReadOnly);
             }
         }
-
+        //convierte las fichas de tipo Cell a strings
         private static string Symbol(Tablero.Cell a)
         {
             switch (a)
@@ -108,11 +108,13 @@ namespace ReSOSgame
             }
         }
 
-        private string ObtenerRutaNuevoArchivo()
+        private static string ObtenerRutaNuevoArchivo()
         {
-            return @"C:\Users\Ademar\OneDrive\Desktop\Practica1-C3S2\Sprint5\Registros\game_" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".txt";
+            return @"C:\Users\Ademar\OneDrive\Desktop\Practica1-C3S2\Sprint5\Registros\game_" + 
+                   DateTime.Now.ToString("yyyyMMddHHmmss") + ".txt";
         }
 
+        //Inicia el grabado de juego
         public void SaveGame()
         {
             FilePath = ObtenerRutaNuevoArchivo();

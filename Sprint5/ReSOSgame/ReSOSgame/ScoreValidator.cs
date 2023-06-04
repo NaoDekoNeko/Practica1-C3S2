@@ -53,11 +53,5 @@ namespace ReSOSGame
         {
             return tablero.EstadoDeJuego != GameState.JUGANDO;
         }
-        // Funcion que verifica si algunos de los dos jugadores ha ganado
-        public bool HasWon()
-        {
-            return tablero.EstadoDeJuego == GameState.GANOAZUL ||
-                tablero.EstadoDeJuego == GameState.GANOROJO;
-        }
     }
 }

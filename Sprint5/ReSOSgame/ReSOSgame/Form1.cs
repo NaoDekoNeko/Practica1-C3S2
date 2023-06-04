@@ -3,7 +3,6 @@ using System.Data;
 using System.Drawing;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using ReSOSgame;
 
 namespace ReSOSGame
 {
@@ -184,9 +183,11 @@ namespace ReSOSGame
         {
             // Al ir cambiando  el "numericUpDown1" se va cambiando el tamaño del tablero
             controller.Tablero = new Tablero((int)BoardSizeSel.Value);
+            //al reiniciar el juego, se borra el anterior
             if (controller.Juego != null)
                 GC.SuppressFinalize(controller.Juego);
             controller.Juego = GameSelector(); // Verifica los radio button y retorna el tipo de juego seleccionado
+            VisibleScore();
             controller.Player1 = BluePlayerSelector(); // Verrifica el radio button y se asigna como jugador azul al primer player
             controller.Player2 = RedPlayerSelector(); // Verrifica el radio button y se asigna como jugador rojo al segundo player
             controller.InitTurn(); // Inicializa el CurrentPlayer como palyer1 , es decir el player1 empieza el juego
@@ -261,7 +262,6 @@ namespace ReSOSGame
         //Este metodo llama a la funcion reiniciarJuego
         private void NuevaPartida(object sender, EventArgs e)
         {
-            
             ReIniciarJuego();
         }
 
@@ -305,6 +305,27 @@ namespace ReSOSGame
             TipoAzul.Enabled = true;
             TipoRojo.Enabled = true;
             BoardSizeSel.Enabled = true;
+        }
+
+        private void VisibleScore()
+        {
+            switch (controller.Juego)
+            {
+                case null:
+                    return;
+                case JuegoGeneral _:
+                    lbl_Puntaje_Azul.Visible = true;
+                    lbl_Puntaje_Rojo.Visible = true;
+                    Puntaje_Azul.Visible = true;
+                    Puntaje_Rojo.Visible = true;
+                    return;
+                case JuegoSimple _:
+                    lbl_Puntaje_Azul.Visible = false;
+                    lbl_Puntaje_Rojo.Visible = false;
+                    Puntaje_Azul.Visible = false;
+                    Puntaje_Rojo.Visible = false;
+                    return;
+            }
         }
     }
 }

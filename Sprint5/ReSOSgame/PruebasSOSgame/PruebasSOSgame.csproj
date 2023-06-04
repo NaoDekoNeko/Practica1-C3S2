@@ -56,9 +56,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ReSOSgame\ReSOSgame.csproj">
+    <ProjectReference Include="..\ReSOSgame\ReSOSGame.csproj">
       <Project>{747cd1c3-d992-429e-9667-0ee5562dbb4c}</Project>
-      <Name>ReSOSgame</Name>
+      <Name>ReSOSGame</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />

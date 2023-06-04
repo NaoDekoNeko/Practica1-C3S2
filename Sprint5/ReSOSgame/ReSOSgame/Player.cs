@@ -14,7 +14,7 @@ namespace ReSOSGame
 
         protected Player(Jugador player)
         {
-            this.Jugador = player;
+            Jugador = player;
             X = -1;
             Y = -1;
         }
@@ -68,10 +68,13 @@ namespace ReSOSGame
                         X = i;
                         Y = j;
                         juego.MakeMove(i, j, Ficha);
+                        
+                        /*
+                        // Salidas en consola para verificar que se ejecuta el movimiento como queremos
                         Console.WriteLine("Movimiento de la computadora:");
                         Console.WriteLine("Casilla: [{0}, {1}]", i, j);
                         Console.WriteLine("Valor de ficha: {0}", ficha);
-
+                        */
                         return;
                     }
                     index++;
