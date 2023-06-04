@@ -5,18 +5,13 @@
         public enum Cell { VACIA, INVALIDA, S,O}
         public enum Jugador { JAZUL,JROJO}
         public enum GameState { JUGANDO,EMPATE,GANOAZUL,GANOROJO }
-
+        
+        public bool ValidMove { get; set; }
         public Player JugadorActual { get; set; }
-
-        private bool validMove;
         public Cell Ficha { get; set; }
-
         public Jugador Turno { get; set; }
-
         public int Tamanio { get; }
-
         public GameState EstadoDeJuego { get; set; }
-
         public Cell[,] Grid { get; }
 
         public Cell this[int row, int column]
@@ -32,12 +27,6 @@
                 if (row >= 0 && column >= 0 && row < Tamanio && column < Tamanio)
                     Grid[row, column] = value;
             }
-        }
-
-        public bool ValidMove
-        {
-            get => validMove;
-            set => validMove = value;
         }
 
         public Tablero(int tamanio)

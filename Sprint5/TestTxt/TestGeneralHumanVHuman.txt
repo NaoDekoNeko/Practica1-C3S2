@@ -9,73 +9,73 @@ Puntaje Rojo: 0
 Estado de juego: JUGANDO
 Turno: Azul
 -------
+|S| | |
+| |O| |
+| | | |
+-------
+Puntaje Azul: 0
+Puntaje Rojo: 0
+Estado de juego: JUGANDO
+Turno: Azul
+-------
+|S| | |
+| |O| |
+| | |S|
+-------
+Puntaje Azul: 1
+Puntaje Rojo: 0
+Estado de juego: JUGANDO
+Turno: Azul
+-------
+|S| | |
+|S|O| |
+| | |S|
+-------
+Puntaje Azul: 1
+Puntaje Rojo: 0
+Estado de juego: JUGANDO
+Turno: Azul
+-------
 |S|S| |
-| | | |
-| | | |
+|S|O| |
+| | |S|
 -------
-Puntaje Azul: 0
+Puntaje Azul: 1
 Puntaje Rojo: 0
 Estado de juego: JUGANDO
 Turno: Azul
 -------
-|S|S|S|
-| | | |
-| | | |
--------
-Puntaje Azul: 0
-Puntaje Rojo: 0
-Estado de juego: JUGANDO
-Turno: Azul
--------
-|S|S|S|
-|O| | |
-| | | |
--------
-Puntaje Azul: 0
-Puntaje Rojo: 0
-Estado de juego: JUGANDO
-Turno: Azul
--------
-|S|S|S|
-|O|S| |
-| | | |
--------
-Puntaje Azul: 0
-Puntaje Rojo: 0
-Estado de juego: JUGANDO
-Turno: Azul
--------
-|S|S|S|
-|O|S|S|
-| | | |
--------
-Puntaje Azul: 0
-Puntaje Rojo: 0
-Estado de juego: JUGANDO
-Turno: Azul
--------
-|S|S|S|
-|O|S|S|
-| |S| |
--------
-Puntaje Azul: 0
-Puntaje Rojo: 0
-Estado de juego: JUGANDO
-Turno: Azul
--------
-|S|S|S|
-|O|S|S|
 |S|S| |
+|S|O|O|
+| | |S|
 -------
-Puntaje Azul: 0
-Puntaje Rojo: 1
+Puntaje Azul: 1
+Puntaje Rojo: 0
 Estado de juego: JUGANDO
 Turno: Azul
 -------
-|S|S|S|
-|O|S|S|
+|S|S| |
+|S|O|O|
+| |O|S|
+-------
+Puntaje Azul: 1
+Puntaje Rojo: 0
+Estado de juego: JUGANDO
+Turno: Azul
+-------
 |S|S|O|
+|S|O|O|
+| |O|S|
 -------
-Puntaje Azul: 0
-Puntaje Rojo: 1
-Estado de juego: GANÓ EL JUGADOR ROJO
+Puntaje Azul: 1
+Puntaje Rojo: 0
+Estado de juego: JUGANDO
+Turno: Azul
+-------
+|S|S|O|
+|S|O|O|
+|S|O|S|
+-------
+Puntaje Azul: 2
+Puntaje Rojo: 0
+Estado de juego: GANÓ EL JUGADOR AZUL

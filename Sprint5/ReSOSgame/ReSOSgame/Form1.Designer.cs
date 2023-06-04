@@ -51,9 +51,9 @@ namespace ReSOSGame
             this.TipoAzul = new System.Windows.Forms.GroupBox();
             this.AComputadora = new System.Windows.Forms.RadioButton();
             this.AHumano = new System.Windows.Forms.RadioButton();
-            this.label4 = new System.Windows.Forms.Label();
+            this.lbl_Puntaje_Rojo = new System.Windows.Forms.Label();
             this.Puntaje_Rojo = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
+            this.lbl_Puntaje_Azul = new System.Windows.Forms.Label();
             this.Puntaje_Azul = new System.Windows.Forms.Label();
             this.Record = new System.Windows.Forms.CheckBox();
             this.FichasRojo.SuspendLayout();
@@ -364,15 +364,16 @@ namespace ReSOSGame
             this.AHumano.Text = "Humano";
             this.AHumano.UseVisualStyleBackColor = true;
             // 
-            // label4
+            // lbl_Puntaje_Rojo
             // 
-            this.label4.AutoSize = true;
-            this.label4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
-            this.label4.Location = new System.Drawing.Point(677, 373);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(52, 16);
-            this.label4.TabIndex = 10;
-            this.label4.Text = "Puntaje";
+            this.lbl_Puntaje_Rojo.AutoSize = true;
+            this.lbl_Puntaje_Rojo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
+            this.lbl_Puntaje_Rojo.Location = new System.Drawing.Point(677, 373);
+            this.lbl_Puntaje_Rojo.Name = "lbl_Puntaje_Rojo";
+            this.lbl_Puntaje_Rojo.Size = new System.Drawing.Size(52, 16);
+            this.lbl_Puntaje_Rojo.TabIndex = 10;
+            this.lbl_Puntaje_Rojo.Text = "Puntaje";
+            this.lbl_Puntaje_Rojo.Visible = false;
             // 
             // Puntaje_Rojo
             // 
@@ -382,16 +383,18 @@ namespace ReSOSGame
             this.Puntaje_Rojo.Size = new System.Drawing.Size(14, 16);
             this.Puntaje_Rojo.TabIndex = 11;
             this.Puntaje_Rojo.Text = "0";
+            this.Puntaje_Rojo.Visible = false;
             // 
-            // label6
+            // lbl_Puntaje_Azul
             // 
-            this.label6.AutoSize = true;
-            this.label6.BackColor = System.Drawing.Color.LightCyan;
-            this.label6.Location = new System.Drawing.Point(19, 373);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(52, 16);
-            this.label6.TabIndex = 12;
-            this.label6.Text = "Puntaje";
+            this.lbl_Puntaje_Azul.AutoSize = true;
+            this.lbl_Puntaje_Azul.BackColor = System.Drawing.Color.LightCyan;
+            this.lbl_Puntaje_Azul.Location = new System.Drawing.Point(19, 373);
+            this.lbl_Puntaje_Azul.Name = "lbl_Puntaje_Azul";
+            this.lbl_Puntaje_Azul.Size = new System.Drawing.Size(52, 16);
+            this.lbl_Puntaje_Azul.TabIndex = 12;
+            this.lbl_Puntaje_Azul.Text = "Puntaje";
+            this.lbl_Puntaje_Azul.Visible = false;
             // 
             // Puntaje_Azul
             // 
@@ -401,6 +404,7 @@ namespace ReSOSGame
             this.Puntaje_Azul.Size = new System.Drawing.Size(14, 16);
             this.Puntaje_Azul.TabIndex = 13;
             this.Puntaje_Azul.Text = "0";
+            this.Puntaje_Azul.Visible = false;
             // 
             // Record
             // 
@@ -422,9 +426,9 @@ namespace ReSOSGame
             this.ClientSize = new System.Drawing.Size(824, 551);
             this.Controls.Add(this.Record);
             this.Controls.Add(this.Puntaje_Azul);
-            this.Controls.Add(this.label6);
+            this.Controls.Add(this.lbl_Puntaje_Azul);
             this.Controls.Add(this.Puntaje_Rojo);
-            this.Controls.Add(this.label4);
+            this.Controls.Add(this.lbl_Puntaje_Rojo);
             this.Controls.Add(this.TipoAzul);
             this.Controls.Add(this.TipoRojo);
             this.Controls.Add(this.Turno);
@@ -478,9 +482,9 @@ namespace ReSOSGame
         private GroupBox TipoAzul;
         private RadioButton AComputadora;
         private RadioButton AHumano;
-        private Label label4;
+        private Label lbl_Puntaje_Rojo;
         private Label Puntaje_Rojo;
-        private Label label6;
+        private Label lbl_Puntaje_Azul;
         private Label Puntaje_Azul;
         private CheckBox Record;
     }
