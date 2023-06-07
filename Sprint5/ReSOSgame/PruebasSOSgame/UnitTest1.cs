@@ -1,8 +1,9 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ReSOSGame;
-using System;
+﻿using System;
+using System.Diagnostics.Contracts;
 using System.IO;
 using System.Threading;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using ReSOSGame;
 
 namespace PruebasSOSgame
 // HU :Historia de Usuario
@@ -128,7 +129,7 @@ namespace PruebasSOSgame
             juego.MakeMove(0, 2, Tablero.Cell.O);
             juego.MakeMove(2, 2, Tablero.Cell.S);
             new Consola(tablero).DisplayBoard();
-            Assert.AreEqual(Tablero.Jugador.JAZUL, tablero.Turno);
+            Assert.AreEqual(Tablero.Jugador.JROJO, tablero.Turno);
             Assert.AreEqual(Tablero.Cell.S, tablero.Ficha);
             Assert.AreEqual(Tablero.GameState.GANOAZUL, tablero.EstadoDeJuego);
         }
@@ -141,7 +142,7 @@ namespace PruebasSOSgame
             juego.MakeMove(2, 2, Tablero.Cell.S);
             juego.MakeMove(0, 1, Tablero.Cell.O);
             new Consola(tablero).DisplayBoard();
-            Assert.AreEqual(Tablero.Jugador.JROJO, tablero.Turno);
+            Assert.AreEqual(Tablero.Jugador.JAZUL, tablero.Turno);
             Assert.AreEqual(Tablero.Cell.O, tablero.Ficha);
             Assert.AreEqual(Tablero.GameState.GANOROJO, tablero.EstadoDeJuego);
         }
@@ -200,14 +201,7 @@ namespace PruebasSOSgame
                 for(int j = 0; j< tablero.Tamanio;j++)
                 {
                     n = rd.Next(100);
-                    if(n%2 ==0)
-                    {
-                        juego.MakeMove(i, j, Tablero.Cell.S);
-                    }
-                    else
-                    {
-                        juego.MakeMove(i, j, Tablero.Cell.O);
-                    }
+                    juego.MakeMove(i, j, n % 2 == 0 ? Tablero.Cell.S : Tablero.Cell.O);
                 }
             }
             new Consola(tablero).DisplayBoard();
@@ -228,15 +222,16 @@ namespace PruebasSOSgame
             juego.MakeMove(2, 0, Tablero.Cell.S); ImprimirTest();
             Assert.AreEqual(Tablero.GameState.GANOAZUL, tablero.EstadoDeJuego);
         }
-        public void ImprimirTest() 
+
+        private void ImprimirTest() 
         {
             new Consola(tablero).DisplayBoard();
-            System.Console.WriteLine("Puntaje Azul: " + juego.PuntajeAzul);
-            System.Console.WriteLine("Puntaje Rojo: " + juego.PuntajeRojo);
+            Console.WriteLine("Puntaje Azul: " + juego.PuntajeAzul);
+            Console.WriteLine("Puntaje Rojo: " + juego.PuntajeRojo);
         }
         //Criterio de aceptacion 7.3
         [TestMethod]
-        public void VictoryFullboardRed()
+        public void VictoryFullBoardRed()
         {
             juego.MakeMove(0, 0, Tablero.Cell.S);
             juego.MakeMove(0, 1, Tablero.Cell.S);
@@ -362,7 +357,9 @@ namespace PruebasSOSgame
         [TestCleanup]
         public void TearDown()
         {
-            if (!File.Exists(gameRecorder.FilePath)) return;
+            //if (!File.Exists(gameRecorder.FilePath)) return;
+            Contract.Requires(File.Exists(gameRecorder.FilePath), "La partida se ha guardado");
+            Contract.Ensures(!File.Exists(gameRecorder.FilePath), "Se borra la partida");
             //quitamos el atributo de solo lectura
             File.SetAttributes(gameRecorder.FilePath, FileAttributes.Normal);
             //borramos la partida para que los test no lo acumulen
@@ -424,7 +421,8 @@ namespace PruebasSOSgame
             controller.CurrentPlayer.MakeMove(0, 1, Tablero.Cell.O, controller.Juego);
             gameRecorder.PrintGame();
             //Console.WriteLine(gameRecorder.FilePath);
-            Assert.IsTrue(FileCompare(gameRecorder.FilePath, @"C:\Users\Ademar\OneDrive\Desktop\Practica1-C3S2\Sprint5\TestTxt\TestSimpleHumanVHuman.txt"));
+            Assert.IsTrue(FileCompare(gameRecorder.FilePath,
+                @"C:\Users\Ademar\OneDrive\Desktop\Practica1-C3S2\Sprint5\TestTxt\TestSimpleHumanVHuman.txt"));
             
         }
         //Criterio de aceptación 20.2
@@ -445,6 +443,7 @@ namespace PruebasSOSgame
             }
             Assert.IsTrue(File.Exists(gameRecorder.FilePath));
         }
+        //Criterio de aceptación 20.3
         [TestMethod]
         public void SaveGeneralHumanVHuman()
         {
@@ -473,10 +472,11 @@ namespace PruebasSOSgame
             gameRecorder.PrintGame();
             controller.CurrentPlayer.MakeMove(2, 0, Tablero.Cell.S, controller.Juego);
             gameRecorder.PrintGame();
-            //Console.WriteLine(gameRecorder.FilePath);
-            Assert.IsTrue(FileCompare(gameRecorder.FilePath, @"C:\Users\Ademar\OneDrive\Desktop\Practica1-C3S2\Sprint5\TestTxt\TestGeneralHumanVHuman.txt"));
+            Console.WriteLine(gameRecorder.FilePath);
+            Assert.IsTrue(FileCompare(gameRecorder.FilePath, 
+                @"C:\Users\Ademar\OneDrive\Desktop\Practica1-C3S2\Sprint5\TestTxt\TestGeneralHumanVHuman.txt"));
         }
-
+        //Criterio de aceptación 20.4
         [TestMethod]
         public void SaveGeneralComputerVComputer()
         {
@@ -494,6 +494,26 @@ namespace PruebasSOSgame
             }
             //Console.WriteLine(gameRecorder.FilePath);
             Assert.IsTrue(File.Exists(gameRecorder.FilePath));
+        }
+        //Criterio extra
+        [TestMethod]
+        public void DifferentSaves()
+        {
+            Thread.Sleep(TimeSpan.FromSeconds(1));
+            controller.Juego = new JuegoGeneral(controller.Tablero);
+            controller.Player1 = new Computer(Tablero.Jugador.JAZUL);
+            controller.Player2 = new Computer(Tablero.Jugador.JROJO);
+            gameRecorder = new GameRecorder(controller.Juego);
+            gameRecorder.SaveGame();
+            controller.InitTurn();
+            while (controller.Tablero.EstadoDeJuego == Tablero.GameState.JUGANDO)
+            {
+                controller.CurrentPlayer.MakeMove(0, 0, (Tablero.Cell)1, controller.Juego);
+                gameRecorder.PrintGame();
+            }
+            Console.WriteLine(gameRecorder.FilePath);
+            Assert.IsFalse(FileCompare(gameRecorder.FilePath, 
+                @"C:\Users\Ademar\OneDrive\Desktop\Practica1-C3S2\Sprint5\TestTxt\TestDifferent.txt"));
         }
     }
 }

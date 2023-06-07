@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>C:\Users\Ademar\OneDrive\Desktop\Practica1-C3S2\Sprint5\ReSOSgame\ReSOSgame\TableroHelper.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using static ReSOSGame.Tablero;
+
+namespace ReSOSGame
+{
+    public static class TableroHelper
+    {
+        public static string Symbol(Cell cell)
+        {
+            switch (cell)
+            {
+                case Cell.S:
+                    return &quot;S&quot;;
+                case Cell.O:
+                    return &quot;O&quot;;
+                case Cell.VACIA:
+                case Cell.INVALIDA:
+                default:
+                    return &quot; &quot;;
+            }
+        }
+        public static string GetFormattedBoard(Tablero tablero)
+        {
+            string formattedBoard = &quot;&quot;;
+            for (int row = 0; row &lt; tablero.Tamanio; row++)
+            {
+                formattedBoard += &quot;-------\n&quot;;
+                for (int column = 0; column &lt; tablero.Tamanio; column++)
+                {
+                    formattedBoard += &quot;|&quot; + Symbol(tablero[row, column]);
+                }
+                formattedBoard += &quot;|\n&quot;;
+            }
+            formattedBoard += &quot;-------\n&quot;;
+
+            return formattedBoard;
+        }
+    }
+}
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[8,9,8,10,1],[9,13,9,26,1],[12,21,12,32,1],[14,21,14,32,1],[18,21,18,32,1],[20,9,20,10,1],[22,9,22,10,1],[23,13,23,40,1],[24,18,24,29,1],[24,31,24,52,1],[24,54,24,59,1],[25,13,25,14,1],[26,17,26,47,1],[27,22,27,36,1],[27,38,27,62,1],[27,64,27,72,1],[28,17,28,18,1],[29,21,29,74,1],[30,17,30,18,1],[31,17,31,41,1],[32,13,32,14,1],[33,13,33,43,1],[35,13,35,35,1],[36,9,36,10,1]]);
+    </script>
+  </body>
+</html>

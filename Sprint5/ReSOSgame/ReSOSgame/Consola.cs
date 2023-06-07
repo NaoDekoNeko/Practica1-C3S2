@@ -1,5 +1,5 @@
 ﻿using System;
-using static ReSOSGame.Tablero;
+using static ReSOSGame.TableroHelper;
 
 namespace ReSOSGame
 {
@@ -14,31 +14,8 @@ namespace ReSOSGame
 
         public void DisplayBoard()
         {
-            for (int row = 0; row < tablero.Tamanio; row++)
-            {
-                Console.WriteLine("-------");
-                for (int column = 0; column < tablero.Tamanio; column++)
-                {
-                    Console.Write("|" + Symbol(tablero[row, column]));
-                }
-                Console.WriteLine("|");
-            }
-            Console.WriteLine("-------");
-        }
-
-        private char Symbol(Cell cell)
-        {
-            switch (cell)
-            {
-                case Cell.S:
-                    return 'S';
-                case Cell.O:
-                    return 'O';
-                case Cell.VACIA:
-                case Cell.INVALIDA:
-                default:
-                    return ' ';
-            }
+            string formattedBoard = GetFormattedBoard(tablero);
+            Console.WriteLine(formattedBoard);
         }
     }
 }

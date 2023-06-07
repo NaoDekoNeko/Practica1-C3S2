@@ -34,10 +34,12 @@ namespace ReSOSGame
                            (tablero[row, col + 1] == Cell.O && tablero[row, col + 2] == Cell.S) ||
                            (tablero[row, col - 1] == Cell.O && tablero[row, col - 2] == Cell.S) ||
                            (tablero[row + 1, col] == Cell.O && tablero[row + 2, col] == Cell.S) ||
-                           (tablero[row - 1, col] == Cell.O && tablero[row - 2, col] == Cell.S);
+                           (tablero[row - 1, col] == Cell.O && tablero[row - 2, col] == Cell.S) ||
+                           (tablero[row - 1, col + 1] == Cell.O && tablero[row - 2, col + 2] == Cell.S) ||
+                           (tablero[row + 1, col - 1] == Cell.O && tablero[row + 2, col - 2] == Cell.S);
+
                 case Cell.O:
-                    return (tablero[row - 1, col - 1] == Cell.S &&
-                            tablero[row + 1, col + 1] == Cell.S) ||
+                    return (tablero[row - 1, col - 1] == Cell.S && tablero[row + 1, col + 1] == Cell.S) ||
                            (tablero[row + 1, col - 1] == Cell.S && tablero[row - 1, col + 1] == Cell.S) ||
                            (tablero[row - 1, col] == Cell.S && tablero[row + 1, col] == Cell.S) ||
                            (tablero[row, col - 1] == Cell.S && tablero[row, col + 1] == Cell.S);

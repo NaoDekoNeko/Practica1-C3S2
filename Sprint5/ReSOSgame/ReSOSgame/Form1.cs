@@ -113,14 +113,10 @@ namespace ReSOSGame
             controller.Tablero[controller.X, controller.Y] = controller.Ficha;
             dataGridView1.Rows[controller.X].Cells[controller.Y].Value = controller.Ficha;
 
-
-            // Mientras se siga jugando (Estado de juego == JUGANDO) Va pintar el valor del datagrid
-            if (controller.Tablero.EstadoDeJuego == Tablero.GameState.JUGANDO)
-                dataGridView1.Rows[controller.X].Cells[controller.Y].Style.ForeColor =
-                    (controller.Turno == Tablero.Jugador.JROJO) ? Color.Blue : Color.Red;
-            else
-                dataGridView1.Rows[controller.X].Cells[controller.Y].Style.ForeColor =
-                    (controller.Turno == Tablero.Jugador.JROJO) ? Color.Red : Color.Blue;
+            dataGridView1.Rows[controller.X].Cells[controller.Y].Style.ForeColor =
+                (controller.Turno == Tablero.Jugador.JROJO) ? Color.Blue : Color.Red;
+            if (controller.Tablero.EstadoDeJuego != Tablero.GameState.JUGANDO)
+                Turno.Visible = false;
             //Es posible que la asignación de turnos esté fallando aquí
             dataGridView1.CurrentCell = null; // Cuando se ahce click en el data grid ya no se sombreea azul
             dataGridView1.CellValueChanged += UpdateGrid; // Se vuelve a activar al escucha a este updategrid
@@ -133,7 +129,6 @@ namespace ReSOSGame
         private void ClickeoGrid(object sender, DataGridViewCellEventArgs e)
         {
             // Se crean variables temporales para turno {JAZUL,JROJO} y player (Human o Computer)
-            Tablero.Jugador turno = controller.Turno; // rellena el turno 
             Player playerActual = controller.CurrentPlayer; // variable que alamcena el jugador actual
             if (playerActual is Human)
             {
@@ -150,6 +145,7 @@ namespace ReSOSGame
             }
 
             if (!(controller.CurrentPlayer is Computer)) return;
+            if (controller.Tablero.EstadoDeJuego != Tablero.GameState.JUGANDO) return;
             controller.CurrentPlayer.MakeMove(0, 0, 0, controller.Juego); // Realiza el movimiento del jugador de tipo Computer
             PaintGrid();
             ShowGameStatus();
@@ -191,6 +187,7 @@ namespace ReSOSGame
             controller.Player1 = BluePlayerSelector(); // Verrifica el radio button y se asigna como jugador azul al primer player
             controller.Player2 = RedPlayerSelector(); // Verrifica el radio button y se asigna como jugador rojo al segundo player
             controller.InitTurn(); // Inicializa el CurrentPlayer como palyer1 , es decir el player1 empieza el juego
+            Turno.Visible = true;
             if (Record.Checked)
             {
                 StartRecording();
@@ -217,47 +214,30 @@ namespace ReSOSGame
         }
         private void StartComputerVsComputerGame()
         {
-            // Desactiva los controles que no se deben modificar durante el juego
-            //numericUpDown1.Enabled = false;
-            
-
             // Ciclo recursivo para que los jugadores computadoras realicen sus movimientos automáticamente
             PerformComputerMove();
         }
         private void PerformComputerMove()
         {
-            if (controller.CurrentPlayer is Computer)
+            const int delayInMilliseconds = 1000;
+            if (!(controller.CurrentPlayer is Computer)) return;
+            // Verifica si el juego ha terminado
+            if (controller.Tablero.EstadoDeJuego != 0) return;
+            Invoke((MethodInvoker)delegate
             {
-                Invoke((MethodInvoker)delegate
-                {
-                    controller.CurrentPlayer.MakeMove(0, 0, 0, controller.Juego);
-                    PaintGrid();
-                    ShowGameStatus();
-                    ShowTurn();
-                    controller.ChangeTurn();
-                    UpdateScore();
-                });
-
-                // Verifica si el juego ha terminado
-                if (controller.Tablero.EstadoDeJuego == 0)
-                {
-                    // Espera un breve período de tiempo antes de realizar el siguiente movimiento del jugador computadora
-                    // Esto evita que los movimientos se realicen instantáneamente y permite visualizarlos
-                    int delayInMilliseconds = 1000; // Ajusta el tiempo de espera según tus necesidades
-                    Task.Delay(delayInMilliseconds).ContinueWith(_ =>
-                    {
-                        PerformComputerMove(); // Realiza el siguiente movimiento del jugador computadora
-                    });
-                }
-                else
-                {
-                    EndComputerVsComputerGame(); // Finaliza el juego entre las dos computadoras
-                }
-            }
-        }
-        private void EndComputerVsComputerGame()
-        {
-            // Realiza cualquier acción necesaria al finalizar el juego entre las dos computadoras
+                controller.CurrentPlayer.MakeMove(0, 0, 0, controller.Juego);
+                PaintGrid();
+                ShowGameStatus();
+                ShowTurn();
+                controller.ChangeTurn();
+                UpdateScore();
+            });
+            // Espera un breve período de tiempo antes de realizar el siguiente movimiento del jugador computadora
+            // Esto evita que los movimientos se realicen instantáneamente y permite visualizarlos
+            Task.Delay(delayInMilliseconds).ContinueWith(_ =>
+            {
+                PerformComputerMove(); // Realiza el siguiente movimiento del jugador computadora
+            });
         }
         //Este metodo llama a la funcion reiniciarJuego
         private void NuevaPartida(object sender, EventArgs e)
