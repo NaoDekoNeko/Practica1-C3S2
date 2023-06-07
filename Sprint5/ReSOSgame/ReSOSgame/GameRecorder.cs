@@ -1,38 +1,36 @@
 ﻿using System;
+using System.Diagnostics.Contracts;
 using System.IO;
+using static ReSOSGame.Tablero;
 
 namespace ReSOSGame
 {
     public class GameRecorder
     {
         private Tablero Tablero { get; }
-        private Tablero.Jugador Turno { get; }
         private Juego Juego { get; }
         public string FilePath { get; set; }
         public GameRecorder(Juego juego)
         {
             Tablero = juego.Tablero;
             Juego = juego;
-            Turno = Tablero.Turno;
         }
 
         //va a imprimir en un txt el tablero además de otros elementos
         public void PrintGame()
         {
-            //const string filePath = "game.txt";
-            string contenido = "Turno: ";
-            contenido += Turno == Tablero.Jugador.JAZUL ? "Azul\n" : "Rojo\n";
+            string contenido = null;
+
+            Contract.Requires(File.Exists(FilePath),"El archivo de la partida debe existir");
+            Contract.Ensures(File.ReadAllText(FilePath).Contains(contenido), "Se agrega la jugada");
+            Contract.Ensures(Tablero.EstadoDeJuego != GameState.JUGANDO &&
+                             (File.GetAttributes(FilePath) & FileAttributes.ReadOnly) == FileAttributes.ReadOnly,
+                "Archivo de solo lectura cuando acabe la partida");
+
+            contenido += "Turno: ";
+            contenido += Tablero.Turno != Jugador.JAZUL ? "Azul\n" : "Rojo\n";
             // Construir el contenido a escribir
-            contenido += "-------\n";
-            for (var row = 0; row < Tablero.Tamanio; row++)
-            {
-                for (var column = 0; column < Tablero.Tamanio; column++)
-                {
-                    contenido += "|" + Symbol(Tablero[row, column]);
-                }
-                contenido += "|\n";
-            }
-            contenido += "-------\n";
+            contenido += TableroHelper.GetFormattedBoard(Tablero);
             if (Juego is JuegoGeneral aux)
             {
                 contenido += "Puntaje Azul: " + aux.PuntajeAzul + "\n";
@@ -42,73 +40,39 @@ namespace ReSOSGame
             contenido += "Estado de juego: ";
             switch (Tablero.EstadoDeJuego)
             {
-                case Tablero.GameState.JUGANDO:
+                case GameState.JUGANDO:
                     contenido += "JUGANDO\n";
                     break;
-                case Tablero.GameState.GANOROJO:
+                case GameState.GANOROJO:
                     contenido += "GANÓ EL JUGADOR ROJO\n";
                     break;
-                case Tablero.GameState.GANOAZUL:
+                case GameState.GANOAZUL:
                     contenido += "GANÓ EL JUGADOR AZUL\n";
                     break;
-                case Tablero.GameState.EMPATE:
+                case GameState.EMPATE:
                     contenido += "EMPATE\n";
                     break;
             }
 
-            // Verificar si el archivo existe
-            if (!File.Exists(FilePath))
-            {
-                // si no existe, regresa
-                return;
-            }
-
-
             if (Tablero.ValidMove)
             {
-                //Cuando se intente escribir en un archivo que es de solo lectura, no hará nada
-                //caso contrario, agregará el contenido
-                try
+                //si el archivo ya se hizo de solo lectura porque acabó la partida, hace return
+                if (File.GetAttributes(FilePath).HasFlag(FileAttributes.ReadOnly)) return;
+                // Añadir contenido al archivo existente o al archivo recién creado
+                using (StreamWriter sw = File.AppendText(FilePath))
                 {
-                    // Añadir contenido al archivo existente o al archivo recién creado
-                    using (StreamWriter sw = File.AppendText(FilePath))
-                    {
-                        sw.Write(contenido);
-                    }
-                }
-                catch (UnauthorizedAccessException)
-                {
-                    return;
-                }
-                catch (Exception)
-                {
-                    return;
+                    sw.Write(contenido);
                 }
             }
 
-            if (Tablero.EstadoDeJuego != Tablero.GameState.JUGANDO)
+            if (Tablero.EstadoDeJuego != GameState.JUGANDO)
             {
                 //Cuando la partida acabe, hace que el archivo sea de solo lectura
                 File.SetAttributes(FilePath, FileAttributes.ReadOnly);
             }
         }
-        //convierte las fichas de tipo Cell a strings
-        private static string Symbol(Tablero.Cell a)
-        {
-            switch (a)
-            {
-                case Tablero.Cell.S:
-                    return "S";
-                case Tablero.Cell.O:
-                    return "O";
-                case Tablero.Cell.VACIA:
-                case Tablero.Cell.INVALIDA:
-                default:
-                    return " ";
-            }
-        }
 
-        private static string ObtenerRutaNuevoArchivo()
+        private static string NewPath()
         {
             return @"C:\Users\Ademar\OneDrive\Desktop\Practica1-C3S2\Sprint5\Registros\game_" + 
                    DateTime.Now.ToString("yyyyMMddHHmmss") + ".txt";
@@ -117,17 +81,14 @@ namespace ReSOSGame
         //Inicia el grabado de juego
         public void SaveGame()
         {
-            FilePath = ObtenerRutaNuevoArchivo();
+            FilePath = NewPath();
             // Verificar si el archivo existe
-            if (!File.Exists(FilePath))
+            if (File.Exists(FilePath)) return;
+            // Crear el archivo si no existe
+            using (File.Create(FilePath))
             {
-                // Crear el archivo si no existe
-                using (File.Create(FilePath))
-                {
-                    // El archivo se crea y se cierra automáticamente
-                }
+                // El archivo se crea y se cierra automáticamente
             }
-            PrintGame();
         }
     }
 }

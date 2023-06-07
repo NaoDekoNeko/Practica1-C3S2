@@ -1,28 +1,36 @@
 Turno: Azul
 -------
 |S| | |
+-------
 | | | |
+-------
+| | | |
+-------
+Estado de juego: JUGANDO
+Turno: Rojo
+-------
+|S| |S|
+-------
+| | | |
+-------
 | | | |
 -------
 Estado de juego: JUGANDO
 Turno: Azul
 -------
 |S| |S|
-| | | |
+-------
 | | | |
 -------
-Estado de juego: JUGANDO
-Turno: Azul
--------
-|S| |S|
-| | | |
 | | |S|
 -------
 Estado de juego: JUGANDO
-Turno: Azul
+Turno: Rojo
 -------
 |S|O|S|
+-------
 | | | |
+-------
 | | |S|
 -------
 Estado de juego: GANÓ EL JUGADOR ROJO

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Diagnostics.Contracts;
+﻿using System.Diagnostics.Contracts;
 using static ReSOSGame.Tablero;
 
 namespace ReSOSGame
@@ -72,7 +71,7 @@ namespace ReSOSGame
             //cuando hay un ganador cuando el tablero esté lleno o no 
             else
             {
-                Tablero.EstadoDeJuego = Tablero.Turno == Jugador.JAZUL ?
+                Tablero.EstadoDeJuego = Tablero.Turno == Jugador.JROJO ?
                     GameState.GANOAZUL : GameState.GANOROJO;  // Cambia el estado del tablero
             }
         }
@@ -95,22 +94,17 @@ namespace ReSOSGame
                 Tablero.ValidMove = true; // El atributo ValidMove es verdadero. 
                 Tablero.Ficha = ficha; // rellena el atributo Ficha
                 Tablero[row, column] = ficha; // rellena el grid del tablero con ficha
+                Tablero.Turno = (Tablero.Turno == Jugador.JAZUL) ? Jugador.JROJO : Jugador.JAZUL; // Se hace el cambio de turno
                 // Cuando se ha hecho un punto
                 if (Validator.HasOnePoint(row,column,Tablero.Ficha)) 
                 {
                     HasWon = true;
                     FinalGameState(); // Actualiza el estado final del tablero
-                    return;
                 }
                 // Cuando el tablero esté lleno
                 if (Validator.FullBoard())
                 {
                     FinalGameState();
-                    return;
-                }
-                if (Tablero.EstadoDeJuego == GameState.JUGANDO)  // Si el estado de juego es JUGANDO entonces ...
-                {
-                    Tablero.Turno = (Tablero.Turno == Jugador.JAZUL) ? Jugador.JROJO : Jugador.JAZUL; // Se hace el cambio de turno
                 }
             }
             else
@@ -179,10 +173,11 @@ namespace ReSOSGame
                 Tablero.ValidMove = true;
                 Tablero.Ficha = ficha;
                 Tablero[row, column] = ficha;
+                Tablero.Turno = (Tablero.Turno == Jugador.JAZUL) ? Jugador.JROJO : Jugador.JAZUL; // Se cambia de turno al jugador contrario
                 if (Validator.HasOnePoint(row, column, Tablero.Ficha)) // Si se ha obtenido un punto
                 {
                     //en el turno del jugador JAZUL
-                    if (Tablero.Turno == Jugador.JAZUL)
+                    if (Tablero.Turno == Jugador.JROJO)
                     {
                         PuntajeAzul++; // Se agrega un punto al jugador Azul
                     } //en el turno del jugador JROJO
@@ -193,11 +188,6 @@ namespace ReSOSGame
                 if (Validator.FullBoard())
                 {
                     FinalGameState(); // Actualiza el estado del juego cuando el tablero esta lleno
-                }
-                // Nota: esa funcion detiene el cambio de turno cuando ya se halla ganado o empatado
-                if (Tablero.EstadoDeJuego == GameState.JUGANDO) // Si se sigue jugando
-                {
-                    Tablero.Turno = (Tablero.Turno == Jugador.JAZUL) ? Jugador.JROJO : Jugador.JAZUL; // Se cambia de turno al jugador contrario
                 }
             }
             else

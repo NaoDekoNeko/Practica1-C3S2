@@ -12,7 +12,7 @@
         public Jugador Turno { get; set; }
         public int Tamanio { get; }
         public GameState EstadoDeJuego { get; set; }
-        public Cell[,] Grid { get; }
+        internal Cell[,] Grid { get; }
 
         public Cell this[int row, int column]
         {
@@ -33,7 +33,7 @@
         {
             //se espera que el tamaño del tablero sea mínimo 1 y como máximo 12
             Grid = new Cell[tamanio, tamanio];
-            this.Tamanio = tamanio;
+            Tamanio = tamanio;
         }
 
         //Inicia el tablero

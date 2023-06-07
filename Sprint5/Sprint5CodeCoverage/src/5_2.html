@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>C:\Users\Ademar\OneDrive\Desktop\Practica1-C3S2\Sprint5\ReSOSgame\ReSOSgame\GameRecorder.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using System;
+using System.Diagnostics.Contracts;
+using System.IO;
+using static ReSOSGame.Tablero;
+
+namespace ReSOSGame
+{
+    public class GameRecorder
+    {
+        private Tablero Tablero { get; }
+        private Juego Juego { get; }
+        public string FilePath { get; set; }
+        public GameRecorder(Juego juego)
+        {
+            Tablero = juego.Tablero;
+            Juego = juego;
+        }
+
+        //va a imprimir en un txt el tablero adem&#225;s de otros elementos
+        public void PrintGame()
+        {
+            string contenido = null;
+
+            Contract.Requires(File.Exists(FilePath),&quot;El archivo de la partida debe existir&quot;);
+            Contract.Ensures(File.ReadAllText(FilePath).Contains(contenido), &quot;Se agrega la jugada&quot;);
+            Contract.Ensures(Tablero.EstadoDeJuego != GameState.JUGANDO &amp;&amp;
+                             (File.GetAttributes(FilePath) &amp; FileAttributes.ReadOnly) == FileAttributes.ReadOnly,
+                &quot;Archivo de solo lectura cuando acabe la partida&quot;);
+
+            contenido += &quot;Turno: &quot;;
+            contenido += Tablero.Turno != Jugador.JAZUL ? &quot;Azul\n&quot; : &quot;Rojo\n&quot;;
+            // Construir el contenido a escribir
+            contenido += TableroHelper.GetFormattedBoard(Tablero);
+            if (Juego is JuegoGeneral aux)
+            {
+                contenido += &quot;Puntaje Azul: &quot; + aux.PuntajeAzul + &quot;\n&quot;;
+                contenido += &quot;Puntaje Rojo: &quot; + aux.PuntajeRojo + &quot;\n&quot;;
+            }
+
+            contenido += &quot;Estado de juego: &quot;;
+            switch (Tablero.EstadoDeJuego)
+            {
+                case GameState.JUGANDO:
+                    contenido += &quot;JUGANDO\n&quot;;
+                    break;
+                case GameState.GANOROJO:
+                    contenido += &quot;GAN&#211; EL JUGADOR ROJO\n&quot;;
+                    break;
+                case GameState.GANOAZUL:
+                    contenido += &quot;GAN&#211; EL JUGADOR AZUL\n&quot;;
+                    break;
+                case GameState.EMPATE:
+                    contenido += &quot;EMPATE\n&quot;;
+                    break;
+            }
+
+            if (Tablero.ValidMove)
+            {
+                //si el archivo ya se hizo de solo lectura porque acab&#243; la partida, hace return
+                if (File.GetAttributes(FilePath).HasFlag(FileAttributes.ReadOnly)) return;
+                // A&#241;adir contenido al archivo existente o al archivo reci&#233;n creado
+                using (StreamWriter sw = File.AppendText(FilePath))
+                {
+                    sw.Write(contenido);
+                }
+            }
+
+            if (Tablero.EstadoDeJuego != GameState.JUGANDO)
+            {
+                //Cuando la partida acabe, hace que el archivo sea de solo lectura
+                File.SetAttributes(FilePath, FileAttributes.ReadOnly);
+            }
+        }
+        //convierte las fichas de tipo Cell a strings
+        private static string Symbol(Cell cell)
+        {
+            return TableroHelper.Symbol(cell).ToString();
+        }
+
+        private static string NewPath()
+        {
+            return @&quot;C:\Users\Ademar\OneDrive\Desktop\Practica1-C3S2\Sprint5\Registros\game_&quot; + 
+                   DateTime.Now.ToString(&quot;yyyyMMddHHmmss&quot;) + &quot;.txt&quot;;
+        }
+
+        //Inicia el grabado de juego
+        public void SaveGame()
+        {
+            FilePath = NewPath();
+            // Verificar si el archivo existe
+            if (File.Exists(FilePath)) return;
+            // Crear el archivo si no existe
+            using (File.Create(FilePath))
+            {
+                // El archivo se crea y se cierra autom&#225;ticamente
+            }
+        }
+    }
+}
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[10,35,10,39,1],[11,31,11,35,1],[12,34,12,38,1],[12,39,12,43,1],[13,9,13,41,1],[14,9,14,10,1],[15,13,15,37,1],[16,13,16,27,1],[17,9,17,10,1],[21,9,21,10,1],[22,13,22,37,1],[30,13,30,36,1],[31,13,31,79,1],[33,13,33,67,1],[34,13,34,43,1],[35,13,35,14,1],[36,17,36,72,1],[37,17,37,72,1],[38,13,38,14,1],[40,13,40,46,1],[41,13,41,43,1],[44,21,44,46,1],[45,21,45,27,1],[47,21,47,59,1],[48,21,48,27,1],[50,21,50,59,1],[51,21,51,27,1],[53,21,53,45,1],[54,21,54,27,1],[57,13,57,35,1],[58,13,58,14,1],[60,17,60,83,1],[60,84,60,91,0],[62,24,62,67,1],[63,17,63,18,1],[64,21,64,41,1],[65,17,65,18,1],[66,13,66,14,1],[68,13,68,60,1],[69,13,69,14,1],[71,17,71,71,1],[72,13,72,14,1],[73,9,73,10,1],[76,9,76,10,0],[77,13,77,58,0],[78,9,78,10,0],[81,9,81,10,1],[82,13,83,69,1],[84,9,84,10,1],[88,9,88,10,1],[89,13,89,34,1],[91,13,91,39,1],[91,40,91,47,0],[93,13,93,42,1],[94,13,94,14,1],[96,13,96,14,1],[97,9,97,10,1]]);
+    </script>
+  </body>
+</html>
